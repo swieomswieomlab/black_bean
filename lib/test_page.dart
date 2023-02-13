@@ -24,7 +24,7 @@ class _TestPageState extends State<TestPage> {
     }));
 
     return Container(
-      child: Text("2\u00b2"),
+      child: Text("졸라힘드노"),
     );
   }
 }
