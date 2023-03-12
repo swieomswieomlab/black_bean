@@ -1,3 +1,4 @@
+import 'package:black_bean/pages/problem_make.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TestPage(),
+      initialRoute: '/problemMake',
+      routes: {
+        '/': (context) => MyHomePage(),
+        '/problemMake': (context) => ProblemMake(),
+        '/testPage': (context) => TestPage()
+      },
     );
   }
 }
