@@ -51,15 +51,15 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
       children: [
         Row(
           children: [
-            customDropdownButton(degree, degreeDropdownValue,
+            customDropdownButton(degree,"구분", degreeDropdownValue,
                 (value) => degreeDropdownValue = value),
-            customDropdownButton(subject, subjectDropdownValue,
+            customDropdownButton(subject,"과목", subjectDropdownValue,
                 (value) => subjectDropdownValue = value),
-            customDropdownButton(year, yearDropdownValue,
+            customDropdownButton(year,"년도", yearDropdownValue,
                 (value) => yearDropdownValue = value),
-            customDropdownButton(majorSection, majorSectionDropdownValue,
+            customDropdownButton(majorSection,"대단원",majorSectionDropdownValue,
                 (value) => majorSectionDropdownValue = value),
-            customDropdownButton(subSection, subSectionDropdownValue,
+            customDropdownButton(subSection,"소단원",subSectionDropdownValue,
                 (value) => subSectionDropdownValue = value),
           ],
         ),
@@ -69,23 +69,28 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
   }
 
   Widget customDropdownButton(
-      List<dynamic> items, String? value, Function(String?) onChanged) {
+      List<dynamic> items, String des, String? value, Function(String?) onChanged) {
     return SizedBox(
       width: 100,
       height: 100,
-      child: DropdownButton(
-          value: value,
-          items: items.map<DropdownMenuItem<String>>((dynamic value) {
-            return DropdownMenuItem<String>(
+      child: Column(
+        children: [
+          Text(des),
+          DropdownButton(
               value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (newValue) {
-            setState(() {
-              onChanged(newValue);
-            });
-          }),
+              items: items.map<DropdownMenuItem<String>>((dynamic value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() {
+                  onChanged(newValue);
+                });
+              }),
+        ],
+      ),
     );
   }
 }
