@@ -35,15 +35,21 @@ class DropdownButtonsFormClass extends StatefulWidget {
 List<String> degree = ['고졸', '중졸'];
 List<String> subject = ['국어', '수학'];
 List<String> year = ['2022-1', '2022-2', '2023-1'];
-List<String> majorSection = ['1', '2', '3', '4', '5', '6', '7'];
-List<String> subSection = ['1', '2', '3', '4'];
+List<String> number = List.generate(20, (i) => (i + 1).toString());
+List<String> majorSection = List.generate(4, (i) => (i + 1).toString());
+List<String> interSection = List.generate(5, (i) => (i + 1).toString());
+List<String> subSection = List.generate(6, (i) => (i + 1).toString());
+List<String> answer = List.generate(4, (i) => (i + 1).toString());
 
 class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
   String? degreeDropdownValue = degree.first;
   String? subjectDropdownValue = subject.first;
   String? yearDropdownValue = year.first;
+  String? numberDropdownValue = number.first;
   String? majorSectionDropdownValue = majorSection.first;
+  String? interSectionDropdownValue = interSection.first;
   String? subSectionDropdownValue = subSection.first;
+  String? answerDropdownValue = answer.first;
 
   @override
   Widget build(BuildContext context) {
@@ -51,16 +57,22 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
       children: [
         Row(
           children: [
-            customDropdownButton(degree,"구분", degreeDropdownValue,
+            customDropdownButton(degree, "구분", degreeDropdownValue,
                 (value) => degreeDropdownValue = value),
-            customDropdownButton(subject,"과목", subjectDropdownValue,
+            customDropdownButton(subject, "과목", subjectDropdownValue,
                 (value) => subjectDropdownValue = value),
-            customDropdownButton(year,"년도", yearDropdownValue,
+            customDropdownButton(year, "년도", yearDropdownValue,
                 (value) => yearDropdownValue = value),
-            customDropdownButton(majorSection,"대단원",majorSectionDropdownValue,
+            customDropdownButton(number, "번호", numberDropdownValue,
+                (value) => numberDropdownValue = value),
+            customDropdownButton(majorSection, "대단원", majorSectionDropdownValue,
                 (value) => majorSectionDropdownValue = value),
-            customDropdownButton(subSection,"소단원",subSectionDropdownValue,
+            customDropdownButton(interSection, "중단원", interSectionDropdownValue,
+                (value) => interSectionDropdownValue = value),
+            customDropdownButton(subSection, "소단원", subSectionDropdownValue,
                 (value) => subSectionDropdownValue = value),
+            customDropdownButton(answer, "정답", answerDropdownValue,
+                (value) => answerDropdownValue = value),
           ],
         ),
         ElevatedButton(onPressed: () {}, child: const Text("Submit"))
@@ -68,8 +80,8 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
     );
   }
 
-  Widget customDropdownButton(
-      List<dynamic> items, String des, String? value, Function(String?) onChanged) {
+  Widget customDropdownButton(List<dynamic> items, String des, String? value,
+      Function(String?) onChanged) {
     return SizedBox(
       width: 100,
       height: 100,
