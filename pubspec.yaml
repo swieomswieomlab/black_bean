@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^2.5.0
   cloud_firestore: ^4.3.2
   cp949: ^1.2.1
+  firebase_database: ^10.0.16
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +51,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  image_picker: ^0.8.7
+  image_picker_for_web: ^2.1.12
+  firebase_storage: ^11.0.15
+  firebase_auth: ^4.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
