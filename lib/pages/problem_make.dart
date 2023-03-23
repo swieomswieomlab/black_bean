@@ -32,8 +32,8 @@ class DropdownButtonsFormClass extends StatefulWidget {
       _DropdownButtonsFormClassState();
 }
 
-List<String> degree = ['고졸', '중졸'];
-List<String> subject = ['국어', '수학'];
+List<String> degree = ['High', 'Middle'];
+List<String> subject = ['Math', 'Korean'];
 List<String> year = ['2022-1', '2022-2', '2023-1'];
 List<String> number = List.generate(20, (i) => (i + 1).toString());
 List<String> majorSection = List.generate(4, (i) => (i + 1).toString());

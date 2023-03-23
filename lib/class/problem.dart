@@ -45,6 +45,8 @@ class FirestoreService {
           .collection('degree')
           .doc(degree)
           .collection('subject')
+          .doc(subject)
+          .collection('problems')
           .doc() // this will create a new document with an automatically generated ID
           .set(problem.toMap());
     } catch (e) {

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'pages/home_page.dart';
 import 'firebase_options.dart';
-import 'pages/image_picker_test.dart';
+// import 'pages/image_picker_test.dart';
 import 'pages/test_page.dart';
 import 'package:flutter/foundation.dart';
 
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => MyHomePage(),
         '/problemMake': (context) => ProblemMake(),
         '/testPage': (context) => TestPage(),
-        '/imageTestPage': (context) => HomePage(),
+        // '/imageTestPage': (context) => HomePage(),
         '/loginPage': (context) => LoginPage(),
         '/signinPage': (context) => SignUpPage(),
       },
