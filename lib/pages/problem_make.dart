@@ -1,5 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 class ProblemMake extends StatefulWidget {
   const ProblemMake({Key? key});
 
@@ -8,6 +13,52 @@ class ProblemMake extends StatefulWidget {
 }
 
 class _ProblemMakeState extends State<ProblemMake> {
+XFile? _image;
+final _picker = ImagePicker();
+final _storage = FirebaseStorage.instance;
+
+  Future<void> _pickImage() async {
+  try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      //you can use ImageCourse.camera for Camera capture
+      if (image != null) {
+        setState(() {
+          _image = image;
+        });
+        uploadImage_web(_image!);
+        // _uploadImage2(_image!);
+      } else {
+        print("No image is selected.");
+      }
+    } catch (e) {
+      print("error while picking file.");
+    }
+}
+
+Future<void> _uploadImage(XFile pickedImage) async {
+  // Initialize Firebase if it hasn't been initialized yet
+  final imageName = DateTime.now().millisecondsSinceEpoch.toString();
+  final ref = FirebaseStorage.instance.ref().child('images/$imageName');
+      UploadTask uploadTask = ref.putFile(File(pickedImage.path));
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final urlImageUser = await snapshot.ref.getDownloadURL();
+
+  print('Image URL: $urlImageUser');
+}
+
+
+Future<void> uploadImage_web(XFile pickedFile) async {
+  if (pickedFile != null) {
+    final snapshot = await _storage
+        .ref()
+        .child('images/${DateTime.now().toString()}')
+        .putData(await pickedFile.readAsBytes());
+    print('Upload complete!');
+  } else {
+    print('No image selected.');
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +66,19 @@ class _ProblemMakeState extends State<ProblemMake> {
       children: [
         ElevatedButton(
             onPressed: (() {
-              //
+              
             }),
-            child: const Text("Upload")),
+            child: const Text("Upload Image")),
+            Center(
+        child: _image != null
+            ? 
+            // Image.file(File(_image!.path))
+            Image.network(_image!.path)
+            // Text('Picked image: ${_pickedFile!.path}')
+            // Image.file(File(_pickedFile!.path))
+
+            : Text('No image selected'),
+      ),
         DropdownButtonsFormClass(),
       ],
     ));

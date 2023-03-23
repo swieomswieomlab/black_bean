@@ -18,9 +18,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
+          children:  <Widget>[
             Text(
               'Hello World!',
+            ),
+            //button that navigates to the image picker page
+            ElevatedButton(
+              onPressed: (){
+                Navigator.pushNamed(context, '/imageTestPage');
+              }
+              ,
+              child: Text('image picker test'),
             ),
           ],
         ),
