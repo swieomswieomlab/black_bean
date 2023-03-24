@@ -13,72 +13,13 @@ class ProblemMake extends StatefulWidget {
 }
 
 class _ProblemMakeState extends State<ProblemMake> {
-XFile? _image;
-final _picker = ImagePicker();
-final _storage = FirebaseStorage.instance;
 
-  Future<void> _pickImage() async {
-  try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      //you can use ImageCourse.camera for Camera capture
-      if (image != null) {
-        setState(() {
-          _image = image;
-        });
-        uploadImage_web(_image!);
-        // _uploadImage2(_image!);
-      } else {
-        print("No image is selected.");
-      }
-    } catch (e) {
-      print("error while picking file.");
-    }
-}
-
-Future<void> _uploadImage(XFile pickedImage) async {
-  // Initialize Firebase if it hasn't been initialized yet
-  final imageName = DateTime.now().millisecondsSinceEpoch.toString();
-  final ref = FirebaseStorage.instance.ref().child('images/$imageName');
-      UploadTask uploadTask = ref.putFile(File(pickedImage.path));
-    final snapshot = await uploadTask.whenComplete(() => null);
-    final urlImageUser = await snapshot.ref.getDownloadURL();
-
-  print('Image URL: $urlImageUser');
-}
-
-
-Future<void> uploadImage_web(XFile pickedFile) async {
-  if (pickedFile != null) {
-    final snapshot = await _storage
-        .ref()
-        .child('images/${DateTime.now().toString()}')
-        .putData(await pickedFile.readAsBytes());
-    print('Upload complete!');
-  } else {
-    print('No image selected.');
-  }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
       children: [
-        ElevatedButton(
-            onPressed: (() {
-              
-            }),
-            child: const Text("Upload Image")),
-            Center(
-        child: _image != null
-            ? 
-            // Image.file(File(_image!.path))
-            Image.network(_image!.path)
-            // Text('Picked image: ${_pickedFile!.path}')
-            // Image.file(File(_pickedFile!.path))
-
-            : Text('No image selected'),
-      ),
         DropdownButtonsFormClass(),
       ],
     ));
@@ -111,11 +52,74 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
   String? interSectionDropdownValue = interSection.first;
   String? subSectionDropdownValue = subSection.first;
   String? answerDropdownValue = answer.first;
+  String imgUrl = ""; //이미지 url 저장
+  XFile? _image;
+final _picker = ImagePicker();
+final _storage = FirebaseStorage.instance;
+
+  Future<void> _pickImage() async {
+  try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      //you can use ImageCourse.camera for Camera capture
+      if (image != null) {
+        setState(() {
+          _image = image;
+        });
+        imgUrl = _image!.path;
+        print("imgUrl : $imgUrl");
+      } else {
+        print("No image is selected.");
+      }
+    } catch (e) {
+      print("error while picking file.");
+    }
+}
+
+//web 아닐 때 파이어스토어에 업로드하는 함수, 테스트 필요
+Future<void> _uploadImage(XFile pickedImage) async {
+  // Initialize Firebase if it hasn't been initialized yet
+  final imageName = DateTime.now().millisecondsSinceEpoch.toString();
+  final ref = FirebaseStorage.instance.ref().child('images/$imageName');
+      UploadTask uploadTask = ref.putFile(File(pickedImage.path));
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final urlImageUser = await snapshot.ref.getDownloadURL();
+
+  print('Image URL: $urlImageUser');
+}
+
+//웹에서 파이어스토어에 이미지 업로드 할 때 사용하는 함수
+Future<void> uploadImage_web(XFile pickedFile) async {
+  if (pickedFile != null) {
+    final snapshot = await _storage
+        .ref()
+        .child('images/${DateTime.now().toString()}')
+        .putData(await pickedFile.readAsBytes());
+        imgUrl = await snapshot.ref.getDownloadURL();
+    print('Upload complete!  $imgUrl');
+  } else {
+    print('No image selected.');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        ElevatedButton(
+            onPressed: (() {
+              _pickImage();
+            }),
+            child: const Text("Upload Image")),
+            Center(
+        child: _image != null
+            ? 
+            // Image.file(File(_image!.path))
+            Image.network(imgUrl)
+            // Text('Picked image: ${_pickedFile!.path}')
+            // Image.file(File(_pickedFile!.path))
+
+            : Text('No image selected'),
+      ),
         Row(
           children: [
             customDropdownButton(degree, "구분", degreeDropdownValue,
@@ -136,7 +140,10 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
                 (value) => answerDropdownValue = value),
           ],
         ),
-        ElevatedButton(onPressed: () {}, child: const Text("Submit"))
+        ElevatedButton(onPressed: () {
+
+          uploadImage_web(_image!); // 이미지 firestore에 업로드
+        }, child: const Text("Submit"))
       ],
     );
   }
