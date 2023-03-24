@@ -5,6 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import '../class/problem.dart';
+
 class ProblemMake extends StatefulWidget {
   const ProblemMake({Key? key});
 
@@ -13,12 +16,12 @@ class ProblemMake extends StatefulWidget {
 }
 
 class _ProblemMakeState extends State<ProblemMake> {
-XFile? _image;
-final _picker = ImagePicker();
-final _storage = FirebaseStorage.instance;
+  XFile? _image;
+  final _picker = ImagePicker();
+  final _storage = FirebaseStorage.instance;
 
   Future<void> _pickImage() async {
-  try {
+    try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       //you can use ImageCourse.camera for Camera capture
       if (image != null) {
@@ -33,52 +36,47 @@ final _storage = FirebaseStorage.instance;
     } catch (e) {
       print("error while picking file.");
     }
-}
+  }
 
-Future<void> _uploadImage(XFile pickedImage) async {
-  // Initialize Firebase if it hasn't been initialized yet
-  final imageName = DateTime.now().millisecondsSinceEpoch.toString();
-  final ref = FirebaseStorage.instance.ref().child('images/$imageName');
-      UploadTask uploadTask = ref.putFile(File(pickedImage.path));
+  Future<void> _uploadImage(XFile pickedImage) async {
+    // Initialize Firebase if it hasn't been initialized yet
+    final imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    final ref = FirebaseStorage.instance.ref().child('images/$imageName');
+    UploadTask uploadTask = ref.putFile(File(pickedImage.path));
     final snapshot = await uploadTask.whenComplete(() => null);
     final urlImageUser = await snapshot.ref.getDownloadURL();
 
-  print('Image URL: $urlImageUser');
-}
-
-
-Future<void> uploadImage_web(XFile pickedFile) async {
-  if (pickedFile != null) {
-    final snapshot = await _storage
-        .ref()
-        .child('images/${DateTime.now().toString()}')
-        .putData(await pickedFile.readAsBytes());
-    print('Upload complete!');
-  } else {
-    print('No image selected.');
+    print('Image URL: $urlImageUser');
   }
-}
+
+  Future<void> uploadImage_web(XFile pickedFile) async {
+    if (pickedFile != null) {
+      final snapshot = await _storage
+          .ref()
+          .child('images/${DateTime.now().toString()}')
+          .putData(await pickedFile.readAsBytes());
+      print('Upload complete!');
+    } else {
+      print('No image selected.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
       children: [
-        ElevatedButton(
-            onPressed: (() {
-              
-            }),
-            child: const Text("Upload Image")),
-            Center(
-        child: _image != null
-            ? 
-            // Image.file(File(_image!.path))
-            Image.network(_image!.path)
-            // Text('Picked image: ${_pickedFile!.path}')
-            // Image.file(File(_pickedFile!.path))
+        ElevatedButton(onPressed: (() {}), child: const Text("Upload Image")),
+        Center(
+          child: _image != null
+              ?
+              // Image.file(File(_image!.path))
+              Image.network(_image!.path)
+              // Text('Picked image: ${_pickedFile!.path}')
+              // Image.file(File(_pickedFile!.path))
 
-            : Text('No image selected'),
-      ),
+              : Text('No image selected'),
+        ),
         DropdownButtonsFormClass(),
       ],
     ));
@@ -112,6 +110,11 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
   String? subSectionDropdownValue = subSection.first;
   String? answerDropdownValue = answer.first;
 
+  var url = '';
+
+  //TODO: firestore 변수 하나로 묶을 필요 있음
+  late FirestoreService firestoreService;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -136,7 +139,23 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
                 (value) => answerDropdownValue = value),
           ],
         ),
-        ElevatedButton(onPressed: () {}, child: const Text("Submit"))
+        ElevatedButton(
+            onPressed: () {
+              //
+              Problem problem = Problem(
+                  answer: int.parse(answerDropdownValue!),
+                  iSection: int.parse(interSectionDropdownValue!),
+                  mSection: int.parse(majorSectionDropdownValue!),
+                  number: int.parse(numberDropdownValue!),
+                  //TODO: initialize url variable
+                  problem: url,
+                  sSection: int.parse(subSectionDropdownValue!),
+                  year: yearDropdownValue!);
+
+              firestoreService.addProblemToDatabase(
+                  degreeDropdownValue!, subjectDropdownValue!, problem);
+            },
+            child: const Text("Submit"))
       ],
     );
   }
