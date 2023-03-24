@@ -5,6 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import '../class/problem.dart';
+
 class ProblemMake extends StatefulWidget {
   const ProblemMake({Key? key});
 
@@ -101,6 +104,11 @@ Future<void> uploadImage_web(XFile pickedFile) async {
   }
 }
 
+  var url = '';
+
+  //TODO: firestore 변수 하나로 묶을 필요 있음
+  late FirestoreService firestoreService;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -112,7 +120,7 @@ Future<void> uploadImage_web(XFile pickedFile) async {
             child: const Text("Upload Image")),
             Center(
         child: _image != null
-            ? 
+            ?
             // Image.file(File(_image!.path))
             Image.network(imgUrl)
             // Text('Picked image: ${_pickedFile!.path}')
@@ -140,10 +148,23 @@ Future<void> uploadImage_web(XFile pickedFile) async {
                 (value) => answerDropdownValue = value),
           ],
         ),
-        ElevatedButton(onPressed: () {
+        ElevatedButton(
+            onPressed: () {
+              //
+              Problem problem = Problem(
+                  answer: int.parse(answerDropdownValue!),
+                  iSection: int.parse(interSectionDropdownValue!),
+                  mSection: int.parse(majorSectionDropdownValue!),
+                  number: int.parse(numberDropdownValue!),
+                  //TODO: initialize url variable
+                  problem: url,
+                  sSection: int.parse(subSectionDropdownValue!),
+                  year: yearDropdownValue!);
 
-          uploadImage_web(_image!); // 이미지 firestore에 업로드
-        }, child: const Text("Submit"))
+              firestoreService.addProblemToDatabase(
+                  degreeDropdownValue!, subjectDropdownValue!, problem);
+            },
+            child: const Text("Submit"))
       ],
     );
   }
