@@ -146,7 +146,10 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
         ),
         ElevatedButton(
             onPressed: () {
-              //
+              //assert _image is not null
+              //upload to storage?
+              uploadImage_web(_image!);
+              //upload to firebase
               Problem problem = Problem(
                   answer: int.parse(answerDropdownValue!),
                   iSection: int.parse(interSectionDropdownValue!),
