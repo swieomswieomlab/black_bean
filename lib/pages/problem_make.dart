@@ -6,7 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../class/problem.dart';
+import '../model/problem.dart';
 
 class ProblemMake extends StatefulWidget {
   const ProblemMake({Key? key});
@@ -77,9 +77,9 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
   }
 
 //web 아닐 때 파이어스토어에 업로드하는 함수, 테스트 필요
-  Future<void> _uploadImage(XFile pickedImage) async {
+  Future<void> _uploadImage(XFile pickedImage, imageName) async {
     // Initialize Firebase if it hasn't been initialized yet
-    final imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    // final imageName = DateTime.now().millisecondsSinceEpoch.toString();
     final ref = FirebaseStorage.instance.ref().child('images/$imageName');
     UploadTask uploadTask = ref.putFile(File(pickedImage.path));
     final snapshot = await uploadTask.whenComplete(() => null);
@@ -89,11 +89,11 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
   }
 
 //웹에서 파이어스토어에 이미지 업로드 할 때 사용하는 함수
-  Future<void> uploadImage_web(XFile pickedFile) async {
+  Future<void> uploadImage_web(XFile pickedFile, imageName) async {
     if (pickedFile != null) {
       final snapshot = await _storage
           .ref()
-          .child('images/${DateTime.now().toString()}')
+          .child('images/$imageName)}')
           .putData(await pickedFile.readAsBytes());
       imgUrl = await snapshot.ref.getDownloadURL();
       print('Upload complete!  $imgUrl');
@@ -146,39 +146,47 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
         ),
         ElevatedButton(
             onPressed: () {
-              //assert _image is not null
-              //upload to storage?
-              uploadImage_web(_image!);
-              //upload to firebase
-              Problem problem = Problem(
-                  answer: int.parse(answerDropdownValue!),
-                  iSection: int.parse(interSectionDropdownValue!),
-                  mSection: int.parse(majorSectionDropdownValue!),
-                  number: int.parse(numberDropdownValue!),
-                  problem: imgUrl,
-                  sSection: int.parse(subSectionDropdownValue!),
-                  year: yearDropdownValue!);
-
-              firestoreService.addProblemToDatabase(
-                  degreeDropdownValue!, subjectDropdownValue!, problem);
-
-              showDialog(
-                  context: context,
-                  builder: ((context) {
-                    return AlertDialog(
-                      actions: <Widget>[
-                        TextButton(
-                            onPressed: (() {
-                              Navigator.pop(context);
-                            }),
-                            child: const Text("OK"))
-                      ],
-                    );
-                  }));
+              submitProblem(context);
             },
             child: const Text("Submit"))
       ],
     );
+  }
+
+  Problem submitProblem(BuildContext context) {
+//upload to firebase
+    Problem problem = Problem(
+        answer: int.parse(answerDropdownValue!),
+        iSection: int.parse(interSectionDropdownValue!),
+        mSection: int.parse(majorSectionDropdownValue!),
+        number: int.parse(numberDropdownValue!),
+        problem: imgUrl,
+        sSection: int.parse(subSectionDropdownValue!),
+        year: yearDropdownValue!);
+
+    //assert _image is not null
+    //upload to storage?
+    String imageName = "${problem.year}_${problem.number.toString()}";
+    uploadImage_web(_image!, imageName);
+
+    firestoreService.addProblemToDatabase(
+        degreeDropdownValue!, subjectDropdownValue!, problem);
+
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            actions: <Widget>[
+              TextButton(
+                  onPressed: (() {
+                    Navigator.pop(context);
+                  }),
+                  child: const Text("OK"))
+            ],
+          );
+        }));
+
+    return problem;
   }
 
   Widget customDropdownButton(List<dynamic> items, String des, String? value,
