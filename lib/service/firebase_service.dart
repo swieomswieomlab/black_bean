@@ -1,0 +1,61 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+import '../model/problem.dart';
+
+class FirebaseService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  //web 아닐 때 파이어스토어에 업로드하는 함수, 테스트 필요
+  Future<void> _uploadImage(XFile pickedImage, imageName) async {
+    // Initialize Firebase if it hasn't been initialized yet
+    // final imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    final ref = FirebaseStorage.instance.ref().child('images/$imageName');
+    UploadTask uploadTask = ref.putFile(File(pickedImage.path));
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final urlImageUser = await snapshot.ref.getDownloadURL();
+
+    print('Image URL: $urlImageUser');
+  }
+
+ //웹에서 파이어스토어에 이미지 업로드 할 때 사용하는 함수
+  Future<void> uploadImage_web(XFile pickedFile, imageName) async {
+    if (pickedFile != null) {
+      final snapshot = await _storage
+          .ref()
+          .child('images/$imageName')
+          .putData(await pickedFile.readAsBytes());
+      var imgUrl = await snapshot.ref.getDownloadURL();
+      print('Upload complete!  $imgUrl');
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future<void> addProblemToDatabase(
+    String degree,
+    String subject,
+    Problem problem,
+  ) async {
+    try {
+      await _firestore
+          .collection('degree')
+          .doc(degree)
+          .collection('subject')
+          .doc(subject)
+          .collection('problems')
+          .doc() // this will create a new document with an automatically generated ID
+          .set(problem.toMap());
+    } catch (e) {
+      print(e);
+    }
+  }
+}

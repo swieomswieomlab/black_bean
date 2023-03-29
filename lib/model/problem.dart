@@ -31,26 +31,3 @@ class Problem {
     };
   }
 }
-
-class FirestoreService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-
-  Future<void> addProblemToDatabase(
-    String degree,
-    String subject,
-    Problem problem,
-  ) async {
-    try {
-      await _db
-          .collection('degree')
-          .doc(degree)
-          .collection('subject')
-          .doc(subject)
-          .collection('problems')
-          .doc() // this will create a new document with an automatically generated ID
-          .set(problem.toMap());
-    } catch (e) {
-      print(e);
-    }
-  }
-}

@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import '../model/problem.dart';
+import '../service/firebase_service.dart';
 
 class ProblemMake extends StatefulWidget {
   const ProblemMake({Key? key});
@@ -21,18 +20,17 @@ class _ProblemMakeState extends State<ProblemMake> {
     return Scaffold(
         body: Column(
       children: [
-        DropdownButtonsFormClass(),
+        ProblemMakeWidget(),
       ],
     ));
   }
 }
 
-class DropdownButtonsFormClass extends StatefulWidget {
-  const DropdownButtonsFormClass({Key? key});
+class ProblemMakeWidget extends StatefulWidget {
+  const ProblemMakeWidget({Key? key});
 
   @override
-  State<DropdownButtonsFormClass> createState() =>
-      _DropdownButtonsFormClassState();
+  State<ProblemMakeWidget> createState() => _ProblemMakeWidgetState();
 }
 
 List<String> degree = ['High', 'Middle'];
@@ -44,7 +42,7 @@ List<String> interSection = List.generate(5, (i) => (i + 1).toString());
 List<String> subSection = List.generate(6, (i) => (i + 1).toString());
 List<String> answer = List.generate(4, (i) => (i + 1).toString());
 
-class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
+class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
   String? degreeDropdownValue = degree.first;
   String? subjectDropdownValue = subject.first;
   String? yearDropdownValue = year.first;
@@ -55,8 +53,9 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
   String? answerDropdownValue = answer.first;
   String imgUrl = ""; //이미지 url 저장
   XFile? _image;
+  var url = '';
   final _picker = ImagePicker();
-  final _storage = FirebaseStorage.instance;
+  FirebaseService _firebaseService = FirebaseService();
 
   Future<void> _pickImage() async {
     try {
@@ -75,35 +74,6 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
       print("error while picking file.");
     }
   }
-
-//web 아닐 때 파이어스토어에 업로드하는 함수, 테스트 필요
-  Future<void> _uploadImage(XFile pickedImage, imageName) async {
-    // Initialize Firebase if it hasn't been initialized yet
-    // final imageName = DateTime.now().millisecondsSinceEpoch.toString();
-    final ref = FirebaseStorage.instance.ref().child('images/$imageName');
-    UploadTask uploadTask = ref.putFile(File(pickedImage.path));
-    final snapshot = await uploadTask.whenComplete(() => null);
-    final urlImageUser = await snapshot.ref.getDownloadURL();
-
-    print('Image URL: $urlImageUser');
-  }
-
-//웹에서 파이어스토어에 이미지 업로드 할 때 사용하는 함수
-  Future<void> uploadImage_web(XFile pickedFile, imageName) async {
-    if (pickedFile != null) {
-      final snapshot = await _storage
-          .ref()
-          .child('images/$imageName)}')
-          .putData(await pickedFile.readAsBytes());
-      imgUrl = await snapshot.ref.getDownloadURL();
-      print('Upload complete!  $imgUrl');
-    } else {
-      print('No image selected.');
-    }
-  }
-
-  var url = '';
-  FirestoreService firestoreService = FirestoreService();
 
   @override
   Widget build(BuildContext context) {
@@ -166,10 +136,10 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
 
     //assert _image is not null
     //upload to storage?
-    String imageName = "${problem.year}_${problem.number.toString()}";
-    uploadImage_web(_image!, imageName);
+    String imageName = "${problem.year}_${problem.number.toString()}.jpg";
+    _firebaseService.uploadImage_web(_image!, imageName);
 
-    firestoreService.addProblemToDatabase(
+    _firebaseService.addProblemToDatabase(
         degreeDropdownValue!, subjectDropdownValue!, problem);
 
     showDialog(
@@ -185,6 +155,14 @@ class _DropdownButtonsFormClassState extends State<DropdownButtonsFormClass> {
             ],
           );
         }));
+
+    //올리는거 완료되면 이미지 비우기
+    setState(() {
+      _image = null;
+    });
+    imgUrl = '';
+    //드롭다운 밸류는?
+    numberDropdownValue = (int.parse(numberDropdownValue!) + 1).toString();
 
     return problem;
   }
