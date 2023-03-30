@@ -18,11 +18,13 @@ class _ProblemMakeState extends State<ProblemMake> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        ProblemMakeWidget(),
-      ],
-    ));
+        body: SingleChildScrollView(
+          child: Column(
+              children: [
+          ProblemMakeWidget(),
+              ],
+            ),
+        ));
   }
 }
 
