@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
-    print("web");
+    // print("web");
   await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
   );

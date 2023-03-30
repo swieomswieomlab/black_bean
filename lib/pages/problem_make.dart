@@ -55,7 +55,7 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
   XFile? _image;
   var url = '';
   final _picker = ImagePicker();
-  FirebaseService _firebaseService = FirebaseService();
+  final FirebaseService _firebaseService = FirebaseService();
 
   Future<void> _pickImage() async {
     try {
@@ -66,12 +66,12 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
           _image = image;
         });
         imgUrl = _image!.path;
-        print("imgUrl : $imgUrl");
+        print("problem_make.dart line 69: imgUrl : $imgUrl");
       } else {
-        print("No image is selected.");
+        print("problem_make.dart line 71:No image is selected.");
       }
     } catch (e) {
-      print("error while picking file.");
+      print("problem_make.dart line 74: Error while picking file!");
     }
   }
 

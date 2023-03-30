@@ -23,7 +23,7 @@ class FirebaseService {
     final snapshot = await uploadTask.whenComplete(() => null);
     final urlImageUser = await snapshot.ref.getDownloadURL();
 
-    print('Image URL: $urlImageUser');
+    print('firebase_service_dart line 26: Image URL: $urlImageUser');
   }
 
  //웹에서 파이어스토어에 이미지 업로드 할 때 사용하는 함수
@@ -34,9 +34,9 @@ class FirebaseService {
           .child('images/$imageName')
           .putData(await pickedFile.readAsBytes());
       var imgUrl = await snapshot.ref.getDownloadURL();
-      print('Upload complete!  $imgUrl');
+      print('firebase_service_dart line 37: Upload complete!  $imgUrl');
     } else {
-      print('No image selected.');
+      print('firebase_service_dart line 38: No image selected.');
     }
   }
 
