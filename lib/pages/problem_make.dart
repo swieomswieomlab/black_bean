@@ -36,10 +36,10 @@ class ProblemMakeWidget extends StatefulWidget {
 List<String> degree = ['High', 'Middle'];
 List<String> subject = ['Math', 'Korean'];
 List<String> year = ['2022-1', '2022-2', '2023-1'];
-List<String> number = List.generate(20, (i) => (i + 1).toString());
-List<String> majorSection = List.generate(4, (i) => (i + 1).toString());
-List<String> interSection = List.generate(5, (i) => (i + 1).toString());
-List<String> subSection = List.generate(6, (i) => (i + 1).toString());
+List<String> number = List.generate(22, (i) => (i + 1).toString());
+List<String> majorSection = List.generate(9, (i) => (i + 1).toString());
+List<String> interSection = List.generate(9, (i) => (i + 1).toString());
+List<String> subSection = List.generate(9, (i) => (i + 1).toString());
 List<String> answer = List.generate(4, (i) => (i + 1).toString());
 
 class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
