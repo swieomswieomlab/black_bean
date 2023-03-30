@@ -62,24 +62,37 @@ class FirebaseService {
   }
 
   //문제 하나 불러오는 함수
-  Problem loadProblemFromDatabase(AsyncSnapshot<DocumentSnapshot> snapshot) {
-    Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+  Future<Problem> loadProblemFromDatabase(
+      String degree, String subject, String year, int number) async {
+    DocumentSnapshot documentSnapshot = await _firestore
+        .collection('degree')
+        .doc(degree)
+        .collection('subject')
+        .doc(subject)
+        .collection('problems')
+        .where('year', isEqualTo: year)
+        .where('number', isEqualTo: number)
+        .get()
+        .then((value) => value.docs.single);
+
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+
     var answer = data['answer'];
     var iSection = data['iSection'];
     var mSection = data['mSection'];
-    var number = data['number'];
+    var numberdata = data['number'];
     var problemurl = data['problem'];
     var sSection = data['sSection'];
-    var year = data['year'];
+    var yeardata = data['year'];
 
     Problem problem = Problem(
         answer: answer,
         iSection: iSection,
         mSection: mSection,
-        number: number,
+        number: numberdata,
         problem: problemurl,
         sSection: sSection,
-        year: year);
+        year: yeardata);
 
     print(problem.toMap());
 

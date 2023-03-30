@@ -5,6 +5,8 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../service/firebase_service.dart';
+
 var db = FirebaseFirestore.instance;
 
 class TestPage extends StatefulWidget {
@@ -15,16 +17,16 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+  FirebaseService firebaseService = FirebaseService();
   @override
   Widget build(BuildContext context) {
-    db.collection("test").get().then(((value) {
-      for (var element in value.docs) {
-        print(element.get("name"));
-      }
-    }));
-
-    return Container(
-      child: Text("졸라힘드노"),
+    return Scaffold(
+      body: ElevatedButton(
+        onPressed: (() {
+          firebaseService.loadProblemFromDatabase('High', 'Math', '2022-1', 1);
+        }),
+        child: const Text("PRINT"),
+      ),
     );
   }
 }
