@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -39,6 +40,18 @@ class FirebaseService {
     } else {
       print('firebase_service_dart line 38: No image selected.');
     }
+  }
+
+    Future<String> uploadToStorage(XFile pickedFile, imageName) async {
+    Uint8List bytes = await pickedFile.readAsBytes();
+
+Reference ref = FirebaseStorage.instance.ref().child('images/$imageName');
+UploadTask uploadTask = ref.putData(bytes, SettableMetadata(contentType: 'image/png'));
+TaskSnapshot taskSnapshot = await uploadTask
+	.whenComplete(() => print('done'))
+    .catchError((error) => print('something went wrong'));
+String url = await taskSnapshot.ref.getDownloadURL();
+return url;
   }
 
   //문제 선택하고 firestore에 올리는 함수
