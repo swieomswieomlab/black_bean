@@ -42,16 +42,17 @@ class FirebaseService {
     }
   }
 
-    Future<String> uploadToStorage(XFile pickedFile, imageName) async {
+  Future<String> uploadToStorage(XFile pickedFile, imageName) async {
     Uint8List bytes = await pickedFile.readAsBytes();
 
-Reference ref = FirebaseStorage.instance.ref().child('images/$imageName');
-UploadTask uploadTask = ref.putData(bytes, SettableMetadata(contentType: 'image/png'));
-TaskSnapshot taskSnapshot = await uploadTask
-	.whenComplete(() => print('done'))
-    .catchError((error) => print('something went wrong'));
-String url = await taskSnapshot.ref.getDownloadURL();
-return url;
+    Reference ref = FirebaseStorage.instance.ref().child('images/$imageName');
+    UploadTask uploadTask =
+        ref.putData(bytes, SettableMetadata(contentType: 'image/png'));
+    TaskSnapshot taskSnapshot = await uploadTask
+        .whenComplete(() => print('done'))
+        .catchError((error) => print('something went wrong'));
+    String url = await taskSnapshot.ref.getDownloadURL();
+    return url;
   }
 
   //문제 선택하고 firestore에 올리는 함수
@@ -107,8 +108,53 @@ return url;
         sSection: sSection,
         year: yeardata);
 
-    print(problem.toMap());
+    // print(problem.toMap());
 
     return problem;
   }
+
+  //함수에서 문제 리스트 불러오기
+  Future<List<Problem>> loadProblemYearFromDatabase(
+      String degree, String subject, String year) async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('degree')
+        .doc(degree)
+        .collection('subject')
+        .doc(subject)
+        .collection('problems')
+        .where('year', isEqualTo: year)
+        .get();
+
+    List<Problem> problems = [];
+
+    querySnapshot.docs.forEach((documentSnapshot) {
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+
+      var answer = data['answer'];
+      var iSection = data['iSection'];
+      var mSection = data['mSection'];
+      var numberdata = data['number'];
+      var problemurl = data['problem'];
+      var sSection = data['sSection'];
+      var yeardata = data['year'];
+
+      Problem problem = Problem(
+          answer: answer,
+          iSection: iSection,
+          mSection: mSection,
+          number: numberdata,
+          problem: problemurl,
+          sSection: sSection,
+          year: yeardata);
+
+      // print(problem.toMap());
+
+      problems.add(problem);
+    });
+
+    return problems;
+  }
+
+
+  
 }

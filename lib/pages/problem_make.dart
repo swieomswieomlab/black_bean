@@ -19,12 +19,12 @@ class _ProblemMakeState extends State<ProblemMake> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-              children: [
+      child: Column(
+        children: [
           ProblemMakeWidget(),
-              ],
-            ),
-        ));
+        ],
+      ),
+    ));
   }
 }
 
@@ -69,12 +69,13 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
         });
         imgUrl = _image!.path;
         print("problem_make.dart line 69: imgUrl : $imgUrl");
-      String imageName = "${yearDropdownValue!}_${int.parse(numberDropdownValue!)}.jpg";
-        _firebaseService.uploadToStorage(_image!, imageName).then((value) => 
-setState(() {
-  imgUrl = value;
-})
-);
+        String imageName =
+            "${yearDropdownValue!}_${int.parse(numberDropdownValue!)}.jpg";
+        _firebaseService
+            .uploadToStorage(_image!, imageName)
+            .then((value) => setState(() {
+                  imgUrl = value;
+                }));
       } else {
         print("problem_make.dart line 71:No image is selected.");
       }
@@ -82,7 +83,6 @@ setState(() {
       print("problem_make.dart line 74: Error while picking file!");
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -94,16 +94,17 @@ setState(() {
             }),
             child: const Text("Upload Image")),
         Center(
-          child: Image.network('https://firebasestorage.googleapis.com/v0/b/black-bean-1f72d.appspot.com/o/images%2F2022-1_1.jpg?alt=media&token=81d56325-695f-499f-9230-0e43954644e4')
-          // _image != null
-          //     ?
-          //     // Image.file(File(_image!.path))
-          //     Image.network('https://firebasestorage.googleapis.com/v0/b/black-bean-1f72d.appspot.com/o/images%2F2022-1_2.jpg?alt=media&token=5528904d-4b80-4fbd-8c61-00153e2dba3d')
-              // Text('Picked image: ${_pickedFile!.path}')
-              // Image.file(File(_pickedFile!.path))
+            child: Image.network(
+                'https://firebasestorage.googleapis.com/v0/b/black-bean-1f72d.appspot.com/o/images%2F2022-1_1.jpg?alt=media&token=81d56325-695f-499f-9230-0e43954644e4')
+            // _image != null
+            //     ?
+            //     // Image.file(File(_image!.path))
+            //     Image.network('https://firebasestorage.googleapis.com/v0/b/black-bean-1f72d.appspot.com/o/images%2F2022-1_2.jpg?alt=media&token=5528904d-4b80-4fbd-8c61-00153e2dba3d')
+            // Text('Picked image: ${_pickedFile!.path}')
+            // Image.file(File(_pickedFile!.path))
 
-              // : Text('No image selected'),
-        ),
+            // : Text('No image selected'),
+            ),
         // Image.network('https://firebasestorage.googleapis.com/v0/b/black-bean-1f72d.appspot.com/o/images%2F2022-1_1.jpg?alt=media&token=1421a476-fa46-43df-8efd-7b88dee73764'),
         Row(
           children: [
@@ -135,10 +136,11 @@ setState(() {
   }
 
   Problem submitProblem(BuildContext context) {
-        String imageName = "${yearDropdownValue!}_${int.parse(numberDropdownValue!)}.jpg";
+    String imageName =
+        "${yearDropdownValue!}_${int.parse(numberDropdownValue!)}.jpg";
 
 //upload to firebase
-      Problem problem = Problem(
+    Problem problem = Problem(
         answer: int.parse(answerDropdownValue!),
         iSection: int.parse(interSectionDropdownValue!),
         mSection: int.parse(majorSectionDropdownValue!),
@@ -149,7 +151,6 @@ setState(() {
 
     //assert _image is not null
     //upload to storage?
-
 
     _firebaseService.addProblemToDatabase(
         degreeDropdownValue!, subjectDropdownValue!, problem);
