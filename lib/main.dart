@@ -5,6 +5,7 @@ import 'package:black_bean/pages/sign_up_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'pages/full_exam.dart';
 import 'pages/home_page.dart';
 import 'firebase_options.dart';
 // import 'pages/image_picker_test.dart';
