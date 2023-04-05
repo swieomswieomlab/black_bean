@@ -147,7 +147,7 @@ class FirebaseService {
           sSection: sSection,
           year: yeardata);
 
-      // print(problem.toMap());
+      print(problem.toMap());
 
       problems.add(problem);
     });

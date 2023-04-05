@@ -23,10 +23,11 @@ class _FullExamPageState extends State<FullExamPage> {
   void initState() {
     super.initState();
     _firebaseService
-        .loadProblemYearFromDatabase('High', 'Math', '2022-2')
+        .loadProblemYearFromDatabase('High', 'Math', '2022-1')
         .then((loadedProblems) {
       setState(() {
         problems = loadedProblems;
+        problems.sort((a, b) => a.number.compareTo(b.number));
       });
     });
   }
@@ -43,10 +44,12 @@ class _FullExamPageState extends State<FullExamPage> {
             children: [
               //exam image
               Container(
-                child: Text('exam image here 근데 이거 웹이라 지금 좀 문제 있음'),
-                // child: Image.network(
-                //   'https://www.google.com/url?sa=i&url=https%3A%2F%2Fmathbang.net%2F646&psig=AOvVaw1yzaEf4yQjnpUa-8_bq15O&ust=1680347942195000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCLDfroOGhv4CFQAAAAAdAAAAABAF'
-                // ),
+                // child: Text('exam image here 근데 이거 웹이라 지금 좀 문제 있음'),
+                child: Image.network(
+                  // 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fmathbang.net%2F646&psig=AOvVaw1yzaEf4yQjnpUa-8_bq15O&ust=1680347942195000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCLDfroOGhv4CFQAAAAAdAAAAABAF'
+                  problems[0].problem
+                  //로딩 처리 해야됨
+                ),
               ),
               Expanded(child: Container()),
               Divider(),
