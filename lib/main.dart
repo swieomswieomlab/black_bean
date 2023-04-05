@@ -1,3 +1,4 @@
+import 'package:black_bean/pages/full_exam.dart';
 import 'package:black_bean/pages/login_page.dart';
 import 'package:black_bean/pages/problem_make.dart';
 import 'package:black_bean/pages/sign_up_page.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/testPage',
+      initialRoute: '/fullExam',
       routes: {
         '/': (context) => MyHomePage(),
         '/problemMake': (context) => ProblemMake(),
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         // '/imageTestPage': (context) => HomePage(),
         '/loginPage': (context) => LoginPage(),
         '/signinPage': (context) => SignUpPage(),
+        '/fullExam':(context) =>  FullExamPage(),
       },
     );
   }
