@@ -37,7 +37,7 @@ class ProblemMakeWidget extends StatefulWidget {
 
 List<String> degree = ['High', 'Middle'];
 List<String> subject = ['Math', 'Korean'];
-List<String> year = ['2022-1', '2022-2', '2023-1'];
+List<String> year = ['2020-1','2020-2','2021-1','2021-2','2022-1', '2022-2', '2023-1'];
 List<String> number = List.generate(22, (i) => (i + 1).toString());
 List<String> majorSection = List.generate(9, (i) => (i + 1).toString());
 List<String> interSection = List.generate(9, (i) => (i + 1).toString());
@@ -91,31 +91,34 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
               ? Image.network(imgUrl)
               : const Text("No image selected"),
         ),
-        Row(
-          children: [
-            customDropdownButton(degree, "구분", degreeDropdownValue,
-                (value) => degreeDropdownValue = value),
-            customDropdownButton(subject, "과목", subjectDropdownValue,
-                (value) => subjectDropdownValue = value),
-            customDropdownButton(year, "년도", yearDropdownValue,
-                (value) => yearDropdownValue = value),
-            customDropdownButton(number, "번호", numberDropdownValue,
-                (value) => numberDropdownValue = value),
-            customDropdownButton(majorSection, "대단원", majorSectionDropdownValue,
-                (value) => majorSectionDropdownValue = value),
-            customDropdownButton(interSection, "중단원", interSectionDropdownValue,
-                (value) => interSectionDropdownValue = value),
-            customDropdownButton(subSection, "소단원", subSectionDropdownValue,
-                (value) => subSectionDropdownValue = value),
-            customDropdownButton(answer, "정답", answerDropdownValue,
-                (value) => answerDropdownValue = value),
-          ],
+        Center(
+          child: Row(
+            children: [
+              customDropdownButton(degree, "구분", degreeDropdownValue,
+                  (value) => degreeDropdownValue = value),
+              customDropdownButton(subject, "과목", subjectDropdownValue,
+                  (value) => subjectDropdownValue = value),
+              customDropdownButton(year, "년도", yearDropdownValue,
+                  (value) => yearDropdownValue = value),
+              customDropdownButton(number, "번호", numberDropdownValue,
+                  (value) => numberDropdownValue = value),
+              customDropdownButton(majorSection, "대단원", majorSectionDropdownValue,
+                  (value) => majorSectionDropdownValue = value),
+              customDropdownButton(interSection, "중단원", interSectionDropdownValue,
+                  (value) => interSectionDropdownValue = value),
+              customDropdownButton(subSection, "소단원", subSectionDropdownValue,
+                  (value) => subSectionDropdownValue = value),
+              customDropdownButton(answer, "정답", answerDropdownValue,
+                  (value) => answerDropdownValue = value),
+            ],
+          ),
         ),
         ElevatedButton(
             onPressed: () {
               submitProblem(context);
             },
-            child: const Text("Submit"))
+            child: const Text("Submit")),
+        Text(''),
       ],
     );
   }
