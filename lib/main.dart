@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'pages/full_exam.dart';
+import 'pages/grading_page.dart';
 import 'pages/home_page.dart';
 import 'firebase_options.dart';
 // import 'pages/image_picker_test.dart';
@@ -22,7 +23,6 @@ void main() async {
 } else {
   await Firebase.initializeApp();
 }
-  
   runApp(const MyApp());
 }
 
@@ -33,10 +33,11 @@ class MyApp extends StatelessWidget {
   build(BuildContext context) {
     return MaterialApp(
       title: 'Black Bean Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/problemMake',
+      initialRoute: '/gradingPage',
       routes: {
         '/': (context) => MyHomePage(),
         '/problemMake': (context) => ProblemMake(),
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         '/loginPage': (context) => LoginPage(),
         '/signinPage': (context) => SignUpPage(),
         '/fullExam':(context) =>  FullExamPage(),
+        '/gradingPage':(context) =>  GradingPage(),
       },
     );
   }
