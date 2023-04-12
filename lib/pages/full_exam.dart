@@ -36,7 +36,7 @@ class _FullExamPageState extends State<FullExamPage> {
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
-      corrects = List.generate(finalNumber + 1, (index) => 0);
+      corrects = List.generate(finalNumber, (index) => 0);
       // print("Number of problems: " + finalNumber.toString());
       return loadedProblems;
     });

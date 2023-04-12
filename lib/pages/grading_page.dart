@@ -19,13 +19,19 @@ class _GradingPageState extends State<GradingPage> {
   late List<Widget> textWidgets;
   late List<Problem> problems = widget._gradingArguments.problems;
   late List<int> corrects = widget._gradingArguments.corrects;
+  late int _score;
+  String imgUrl = "";
 
-  int _selectedNumber = -1;
+  int _selectedNumberAnswer = -1;
+  int _selectedNumberProblem = -1;
   bool clicked = false;
 
   @override
   void initState() {
     // TODO: implement initState
+    _score = (corrects.where((number) => number == 1).length) *
+        100 ~/
+        corrects.length;
 
     super.initState();
   }
@@ -41,12 +47,16 @@ class _GradingPageState extends State<GradingPage> {
             child: Column(
               children: [
                 Text(number.toString()),
-                corrects[number-1] == 2?
-                const Text("\u{274c}"):
-                const Text("C")
-                ,
+                corrects[number - 1] == 2
+                    ? const Text("\u{274c}")
+                    : const Text("C"),
               ],
             )),
+        onTap: () {
+          setState(() {
+            _selectedNumberProblem = number;
+          });
+        },
       );
     }).toList();
 
@@ -84,7 +94,8 @@ class _GradingPageState extends State<GradingPage> {
             color: Colors.amber,
             // Color(0xFFF3F8FC),
             child: Column(children: [
-              Text("점수 여기에 표시"),
+              Text("$_score점"),
+              //TODO: change phrase by score
               Text("합격까지 한 문제! 너무 잘 하고 있어요 :)"),
             ]),
           ),
@@ -116,18 +127,21 @@ class _GradingPageState extends State<GradingPage> {
                   children: [
                     Text("틀린 문제 다시 풀기", style: Headline_H4(24, Colors.black)),
                     SizedBox(
-                        child: Image.network(
-                      "https://t1.daumcdn.net/cfile/tistory/2267023D5464408A17",
-                      fit: BoxFit.contain,
-                    )),
+                      child: _selectedNumberProblem != -1 && corrects[_selectedNumberProblem-1] == 2
+                          ? Image.network(
+                              problems[_selectedNumberProblem - 1].problem,
+                              fit: BoxFit.contain,
+                            )
+                          : const Text("수고하셨습니다~"),
+                    ),
                     Text("틀렸는지 여부 알려주는 부분",
                         style: Headline_H4(24, Colors.black)),
                     Row(
                       children: [
-                        number_button('1', 1),
-                        number_button('2', 2),
-                        number_button('3', 3),
-                        number_button('4', 4),
+                        numberButton('1', 1),
+                        numberButton('2', 2),
+                        numberButton('3', 3),
+                        numberButton('4', 4),
                       ],
                     ),
                   ],
@@ -140,7 +154,7 @@ class _GradingPageState extends State<GradingPage> {
     );
   }
 
-  OutlinedButton number_button(String number, int value) {
+  OutlinedButton numberButton(String number, int value) {
     int _selectedNumber = -1;
     bool isSelected = _selectedNumber == value;
 
