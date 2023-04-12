@@ -41,7 +41,10 @@ class _GradingPageState extends State<GradingPage> {
             child: Column(
               children: [
                 Text(number.toString()),
-                Text("\u{274c}"),
+                corrects[number-1] == 2?
+                const Text("\u{274c}"):
+                const Text("C")
+                ,
               ],
             )),
       );

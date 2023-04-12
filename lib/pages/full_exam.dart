@@ -20,13 +20,12 @@ class _FullExamPageState extends State<FullExamPage> {
   double space_between_numbers_and_submit = 180;
   double space_between_numbers = 20;
   //0 for init, 1 for correct, 2 for wrong
-  List<int> corrects = List.generate(21, (index) => 0);
+  late List<int> corrects;
 
   late Future<List<Problem>> _loadProblemsFuture;
   late List<Problem> problems;
   int _selectedNumber = -1;
   int _numberState = 0;
-  // TODO: make finalNumber not constant
   late int finalNumber;
 
   @override
@@ -37,7 +36,8 @@ class _FullExamPageState extends State<FullExamPage> {
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
-      print("Number of problems: " + finalNumber.toString());
+      corrects = List.generate(finalNumber + 1, (index) => 0);
+      // print("Number of problems: " + finalNumber.toString());
       return loadedProblems;
     });
   }
@@ -127,14 +127,21 @@ class _FullExamPageState extends State<FullExamPage> {
               } else {
                 corrects[_numberState] = 2; // wrong
               }
+              //print if problem is correct
+              if (corrects[_numberState] == 1) {
+                print("Correct!");
+              } else {
+                print("Wrong!");
+              }
+              //if final number, route to grading page
               if (_numberState == finalNumber - 1) {
                 Navigator.pushNamed(context, '/gradingPage',
                     arguments: GradingArguments(corrects, problems));
                 _numberState = 0;
               }
+              //repetive args
               _numberState += 1;
               _selectedNumber = -1;
-              // print(corrects);
             });
 
             // when problems are finishied, route to grading page
