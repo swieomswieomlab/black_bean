@@ -24,7 +24,9 @@ class _GradingPageState extends State<GradingPage> {
 
   int _selectedNumberAnswer = -1;
   int _selectedNumberProblem = -1;
+  Color _selectedColor = Colors.transparent;
   bool clicked = false;
+  int correctMessageState = -1;
 
   @override
   void initState() {
@@ -43,18 +45,22 @@ class _GradingPageState extends State<GradingPage> {
             .map<Widget>((int number) {
       return InkWell(
         child: Container(
-            color: mainLightBlue,
-            child: Column(
-              children: [
-                Text(number.toString()),
-                corrects[number - 1] == 2
-                    ? const Text("\u{274c}")
-                    : const Text("C"),
-              ],
-            )),
+          color: number == _selectedNumberProblem ? Colors.blue : mainLightBlue,
+          child: Column(
+            children: [
+              Text(number.toString()),
+              corrects[number - 1] == 2
+                  ? const Text("\u{274c}")
+                  : const Text("\u{2b55}"),
+            ],
+          ),
+        ),
         onTap: () {
           setState(() {
             _selectedNumberProblem = number;
+            _selectedColor = Colors.blue;
+            _selectedNumberAnswer = -1;
+            correctMessageState = -1;
           });
         },
       );
@@ -127,15 +133,24 @@ class _GradingPageState extends State<GradingPage> {
                   children: [
                     Text("틀린 문제 다시 풀기", style: Headline_H4(24, Colors.black)),
                     SizedBox(
-                      child: _selectedNumberProblem != -1 && corrects[_selectedNumberProblem-1] == 2
+                      //TODO: fix constant width size
+                      width: 400,
+                      child: _selectedNumberProblem != -1 &&
+                              corrects[_selectedNumberProblem - 1] == 2
                           ? Image.network(
                               problems[_selectedNumberProblem - 1].problem,
                               fit: BoxFit.contain,
                             )
                           : const Text("수고하셨습니다~"),
                     ),
-                    Text("틀렸는지 여부 알려주는 부분",
-                        style: Headline_H4(24, Colors.black)),
+                    //TODO: implement phrase
+                    correctMessageState == -1
+                        ? Text("CMS 0", style: Headline_H4(24, Colors.black))
+                        : correctMessageState == 1
+                            ? Text("CMS 1",
+                                style: Headline_H4(24, Colors.black))
+                            : Text("CMS 2",
+                                style: Headline_H4(24, Colors.black)),
                     Row(
                       children: [
                         numberButton('1', 1),
@@ -155,20 +170,30 @@ class _GradingPageState extends State<GradingPage> {
   }
 
   OutlinedButton numberButton(String number, int value) {
-    int _selectedNumber = -1;
-    bool isSelected = _selectedNumber == value;
-
     return OutlinedButton(
       onPressed: () {
         setState(() {
-          _selectedNumber = isSelected ? -1 : value;
+          _selectedNumberAnswer = value;
+        });
+
+        // check the selected problem's answer
+        bool isCorrect = problems[_selectedNumberProblem - 1].answer ==
+            _selectedNumberAnswer;
+
+        // update the text based on the answer
+        setState(() {
+          if (isCorrect) {
+            correctMessageState = 1;
+          } else {
+            correctMessageState = 2;
+          }
         });
       },
       style: ButtonStyle(
         side: MaterialStateProperty.all(BorderSide(color: Colors.black)),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
-            if (isSelected) {
+            if (_selectedNumberAnswer == value) {
               return Colors.blue;
             } else {
               return null;
@@ -180,7 +205,7 @@ class _GradingPageState extends State<GradingPage> {
         number,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: isSelected ? Colors.white : Colors.black,
+          color: _selectedNumberAnswer == value ? Colors.white : Colors.black,
         ),
       ),
     );
