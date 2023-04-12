@@ -1,6 +1,7 @@
 import 'dart:js_util';
 
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import '../class/grading_arguments.dart';
 
@@ -64,10 +65,9 @@ class _FullExamPageState extends State<FullExamPage> {
                   } else {
                     problems = snapshot.data!;
                     return Container(
-                      child: FadeInImage(
-                        placeholder:
-                            AssetImage('assets/images/placeholder.png'),
-                        image: NetworkImage(problems[_numberState].problem),
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: problems[_numberState].problem,
                       ),
                     );
                   }
