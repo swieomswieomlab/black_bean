@@ -1,6 +1,9 @@
 import 'dart:js_util';
 
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
+
+import '../class/grading_arguments.dart';
 
 import '../model/problem.dart';
 
@@ -18,12 +21,13 @@ class _FullExamPageState extends State<FullExamPage> {
   double space_between_numbers_and_submit = 180;
   double space_between_numbers = 20;
   //0 for init, 1 for correct, 2 for wrong
-  List<int> corrects = List.generate(21, (index) => 0);
+  late List<int> corrects;
 
   late Future<List<Problem>> _loadProblemsFuture;
-  late List<Problem> _problems;
+  late List<Problem> problems;
   int _selectedNumber = -1;
   int _numberState = 0;
+  late int finalNumber;
 
   @override
   void initState() {
@@ -32,6 +36,9 @@ class _FullExamPageState extends State<FullExamPage> {
         .loadProblemYearFromDatabase('High', 'Math', '2022-1')
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
+      finalNumber = loadedProblems.length;
+      corrects = List.generate(finalNumber, (index) => 0);
+      // print("Number of problems: " + finalNumber.toString());
       return loadedProblems;
     });
   }
@@ -47,22 +54,25 @@ class _FullExamPageState extends State<FullExamPage> {
         child: Column(
           children: [
             //exam image
-            FutureBuilder<List<Problem>>(
-              future: _loadProblemsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // show progress indicator while loading
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  _problems = snapshot.data!;
-                  return Container(
-                    child: Image.network(
-                      _problems[_numberState].problem,
-                    ),
-                  );
-                }
-              },
+            SingleChildScrollView(
+              child: FutureBuilder<List<Problem>>(
+                future: _loadProblemsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // show progress indicator while loading
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    problems = snapshot.data!;
+                    return Container(
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: problems[_numberState].problem,
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
             Expanded(child: Container()),
             Divider(),
@@ -111,16 +121,31 @@ class _FullExamPageState extends State<FullExamPage> {
           } else {
             // number selected, check if it's correct
             setState(() {
-              int answer = _problems[_numberState].answer;
+              int answer = problems[_numberState].answer;
               if (answer == _selectedNumber) {
                 corrects[_numberState] = 1; // correct
               } else {
                 corrects[_numberState] = 2; // wrong
               }
+              //print if problem is correct
+              if (corrects[_numberState] == 1) {
+                print("Correct!");
+              } else {
+                print("Wrong!");
+              }
+              //if final number, route to grading page
+              if (_numberState == finalNumber - 1) {
+                Navigator.pushNamed(context, '/gradingPage',
+                    arguments: GradingArguments(corrects, problems));
+                _numberState = 0;
+              }
+              //repetive args
               _numberState += 1;
               _selectedNumber = -1;
-              print(corrects);
             });
+
+            // when problems are finishied, route to grading page
+            // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
           }
         },
         child: Text('저장'),

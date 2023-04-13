@@ -11,6 +11,7 @@ import 'pages/home_page.dart';
 import 'firebase_options.dart';
 // import 'pages/image_picker_test.dart';
 import 'pages/test_page.dart';
+import 'class/grading_arguments.dart';
 import 'package:flutter/foundation.dart';
 
 void main() async {
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/gradingPage',
+      initialRoute: '/fullExam',
       routes: {
         '/': (context) => MyHomePage(),
         '/problemMake': (context) => ProblemMake(),
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         '/loginPage': (context) => LoginPage(),
         '/signinPage': (context) => SignUpPage(),
         '/fullExam':(context) =>  FullExamPage(),
-        '/gradingPage':(context) =>  GradingPage(),
+        '/gradingPage':(context) =>  GradingPage(gradingArguments: ModalRoute.of(context)!.settings.arguments as GradingArguments),
       },
     );
   }
