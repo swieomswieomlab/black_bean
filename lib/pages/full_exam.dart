@@ -27,7 +27,7 @@ class _FullExamPageState extends State<FullExamPage> {
   late List<Problem> problems;
   int _selectedNumber = -1;
   int _numberState = 0;
-  late int finalNumber;
+  int finalNumber = 99;
 
   @override
   void initState() {
@@ -148,7 +148,10 @@ class _FullExamPageState extends State<FullExamPage> {
             // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
           }
         },
-        child: Text('저장'),
+        child: 
+        _numberState == finalNumber - 1
+        ?const Text('채점')
+        :const Text('다음'),
       );
 
   OutlinedButton number_button(String number, int value) {
