@@ -40,7 +40,7 @@ class _GradingPageState extends State<GradingPage> {
 
   @override
   Widget build(BuildContext context) {
-    textWidgets = textWidgets =
+    textWidgets =
         List.generate(problems.length, (index) => problems[index].number)
             .map<Widget>((int number) {
       return InkWell(
