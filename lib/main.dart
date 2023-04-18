@@ -2,6 +2,7 @@ import 'package:black_bean/pages/full_exam.dart';
 import 'package:black_bean/pages/login_page.dart';
 import 'package:black_bean/pages/problem_make.dart';
 import 'package:black_bean/pages/sign_up_page.dart';
+import 'package:black_bean/pages/weakness_exam.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/gradingPage',
+        initialRoute: '/fullExam',
         routes: {
           '/': (context) => MyHomePage(),
           '/problemMake': (context) => ProblemMake(),
@@ -53,6 +54,8 @@ class MyApp extends StatelessWidget {
           '/signinPage': (context) => SignUpPage(),
           '/fullExam':(context) =>  FullExamPage(),
           '/gradingPage':(context) =>  GradingPage(),
+          '/weeknessExam':(context) =>  WeeknessExamPage(),
+
         },
       ),
     );

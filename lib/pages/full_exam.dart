@@ -1,5 +1,6 @@
 import 'dart:js_util';
 
+import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 
 import '../model/problem.dart';
@@ -15,8 +16,7 @@ class FullExamPage extends StatefulWidget {
 
 class _FullExamPageState extends State<FullExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
-  double space_between_numbers_and_submit = 180;
-  double space_between_numbers = 20;
+  double space_between_numbers = 48;
   //0 for init, 1 for correct, 2 for wrong
   List<int> corrects = List.generate(21, (index) => 0);
 
@@ -40,12 +40,15 @@ class _FullExamPageState extends State<FullExamPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text("Exam index here | Subject here"),
+        title: Text("Exam index here | Subject here", style:Headline_H4(26, mainBlack) ,),
       ),
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           children: [
+            SizedBox(height: 36),
             //exam image
             FutureBuilder<List<Problem>>(
               future: _loadProblemsFuture,
@@ -57,8 +60,22 @@ class _FullExamPageState extends State<FullExamPage> {
                 } else {
                   _problems = snapshot.data!;
                   return Container(
-                    child: Image.network(
-                      _problems[_numberState].problem,
+                    width: 820,
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            //TODO: 단원명 불러오기
+                            "${_problems[_numberState].mSection}단원|단원명",
+                            style: Tiny_T1(16, mainSkyBlue),),
+                        ),
+                        Container(
+                          child: Image.network(
+                            _problems[_numberState].problem,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }
@@ -66,30 +83,41 @@ class _FullExamPageState extends State<FullExamPage> {
             ),
             Expanded(child: Container()),
             Divider(),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(width: space_between_numbers_and_submit + 80),
-                        number_button('1', 1),
-                        SizedBox(width: space_between_numbers),
-                        number_button('2', 2),
-                        SizedBox(width: space_between_numbers),
-                        number_button('3', 3),
-                        SizedBox(width: space_between_numbers),
-                        number_button('4', 4),
-                        SizedBox(width: space_between_numbers_and_submit),
-                        submit_button(),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                  ],
-                ),
+            Container(
+              padding: EdgeInsets.only(bottom: 51, top: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(width: 140),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    
+                    children: [
+
+                      Column(children: [
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
+                        Text("이전"),
+                      ]),
+                      SizedBox(width: space_between_numbers),
+                      number_button('1', 1),
+                      SizedBox(width: space_between_numbers),
+                      number_button('2', 2),
+                      SizedBox(width: space_between_numbers),
+                      number_button('3', 3),
+                      SizedBox(width: space_between_numbers),
+                      number_button('4', 4),
+                      SizedBox(width: space_between_numbers),
+                      Column(children: [
+                        IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.arrow_forward_ios)),
+                        Text("다음"),
+                      ]),
+                    ],
+                  ),
+                  submit_button(),
+                ],
               ),
             ),
           ],
@@ -98,9 +126,14 @@ class _FullExamPageState extends State<FullExamPage> {
     );
   }
 
-  ElevatedButton submit_button() => ElevatedButton(
+ ElevatedButton submit_button() => ElevatedButton(
         style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all(Size(80, 30)),
+          fixedSize: MaterialStateProperty.all(Size(140, 48)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
         ),
         onPressed: () {
           if (_selectedNumber == -1) {
@@ -123,8 +156,9 @@ class _FullExamPageState extends State<FullExamPage> {
             });
           }
         },
-        child: Text('저장'),
+        child: Text('채점',style:Button_Bt2(20, Colors.white),),
       );
+
 
   OutlinedButton number_button(String number, int value) {
     bool isSelected = _selectedNumber == value;
@@ -146,6 +180,8 @@ class _FullExamPageState extends State<FullExamPage> {
             }
           },
         ),
+        fixedSize: MaterialStateProperty.all(Size(44, 44)),
+        shape: MaterialStateProperty.all(CircleBorder()),
       ),
       child: Text(
         number,
