@@ -24,7 +24,7 @@ class _FullExamPageState extends State<FullExamPage> {
   late List<int> corrects;
 
   late Future<List<Problem>> _loadProblemsFuture;
-  late List<Problem> problems;
+  late List<Problem> _problems;
   int _selectedNumber = -1;
   int _numberState = 0;
   int finalNumber = 99;
@@ -80,7 +80,7 @@ class _FullExamPageState extends State<FullExamPage> {
                         Container(
                           child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
-                        image: problems[_numberState].problem,
+                        image: _problems[_numberState].problem,
                       ),
                         ),
                       ],
@@ -152,7 +152,7 @@ class _FullExamPageState extends State<FullExamPage> {
           } else {
             // number selected, check if it's correct
             setState(() {
-              int answer = problems[_numberState].answer;
+              int answer = _problems[_numberState].answer;
               if (answer == _selectedNumber) {
                 corrects[_numberState] = 1; // correct
               } else {
@@ -167,7 +167,7 @@ class _FullExamPageState extends State<FullExamPage> {
               //if final number, route to grading page
               if (_numberState == finalNumber - 1) {
                 Navigator.pushNamed(context, '/gradingPage',
-                    arguments: GradingArguments(corrects, problems));
+                    arguments: GradingArguments(corrects, _problems));
                 _numberState = 0;
               }
               //repetive args
