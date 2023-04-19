@@ -1,6 +1,7 @@
 import 'package:black_bean/class/grading_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:black_bean/textstyle.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../model/problem.dart';
 
@@ -12,7 +13,7 @@ class GradingPage extends StatefulWidget {
         super(key: key);
 
   @override
-  State<GradingPage> createState() => _GradingPageState();
+  _GradingPageState createState() => _GradingPageState();
 }
 
 class _GradingPageState extends State<GradingPage> {
@@ -67,106 +68,213 @@ class _GradingPageState extends State<GradingPage> {
     }).toList();
 
     return Scaffold(
-      appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: Image.network(
-            'https://gradium.co.kr/wp-content/uploads/black-beans-1.jpg'),
-        title: Row(
-          children: [
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: Row(
+            children: [
+              SizedBox(
+                width: 100,
+                child: Image.network(
+                  'https://gradium.co.kr/wp-content/uploads/black-beans-1.jpg',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              SizedBox(
+                width: 80,
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  '연습문제',
+                  style: Headline_H2(20, Colors.black),
+                ),
+              ),
+              SizedBox(
+                width: 60,
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  '모의고사',
+                  style: Headline_H2(20, Colors.black),
+                ),
+              ),
+            ],
+          ),
+          actions: [
             TextButton(
               onPressed: () {},
-              child: Text(
-                '연습문제',
-                style: Headline_H2(20, Colors.black),
-              ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                '모의고사',
-                style: Headline_H2(20, Colors.black),
-              ),
-            ),
+              child: Text("마이페이지", style: Button_Bt2(20, Colors.black)),
+            )
           ],
         ),
-        actions: [TextButton(onPressed: () {}, child: Text("마이페이지"))],
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(horizontal: 156),
-            color: Colors.amber,
-            // Color(0xFFF3F8FC),
-            child: Column(children: [
-              Text("$_score점"),
-              //TODO: change phrase by score
-              Text("합격까지 한 문제! 너무 잘 하고 있어요 :)"),
-            ]),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 156),
-            child: Row(children: [
-              Container(
-                width: 366,
+        body: Center(
+          child: SingleChildScrollView(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                width: 1200,
+                // height: screenHeight,
                 child: Column(
-                  children: [
-                    Text("문항 별 채점 결과", style: Headline_H4(24, Colors.black)),
-                    GridView(
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        childAspectRatio: 1.0,
-                        mainAxisSpacing: 4.0,
-                        crossAxisSpacing: 4.0,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 1200,
+                      height: 178,
+                      // margin: EdgeInsets.symmetric(
+                      //   horizontal: 156,
+                      // ),
+                      color: Color(0xffF3F8FC),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "$_score점",
+                            style: Headline_H0(72, mainSkyBlue),
+                          ),
+                          Text(
+                            "합격까지 한 문제! 너무 잘 하고 있어요 :)",
+                            style: Headline_H4(24, grey07),
+                          ),
+                        ],
                       ),
-                      children: textWidgets,
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      height: 500,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 366,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "문항 별 채점 결과",
+                                  style: Headline_H4(24, Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  width: 366,
+                                  child: GridView(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 5,
+                                      childAspectRatio: 70 / 94,
+                                      mainAxisSpacing: 4.0,
+                                      crossAxisSpacing: 4.0,
+                                    ),
+                                    children: textWidgets,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 60,
+                          ),
+                          VerticalDivider(
+                            width: 20,
+                            thickness: 1,
+                            indent: 20,
+                            endIndent: 0,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            width: 60,
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    "틀린 문제 다시 풀기",
+                                    style: Headline_H4(24, Colors.black),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 580,
+                                    child: _selectedNumberProblem != -1 &&
+                                            corrects[_selectedNumberProblem -
+                                                    1] ==
+                                                2
+                                        ? Image.network(
+                                            problems[_selectedNumberProblem - 1]
+                                                .problem,
+                                            fit: BoxFit.contain,
+                                          )
+                                        : const Text("수고하셨습니다~"),
+                                  ),
+                                  Spacer(),
+                                  // SizedBox(
+                                  //   height: 80,
+                                  // ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 217,
+                                      height: 38,
+                                      color: Color(0xFFFFF5DA),
+                                      child: correctMessageState == -1
+                                          ? Text("CMS 0",
+                                              style:
+                                                  Headline_H4(18, Colors.black))
+                                          : correctMessageState == 1
+                                              ? Text("CMS 1",
+                                                  style: Headline_H4(
+                                                      18, Colors.black))
+                                              : Text("\u{270F} 다시 한번 풀어보세요",
+                                                  style: Headline_H4(
+                                                      18, Colors.black)),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 24,
+                                  ),
+                                  Container(
+                                    width: 366,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        numberButton('1', 1),
+                                        numberButton('2', 2),
+                                        numberButton('3', 3),
+                                        numberButton('4', 4),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 60,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),
               ),
-              Container(
-                alignment: Alignment.topRight,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("틀린 문제 다시 풀기", style: Headline_H4(24, Colors.black)),
-                    SizedBox(
-                      //TODO: fix constant width size
-                      width: 400,
-                      child: _selectedNumberProblem != -1 &&
-                              corrects[_selectedNumberProblem - 1] == 2
-                          ? Image.network(
-                              problems[_selectedNumberProblem - 1].problem,
-                              fit: BoxFit.contain,
-                            )
-                          : const Text("수고하셨습니다~"),
-                    ),
-                    //TODO: implement phrase
-                    correctMessageState == -1
-                        ? Text("CMS 0", style: Headline_H4(24, Colors.black))
-                        : correctMessageState == 1
-                            ? Text("CMS 1",
-                                style: Headline_H4(24, Colors.black))
-                            : Text("CMS 2",
-                                style: Headline_H4(24, Colors.black)),
-                    Row(
-                      children: [
-                        numberButton('1', 1),
-                        numberButton('2', 2),
-                        numberButton('3', 3),
-                        numberButton('4', 4),
-                      ],
-                    ),
-                  ],
-                ),
-              )
-            ]),
-          )
-        ],
-      ),
-    );
+            ),
+          ),
+        ));
   }
 
   OutlinedButton numberButton(String number, int value) {

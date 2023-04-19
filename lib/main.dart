@@ -2,8 +2,11 @@ import 'package:black_bean/pages/full_exam.dart';
 import 'package:black_bean/pages/login_page.dart';
 import 'package:black_bean/pages/problem_make.dart';
 import 'package:black_bean/pages/sign_up_page.dart';
+import 'package:black_bean/pages/weakness_exam.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 import 'pages/full_exam.dart';
 import 'pages/grading_page.dart';
@@ -24,6 +27,7 @@ void main() async {
 } else {
   await Firebase.initializeApp();
 }
+
   runApp(const MyApp());
 }
 
@@ -32,23 +36,29 @@ class MyApp extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return MaterialApp(
-      title: 'Black Bean Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ScreenUtilInit(
+            designSize: Size(1512, 982),
+
+      builder:(context, child) =>  MaterialApp(
+        title: 'Black Bean Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: '/fullExam',
+        routes: {
+          '/': (context) => MyHomePage(),
+          '/problemMake': (context) => ProblemMake(),
+          '/testPage': (context) => TestPage(),
+          // '/imageTestPage': (context) => HomePage(),
+          '/loginPage': (context) => LoginPage(),
+          '/signinPage': (context) => SignUpPage(),
+          '/fullExam':(context) =>  FullExamPage(),
+          '/gradingPage':(context) =>  GradingPage(gradingArguments: ModalRoute.of(context)!.settings.arguments as GradingArguments),
+          '/weeknessExam':(context) =>  WeeknessExamPage(),
+
+        },
       ),
-      initialRoute: '/fullExam',
-      routes: {
-        '/': (context) => MyHomePage(),
-        '/problemMake': (context) => ProblemMake(),
-        '/testPage': (context) => TestPage(),
-        // '/imageTestPage': (context) => HomePage(),
-        '/loginPage': (context) => LoginPage(),
-        '/signinPage': (context) => SignUpPage(),
-        '/fullExam':(context) =>  FullExamPage(),
-        '/gradingPage':(context) =>  GradingPage(gradingArguments: ModalRoute.of(context)!.settings.arguments as GradingArguments),
-      },
     );
   }
 }
