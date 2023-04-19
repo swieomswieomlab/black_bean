@@ -155,6 +155,48 @@ class FirebaseService {
     return problems;
   }
 
+  //함수에서 문제 리스트 불러오기
+  Future<List<Problem>> loadProblemWeaknessFromDatabase(
+      String degree, String subject, List<int> mSections) async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('degree')
+        .doc(degree)
+        .collection('subject')
+        .doc(subject)
+        .collection('problems')
+        .where('mSection', whereIn: mSections)
+        .get();
+
+    List<Problem> problems = [];
+
+    querySnapshot.docs.forEach((documentSnapshot) {
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+
+      var answer = data['answer'];
+      var iSection = data['iSection'];
+      var mSection = data['mSection'];
+      var numberdata = data['number'];
+      var problemurl = data['problem'];
+      var sSection = data['sSection'];
+      var yeardata = data['year'];
+
+      Problem problem = Problem(
+          answer: answer,
+          iSection: iSection,
+          mSection: mSection,
+          number: numberdata,
+          problem: problemurl,
+          sSection: sSection,
+          year: yeardata);
+
+      // print(problem.toMap());
+
+      problems.add(problem);
+    });
+
+    return problems;
+  }
+
 
   
 }

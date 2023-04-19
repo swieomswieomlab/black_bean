@@ -2,28 +2,31 @@ import 'dart:js_util';
 
 import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
+import '../class/grading_arguments.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';
 
-class WeeknessExamPage extends StatefulWidget {
-  WeeknessExamPage({Key? key}) : super(key: key);
+class WeaknessExamPage extends StatefulWidget {
+  WeaknessExamPage({Key? key}) : super(key: key);
 
   @override
-  State<WeeknessExamPage> createState() => _WeeknessExamPageState();
+  State<WeaknessExamPage> createState() => _WeaknessExamPageState();
 }
 
-class _WeeknessExamPageState extends State<WeeknessExamPage> {
+class _WeaknessExamPageState extends State<WeaknessExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
   double space_between_numbers = 48;
   //0 for init, 1 for correct, 2 for wrong
-  List<int> corrects = List.generate(21, (index) => 0);
+  late List<int> corrects;
 
   late Future<List<Problem>> _loadProblemsFuture;
   late List<Problem> _problems;
   int _selectedNumber = -1;
   int _numberState = 0;
+  int finalNumber = 99;
 
   @override
   void initState() {
@@ -32,6 +35,9 @@ class _WeeknessExamPageState extends State<WeeknessExamPage> {
         .loadProblemYearFromDatabase('High', 'Math', '2022-1')
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
+      finalNumber = loadedProblems.length;
+      corrects = List.generate(finalNumber, (index) => 0);
+      // print("Number of problems: " + finalNumber.toString());
       return loadedProblems;
     });
   }
@@ -42,7 +48,10 @@ class _WeeknessExamPageState extends State<WeeknessExamPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text("Exam index here | Subject here", style:Headline_H4(26, mainBlack) ,),
+        title: Text(
+          "Exam index here | Subject here",
+          style: Headline_H4(26, mainBlack),
+        ),
       ),
       backgroundColor: Colors.white,
       body: Center(
@@ -68,11 +77,13 @@ class _WeeknessExamPageState extends State<WeeknessExamPage> {
                           child: Text(
                             //TODO: 단원명 불러오기
                             "${_problems[_numberState].mSection}단원|단원명",
-                            style: Tiny_T1(16, mainSkyBlue),),
+                            style: Tiny_T1(16, mainSkyBlue),
+                          ),
                         ),
                         Container(
-                          child: Image.network(
-                            _problems[_numberState].problem,
+                          child: FadeInImage.memoryNetwork(
+                            placeholder: kTransparentImage,
+                            image: _problems[_numberState].problem,
                           ),
                         ),
                       ],
@@ -91,9 +102,7 @@ class _WeeknessExamPageState extends State<WeeknessExamPage> {
                   SizedBox(width: 140),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    
                     children: [
-
                       Column(children: [
                         IconButton(
                             onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
@@ -126,7 +135,7 @@ class _WeeknessExamPageState extends State<WeeknessExamPage> {
     );
   }
 
- ElevatedButton submit_button() => ElevatedButton(
+  ElevatedButton submit_button() => ElevatedButton(
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all(Size(140, 48)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -150,15 +159,31 @@ class _WeeknessExamPageState extends State<WeeknessExamPage> {
               } else {
                 corrects[_numberState] = 2; // wrong
               }
+              //print if problem is correct
+              if (corrects[_numberState] == 1) {
+                print("Correct!");
+              } else {
+                print("Wrong!");
+              }
+              //if final number, route to grading page
+              if (_numberState == finalNumber - 1) {
+                Navigator.pushNamed(context, '/gradingPage',
+                    arguments: GradingArguments(corrects, _problems));
+                _numberState = 0;
+              }
+              //repetive args
               _numberState += 1;
               _selectedNumber = -1;
-              print(corrects);
             });
+
+            // when problems are finishied, route to grading page
+            // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
           }
         },
-        child: Text('채점',style:Button_Bt2(20, Colors.white),),
+        child: _numberState == finalNumber - 1
+            ? const Text('채점')
+            : const Text('다음'),
       );
-
 
   OutlinedButton number_button(String number, int value) {
     bool isSelected = _selectedNumber == value;
