@@ -24,10 +24,12 @@ class _GradingPageState extends State<GradingPage> {
   String imgUrl = "";
 
   int _selectedNumberAnswer = -1;
+  late List<int> _selectedAnswers;
   int _selectedNumberProblem = -1;
   Color _selectedColor = Colors.transparent;
   bool clicked = false;
   int correctMessageState = -1;
+  late List<bool> isCorrectList;
 
   @override
   void initState() {
@@ -35,6 +37,10 @@ class _GradingPageState extends State<GradingPage> {
     _score = (corrects.where((number) => number == 1).length) *
         100 ~/
         corrects.length;
+
+    _selectedAnswers =
+        List.generate(widget._gradingArguments.problems.length, (index) => -1);
+    isCorrectList = List.generate(problems.length, (index) => false);
 
     super.initState();
   }
@@ -246,19 +252,25 @@ class _GradingPageState extends State<GradingPage> {
                                   SizedBox(
                                     height: 24,
                                   ),
+                                  _selectedNumberProblem > 0?
                                   Container(
                                     width: 366,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        numberButton('1', 1),
-                                        numberButton('2', 2),
-                                        numberButton('3', 3),
-                                        numberButton('4', 4),
+                                        numberButton(
+                                            '1', 1, _selectedNumberProblem),
+                                        numberButton(
+                                            '2', 2, _selectedNumberProblem),
+                                        numberButton(
+                                            '3', 3, _selectedNumberProblem),
+                                        numberButton(
+                                            '4', 4, _selectedNumberProblem),
                                       ],
                                     ),
-                                  ),
+                                  ):
+                                  Container(),
                                   SizedBox(
                                     height: 60,
                                   ),
@@ -277,26 +289,35 @@ class _GradingPageState extends State<GradingPage> {
         ));
   }
 
-  OutlinedButton numberButton(String number, int value) {
+  OutlinedButton numberButton(String number, int value, int problemNumber) {
+    bool isCorrect = corrects[problemNumber - 1] == 1;
+    bool isEnabled = !isCorrect && !isCorrectList[problemNumber - 1];
+
     return OutlinedButton(
-      onPressed: () {
-        setState(() {
-          _selectedNumberAnswer = value;
-        });
+      onPressed: isEnabled
+          ? () {
+              setState(() {
+                _selectedNumberAnswer = value;
+              });
 
-        // check the selected problem's answer
-        bool isCorrect = problems[_selectedNumberProblem - 1].answer ==
-            _selectedNumberAnswer;
+              _selectedAnswers[_selectedNumberProblem - 1] = value;
 
-        // update the text based on the answer
-        setState(() {
-          if (isCorrect) {
-            correctMessageState = 1;
-          } else {
-            correctMessageState = 2;
-          }
-        });
-      },
+              // check the selected problem's answer
+              bool isCorrect = problems[_selectedNumberProblem - 1].answer ==
+                  _selectedNumberAnswer;
+
+              isCorrectList[_selectedNumberProblem - 1] = isCorrect;
+
+              // update the text based on the answer
+              setState(() {
+                if (isCorrect) {
+                  correctMessageState = 1;
+                } else {
+                  correctMessageState = 2;
+                }
+              });
+            }
+          : null, // Set onPressed to null if button should be disabled
       style: ButtonStyle(
         side: MaterialStateProperty.all(BorderSide(color: Colors.black)),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(

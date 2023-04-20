@@ -7,7 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 import 'pages/full_exam.dart';
 import 'pages/grading_page.dart';
 import 'pages/home_page.dart';
@@ -21,12 +20,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     // print("web");
-  await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-  );
-} else {
-  await Firebase.initializeApp();
-}
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
 
   runApp(const MyApp());
 }
@@ -37,15 +36,14 @@ class MyApp extends StatelessWidget {
   @override
   build(BuildContext context) {
     return ScreenUtilInit(
-            designSize: Size(1512, 982),
-
-      builder:(context, child) =>  MaterialApp(
+      designSize: Size(1512, 982),
+      builder: (context, child) => MaterialApp(
         title: 'Black Bean Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/fullExam',
+        initialRoute: '/weaknessExam',
         routes: {
           '/': (context) => MyHomePage(),
           '/problemMake': (context) => ProblemMake(),
@@ -53,10 +51,11 @@ class MyApp extends StatelessWidget {
           // '/imageTestPage': (context) => HomePage(),
           '/loginPage': (context) => LoginPage(),
           '/signinPage': (context) => SignUpPage(),
-          '/fullExam':(context) =>  FullExamPage(),
-          '/gradingPage':(context) =>  GradingPage(gradingArguments: ModalRoute.of(context)!.settings.arguments as GradingArguments),
-          '/weeknessExam':(context) =>  WeeknessExamPage(),
-
+          '/fullExam': (context) => FullExamPage(),
+          '/gradingPage': (context) => GradingPage(
+              gradingArguments: ModalRoute.of(context)!.settings.arguments
+                  as GradingArguments),
+          '/weaknessExam': (context) => WeaknessExamPage(),
         },
       ),
     );
