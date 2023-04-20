@@ -32,7 +32,7 @@ class _WeaknessExamPageState extends State<WeaknessExamPage> {
   void initState() {
     super.initState();
     _loadProblemsFuture = _firebaseService
-        .loadProblemYearFromDatabase('High', 'Math', '2022-1')
+        .loadProblemWeaknessFromDatabase('High', 'Math', [1])
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
