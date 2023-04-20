@@ -31,9 +31,8 @@ class _WeaknessExamPageState extends State<WeaknessExamPage> {
   @override
   void initState() {
     super.initState();
-    _loadProblemsFuture = _firebaseService
-        .loadProblemWeaknessFromDatabase('High', 'Math', [1])
-        .then((loadedProblems) {
+    _loadProblemsFuture = _firebaseService.loadProblemWeaknessFromDatabase(
+        'High', 'Math', [1]).then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
       corrects = List.generate(finalNumber, (index) => 0);
@@ -145,40 +144,55 @@ class _WeaknessExamPageState extends State<WeaknessExamPage> {
           ),
         ),
         onPressed: () {
-          if (_selectedNumber == -1) {
-            // no number selected
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Please select a number')),
-            );
-          } else {
-            // number selected, check if it's correct
-            setState(() {
-              int answer = _problems[_numberState].answer;
-              if (answer == _selectedNumber) {
-                corrects[_numberState] = 1; // correct
-              } else {
-                corrects[_numberState] = 2; // wrong
-              }
-              //print if problem is correct
-              if (corrects[_numberState] == 1) {
-                print("Correct!");
-              } else {
-                print("Wrong!");
-              }
-              //if final number, route to grading page
-              if (_numberState == finalNumber - 1) {
-                Navigator.pushNamed(context, '/gradingPage',
-                    arguments: GradingArguments(corrects, _problems));
-                _numberState = 0;
-              }
-              //repetive args
+          // number selected, check if it's correct
+          setState(() {
+            int answer = _problems[_numberState].answer;
+            if (answer == _selectedNumber) {
+              corrects[_numberState] = 1; // correct
+            } else {
+              corrects[_numberState] = 2; // wrong
+            }
+            //print if problem is correct
+            if (corrects[_numberState] == 1) {
+              print("Correct!");
+            } else {
+              print("Wrong!");
+            }
+            //if final number, route to grading page
+            if (_numberState == finalNumber - 1) {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('AlertDialog Title'),
+                  content: const Text('AlertDialog description'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, 'Cancel');
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, 'OK');
+                        Navigator.pushNamed(context, '/gradingPage',
+                            arguments: GradingArguments(corrects, _problems));
+                        _numberState = 0;
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
+            }
+            if (_numberState < finalNumber - 1) {
               _numberState += 1;
-              _selectedNumber = -1;
-            });
+            }
+            _selectedNumber = -1;
+          });
 
-            // when problems are finishied, route to grading page
-            // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
-          }
+          // when problems are finishied, route to grading page
+          // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
         },
         child: _numberState == finalNumber - 1
             ? const Text('채점')

@@ -48,7 +48,10 @@ class _FullExamPageState extends State<FullExamPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text("Exam index here | Subject here", style:Headline_H4(26, mainBlack) ,),
+        title: Text(
+          "Exam index here | Subject here",
+          style: Headline_H4(26, mainBlack),
+        ),
       ),
       backgroundColor: Colors.white,
       body: Center(
@@ -74,13 +77,14 @@ class _FullExamPageState extends State<FullExamPage> {
                           child: Text(
                             //TODO: 단원명 불러오기
                             "${_problems[_numberState].mSection}단원|단원명",
-                            style: Tiny_T1(16, mainSkyBlue),),
+                            style: Tiny_T1(16, mainSkyBlue),
+                          ),
                         ),
                         Container(
                           child: FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        image: _problems[_numberState].problem,
-                      ),
+                            placeholder: kTransparentImage,
+                            image: _problems[_numberState].problem,
+                          ),
                         ),
                       ],
                     ),
@@ -98,9 +102,7 @@ class _FullExamPageState extends State<FullExamPage> {
                   SizedBox(width: 140),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    
                     children: [
-
                       Column(children: [
                         IconButton(
                             onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
@@ -133,7 +135,7 @@ class _FullExamPageState extends State<FullExamPage> {
     );
   }
 
- ElevatedButton submit_button() => ElevatedButton(
+  ElevatedButton submit_button() => ElevatedButton(
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all(Size(140, 48)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -143,47 +145,59 @@ class _FullExamPageState extends State<FullExamPage> {
           ),
         ),
         onPressed: () {
-          if (_selectedNumber == -1) {
-            // no number selected
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Please select a number')),
-            );
-          } else {
-            // number selected, check if it's correct
-            setState(() {
-              int answer = _problems[_numberState].answer;
-              if (answer == _selectedNumber) {
-                corrects[_numberState] = 1; // correct
-              } else {
-                corrects[_numberState] = 2; // wrong
-              }
-              //print if problem is correct
-              if (corrects[_numberState] == 1) {
-                print("Correct!");
-              } else {
-                print("Wrong!");
-              }
-              //if final number, route to grading page
-              if (_numberState == finalNumber - 1) {
-                Navigator.pushNamed(context, '/gradingPage',
-                    arguments: GradingArguments(corrects, _problems));
-                _numberState = 0;
-              }
-              //repetive args
+          // number selected, check if it's correct
+          setState(() {
+            int answer = _problems[_numberState].answer;
+            if (answer == _selectedNumber) {
+              corrects[_numberState] = 1; // correct
+            } else {
+              corrects[_numberState] = 2; // wrong
+            }
+            //print if problem is correct
+            if (corrects[_numberState] == 1) {
+              print("Correct!");
+            } else {
+              print("Wrong!");
+            }
+            //if final number, route to grading page
+            if (_numberState == finalNumber - 1) {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('AlertDialog Title'),
+                  content: const Text('AlertDialog description'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, 'Cancel');
+                        
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, 'OK');
+                        Navigator.pushNamed(context, '/gradingPage',
+                            arguments: GradingArguments(corrects, _problems));
+                        _numberState = 0;
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
+            }
+            //repetive args
+            if (_numberState < finalNumber - 1) {
               _numberState += 1;
-              _selectedNumber = -1;
-            });
-
-            // when problems are finishied, route to grading page
-            // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
-          }
+            }
+            _selectedNumber = -1;
+          });
         },
-        child: 
-        _numberState == finalNumber - 1
-        ?const Text('채점')
-        :const Text('다음'),
+        child: _numberState == finalNumber - 1
+            ? const Text('채점')
+            : const Text('다음'),
       );
-
 
   OutlinedButton number_button(String number, int value) {
     bool isSelected = _selectedNumber == value;
