@@ -10,6 +10,7 @@ class SelectExamPage extends StatefulWidget {
 }
 
 class _SelectExamPageState extends State<SelectExamPage> {
+  //과목 명 목록 영어, 이미지 이름 찾을 때 씀
   List<String> subject = [
     "korean",
     "math",
@@ -18,6 +19,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
     "science",
     "history"
   ];
+  //과목 목록 한국어
   List<String> subject_kor = [
     "국어",
     "수학",
@@ -26,6 +28,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
     "과학",
     "한국사"
   ];
+  //구현된 과목 번호
   List<int> contained_num = [1];
   bool selected = false;
   int selected_num = -1;
@@ -48,6 +51,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                 SizedBox(
                   height: 62,
                 ),
+                //TODO: 연습문제 설명 글 추후에 수정 필요
                 Text("연습문제에 대한 설명 글입니다.", style: Body_Bd1(26, Colors.black)),
                 Text("연습문제에 대한 설명 글입니다.", style: Body_Bd1(26, Colors.black)),
                 SizedBox(
@@ -75,7 +79,6 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                     width: 150,
                                     height: 70,
                                     child: contained_num.contains(index)
-                                    // index == 1
                                         ? selected_num == index
                                             ? Image.asset(
                                                 "assets/subject_buttons/button_subject_pressed_${subject[index]}.png",
