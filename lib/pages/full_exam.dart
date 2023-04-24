@@ -185,8 +185,8 @@ class _FullExamPageState extends State<FullExamPage> {
                             scrollDirection: Axis.horizontal,
                             child: Container(
                               margin: EdgeInsets.symmetric(horizontal: 40),
-                              width: 800,
-                              // height: 1200,
+                              width: 1200,
+                              height: MediaQuery.of(context).size.height - 100,
                               // color: Colors.redAccent,
                               child: Column(
                                 children: [
@@ -206,39 +206,9 @@ class _FullExamPageState extends State<FullExamPage> {
                                       fit: BoxFit.fitWidth,
                                     ),
                                   ),
-
-                                  SizedBox(height: 100) //답안에 가리는 부분 없애기 위한 공백
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
-                // Expanded(child: Container()),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.black,
-                    width: 1.0,
-                  ),
-                ),
-              ),
-              padding: EdgeInsets.only(bottom: 20, top: 20),
-              child: SingleChildScrollView(
-                controller: _scrollController2,
-                scrollDirection: Axis.horizontal,
-                child: Container(
+                                  Spacer(),
+                                  // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
+                                  Container(
                   width: 1200,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -277,7 +247,34 @@ class _FullExamPageState extends State<FullExamPage> {
                     ],
                   ),
                 ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                // Expanded(child: Container()),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              height: 70,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                // color: Colors.white,
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.black,
+                    width: 1.0,
+                  ),
+                ),
               ),
+              padding: EdgeInsets.only(bottom: 20, top: 20),
             ),
           ),
         ],
