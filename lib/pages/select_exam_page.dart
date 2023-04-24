@@ -20,14 +20,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
     "history"
   ];
   //과목 목록 한국어
-  List<String> subject_kor = [
-    "국어",
-    "수학",
-    "영어",
-    "사회",
-    "과학",
-    "한국사"
-  ];
+  List<String> subject_kor = ["국어", "수학", "영어", "사회", "과학", "한국사"];
   //구현된 과목 번호
   List<int> contained_num = [1];
   bool selected = false;
@@ -98,13 +91,16 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                   ),
                                   Positioned.fill(
                                     child: Container(
-                                      padding: EdgeInsets.only(bottom: selected_num==index ? contained_num.contains(index) ? 0 : 15 : 15),
+                                      padding: EdgeInsets.only(
+                                          bottom: selected_num == index
+                                              ? contained_num.contains(index)
+                                                  ? 0
+                                                  : 15
+                                              : 15),
                                       alignment: Alignment.center,
-                                      child: Text(
-                                        subject_kor[index],
+                                      child: Text(subject_kor[index],
                                           textAlign: TextAlign.center,
-                                          style: Body_Bd1(20, Colors.white)
-                                      ),
+                                          style: Body_Bd1(20, Colors.white)),
                                     ),
                                   ),
                                 ],

@@ -54,103 +54,98 @@ class _FullExamPageState extends State<FullExamPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: remote_control
-          ? 
-          Container(
-            margin: EdgeInsets.only(bottom: 100),
-            child: ClipOval(
-  child: SizedBox(
-    width: 56,
-    height: 56,
-    child: OutlinedButton(
-      onPressed: () {
-        setState(() {
-            remote_control = !remote_control;
-          });
-      },
-      child: Icon(Icons.add),
-      style: OutlinedButton.styleFrom(
-      shape: CircleBorder(),
-      side: BorderSide(width: 2.0, color: Colors.blue),
-      minimumSize: Size(56, 56),
-    ),
-    ),
-  ),
-),
-          )
-          : 
-
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Color(0xffC5D9E9), width: 2),
-    borderRadius: BorderRadius.circular(8),
-  ),
-            margin: EdgeInsets.only(bottom: 100),
-            width: 280,
-            height: 270,
-            child: Column(children: [
-              Row(
-  children: [
-    SizedBox(width: 40),
-    Expanded(
-      child: Text(
-        "문제 리모콘",
-        style: Body_Bd1(20, Colors.black),
-        textAlign: TextAlign.center,
-      ),
-    ),
-    IconButton(
-      icon: Icon(Icons.clear),
-      onPressed: () {
-        setState(() {
-          remote_control = !remote_control;
-        });
-      },
-      alignment: Alignment.centerRight,
-    ),
-  ],
-),
-              Expanded(
-                child: Container(
-                  
-                  padding: EdgeInsets.all(20),
-                  child: GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
+          ? Container(
+              margin: EdgeInsets.only(bottom: 100),
+              child: ClipOval(
+                child: SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        remote_control = !remote_control;
+                      });
+                    },
+                    child: Icon(Icons.add),
+                    style: OutlinedButton.styleFrom(
+                      shape: CircleBorder(),
+                      side: BorderSide(width: 2.0, color: Colors.blue),
+                      minimumSize: Size(56, 56),
                     ),
-                    // spacing: 10,
-                    // runSpacing: 10,
-                    children: 
-                    List.generate(20, (index) {
-                    return Container(
-  width: 38,
-  height: 38,
-  decoration: BoxDecoration(
-    color: grey01,
-    shape: BoxShape.circle,
-  ),
-  child: InkWell(
-    onTap: () {
-      setState(() {
-        remote_control = !remote_control;
-      });
-    },
-    child: Center(
-      child: Text(
-        "${index+1}",
-        style: Body_Bd1(14, grey06),
-        softWrap: false,
-      ),
-    ),
-  ),
-);
-                  }),
                   ),
                 ),
-              )
-            ]),
-          ),
+              ),
+            )
+          : Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xffC5D9E9), width: 2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: EdgeInsets.only(bottom: 100),
+              width: 280,
+              height: 270,
+              child: Column(children: [
+                Row(
+                  children: [
+                    SizedBox(width: 40),
+                    Expanded(
+                      child: Text(
+                        "문제 리모콘",
+                        style: Body_Bd1(20, Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          remote_control = !remote_control;
+                        });
+                      },
+                      alignment: Alignment.centerRight,
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    child: GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      // spacing: 10,
+                      // runSpacing: 10,
+                      children: List.generate(20, (index) {
+                        return Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color: grey01,
+                            shape: BoxShape.circle,
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                remote_control = !remote_control;
+                              });
+                            },
+                            child: Center(
+                              child: Text(
+                                "${index + 1}",
+                                style: Body_Bd1(14, grey06),
+                                softWrap: false,
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                )
+              ]),
+            ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
