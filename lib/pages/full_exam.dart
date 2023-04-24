@@ -28,8 +28,6 @@ class _FullExamPageState extends State<FullExamPage> {
   int _numberState = 0;
   int finalNumber = 99;
   bool remote_control = true;
-  final _scrollController1 = ScrollController();
-  final _scrollController2 = ScrollController();
 
   //아직 안 푼 문제 리스트 예시 넣어둠
   List<int> not_solved_numbers = [1,2,3];
@@ -37,10 +35,6 @@ class _FullExamPageState extends State<FullExamPage> {
   @override
   void initState() {
     super.initState();
-    _scrollController1.addListener(() {
-      _scrollController2.animateTo(_scrollController1.offset,
-          duration: Duration(microseconds: 1), curve: Curves.ease);
-    });
 
     _loadProblemsFuture = _firebaseService
         .loadProblemYearFromDatabase('High', 'Math', '2022-1')
@@ -198,7 +192,6 @@ class _FullExamPageState extends State<FullExamPage> {
                           physics: AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           child: SingleChildScrollView(
-                            controller: _scrollController1,
                             scrollDirection: Axis.horizontal,
                             child: Container(
                               margin: EdgeInsets.symmetric(horizontal: 40),
