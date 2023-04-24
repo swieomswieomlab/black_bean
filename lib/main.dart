@@ -12,6 +12,7 @@ import 'pages/grading_page.dart';
 import 'pages/home_page.dart';
 import 'firebase_options.dart';
 // import 'pages/image_picker_test.dart';
+import 'pages/select_exam_page.dart';
 import 'pages/test_page.dart';
 import 'class/grading_arguments.dart';
 import 'package:flutter/foundation.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/fullExam',
+        initialRoute: '/selectPage',
         routes: {
           '/': (context) => MyHomePage(),
           '/problemMake': (context) => ProblemMake(),
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
               gradingArguments: ModalRoute.of(context)!.settings.arguments
                   as GradingArguments),
           '/weaknessExam': (context) => WeaknessExamPage(),
+          '/selectPage': (context) => SelectExamPage(),
         },
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:black_bean/textstyle.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../components.dart';
 import '../model/problem.dart';
 
 class GradingPage extends StatefulWidget {
@@ -75,47 +76,7 @@ class _GradingPageState extends State<GradingPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          title: Row(
-            children: [
-              SizedBox(
-                width: 100,
-                child: Image.network(
-                  'https://gradium.co.kr/wp-content/uploads/black-beans-1.jpg',
-                  fit: BoxFit.contain,
-                ),
-              ),
-              SizedBox(
-                width: 80,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  '연습문제',
-                  style: Headline_H2(20, Colors.black),
-                ),
-              ),
-              SizedBox(
-                width: 60,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  '모의고사',
-                  style: Headline_H2(20, Colors.black),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {},
-              child: Text("마이페이지", style: Button_Bt2(20, Colors.black)),
-            )
-          ],
-        ),
+        appBar: basicAppbar(),
         body: Center(
           child: SingleChildScrollView(
             child: SingleChildScrollView(

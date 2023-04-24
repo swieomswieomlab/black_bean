@@ -27,10 +27,18 @@ class _FullExamPageState extends State<FullExamPage> {
   int _selectedNumber = -1;
   int _numberState = 0;
   int finalNumber = 99;
+  bool remote_control = true;
+  final _scrollController1 = ScrollController();
+  final _scrollController2 = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _scrollController1.addListener(() {
+      _scrollController2.animateTo(_scrollController1.offset,
+          duration: Duration(microseconds: 1), curve: Curves.ease);
+    });
+
     _loadProblemsFuture = _firebaseService
         .loadProblemYearFromDatabase('High', 'Math', '2022-1')
         .then((loadedProblems) {
@@ -45,6 +53,104 @@ class _FullExamPageState extends State<FullExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: remote_control
+          ? 
+          Container(
+            margin: EdgeInsets.only(bottom: 100),
+            child: ClipOval(
+  child: SizedBox(
+    width: 56,
+    height: 56,
+    child: OutlinedButton(
+      onPressed: () {
+        setState(() {
+            remote_control = !remote_control;
+          });
+      },
+      child: Icon(Icons.add),
+      style: OutlinedButton.styleFrom(
+      shape: CircleBorder(),
+      side: BorderSide(width: 2.0, color: Colors.blue),
+      minimumSize: Size(56, 56),
+    ),
+    ),
+  ),
+),
+          )
+          : 
+
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Color(0xffC5D9E9), width: 2),
+    borderRadius: BorderRadius.circular(8),
+  ),
+            margin: EdgeInsets.only(bottom: 100),
+            width: 280,
+            height: 270,
+            child: Column(children: [
+              Row(
+  children: [
+    SizedBox(width: 40),
+    Expanded(
+      child: Text(
+        "문제 리모콘",
+        style: Body_Bd1(20, Colors.black),
+        textAlign: TextAlign.center,
+      ),
+    ),
+    IconButton(
+      icon: Icon(Icons.clear),
+      onPressed: () {
+        setState(() {
+          remote_control = !remote_control;
+        });
+      },
+      alignment: Alignment.centerRight,
+    ),
+  ],
+),
+              Expanded(
+                child: Container(
+                  
+                  padding: EdgeInsets.all(20),
+                  child: GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    // spacing: 10,
+                    // runSpacing: 10,
+                    children: 
+                    List.generate(20, (index) {
+                    return Container(
+  width: 38,
+  height: 38,
+  decoration: BoxDecoration(
+    color: grey01,
+    shape: BoxShape.circle,
+  ),
+  child: InkWell(
+    onTap: () {
+      setState(() {
+        remote_control = !remote_control;
+      });
+    },
+    child: Center(
+      child: Text(
+        "${index+1}",
+        style: Body_Bd1(14, grey06),
+        softWrap: false,
+      ),
+    ),
+  ),
+);
+                  }),
+                  ),
+                ),
+              )
+            ]),
+          ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -54,83 +160,127 @@ class _FullExamPageState extends State<FullExamPage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 36),
-            //exam image
-            FutureBuilder<List<Problem>>(
-              future: _loadProblemsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // show progress indicator while loading
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  _problems = snapshot.data!;
-                  return Container(
-                    width: 820,
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            //TODO: 단원명 불러오기
-                            "${_problems[_numberState].mSection}단원|단원명",
-                            style: Tiny_T1(16, mainSkyBlue),
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              children: [
+                SizedBox(height: 36),
+                //exam image
+                FutureBuilder<List<Problem>>(
+                  future: _loadProblemsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // show progress indicator while loading
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      _problems = snapshot.data!;
+                      return Expanded(
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          child: SingleChildScrollView(
+                            controller: _scrollController1,
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 40),
+                              width: 800,
+                              // height: 1200,
+                              // color: Colors.redAccent,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(left: 220),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      //TODO: 단원명 불러오기
+                                      "${_problems[_numberState].mSection}단원|단원명",
+                                      style: Tiny_T1(16, mainSkyBlue),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: _problems[_numberState].problem,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 100) //답안에 가리는 부분 없애기 위한 공백
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                        Container(
-                          child: FadeInImage.memoryNetwork(
-                            placeholder: kTransparentImage,
-                            image: _problems[_numberState].problem,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
+                      );
+                    }
+                  },
+                ),
+                // Expanded(child: Container()),
+              ],
             ),
-            Expanded(child: Container()),
-            Divider(),
-            Container(
-              padding: EdgeInsets.only(bottom: 51, top: 25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(width: 140),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.black,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+              padding: EdgeInsets.only(bottom: 20, top: 20),
+              child: SingleChildScrollView(
+                controller: _scrollController2,
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  width: 1200,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
+
                     children: [
-                      Column(children: [
-                        IconButton(
-                            onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-                        Text("이전"),
-                      ]),
-                      SizedBox(width: space_between_numbers),
-                      number_button('1', 1),
-                      SizedBox(width: space_between_numbers),
-                      number_button('2', 2),
-                      SizedBox(width: space_between_numbers),
-                      number_button('3', 3),
-                      SizedBox(width: space_between_numbers),
-                      number_button('4', 4),
-                      SizedBox(width: space_between_numbers),
-                      Column(children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.arrow_forward_ios)),
-                        Text("다음"),
-                      ]),
+                      SizedBox(width: 140),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(children: [
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.arrow_back_ios)),
+                            Text("이전"),
+                          ]),
+                          SizedBox(width: space_between_numbers),
+                          number_button('1', 1),
+                          SizedBox(width: space_between_numbers),
+                          number_button('2', 2),
+                          SizedBox(width: space_between_numbers),
+                          number_button('3', 3),
+                          SizedBox(width: space_between_numbers),
+                          number_button('4', 4),
+                          SizedBox(width: space_between_numbers),
+                          Column(children: [
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.arrow_forward_ios)),
+                            Text("다음"),
+                          ]),
+                        ],
+                      ),
+                      // SizedBox(width: 140),
+                      submit_button(),
                     ],
                   ),
-                  submit_button(),
-                ],
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -170,7 +320,6 @@ class _FullExamPageState extends State<FullExamPage> {
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context, 'Cancel');
-                        
                       },
                       child: const Text('Cancel'),
                     ),
