@@ -213,25 +213,25 @@ class _GradingPageState extends State<GradingPage> {
                                   SizedBox(
                                     height: 24,
                                   ),
-                                  _selectedNumberProblem > 0?
-                                  Container(
-                                    width: 366,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        numberButton(
-                                            '1', 1, _selectedNumberProblem),
-                                        numberButton(
-                                            '2', 2, _selectedNumberProblem),
-                                        numberButton(
-                                            '3', 3, _selectedNumberProblem),
-                                        numberButton(
-                                            '4', 4, _selectedNumberProblem),
-                                      ],
-                                    ),
-                                  ):
-                                  Container(),
+                                  _selectedNumberProblem > 0
+                                      ? Container(
+                                          width: 366,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              numberButton('1', 1,
+                                                  _selectedNumberProblem),
+                                              numberButton('2', 2,
+                                                  _selectedNumberProblem),
+                                              numberButton('3', 3,
+                                                  _selectedNumberProblem),
+                                              numberButton('4', 4,
+                                                  _selectedNumberProblem),
+                                            ],
+                                          ),
+                                        )
+                                      : Container(),
                                   SizedBox(
                                     height: 60,
                                   ),

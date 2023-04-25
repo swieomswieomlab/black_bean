@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 
-
-   const Color mainBlack = Color(0xff020c16);
-   const Color mainLightBlue = Color(0xffeaf4fc);
-   const Color maingreyblue = Color(0xffd5e5f1);
-   const Color mainSkyBlue = Color(0xff43a7f5);
-   const Color grey00 = Color(0xffffffff);
-   const Color grey01 = Color(0xfff2f3f4);
-   const Color grey02 = Color(0xffe6e7e8);
-   const Color grey03 = Color(0xffd0d6d8);
-   const Color grey04 = Color(0xffa8afb1);
-   const Color grey05 = Color(0xff7e8385);
-   const Color grey06 = Color(0xff64696a);
-   const Color grey07 = Color(0xff414445);
-   const Color grey08 = Color(0xff373838);
-   const Color pointRed = Color(0xffeb4b4b);
-   const Color pointYellow = Color(0xfff8cb74);
-   const Color pointGreen = Color(0xff30d07a);
+const Color mainBlack = Color(0xff020c16);
+const Color mainLightBlue = Color(0xffeaf4fc);
+const Color maingreyblue = Color(0xffd5e5f1);
+const Color mainSkyBlue = Color(0xff43a7f5);
+const Color grey00 = Color(0xffffffff);
+const Color grey01 = Color(0xfff2f3f4);
+const Color grey02 = Color(0xffe6e7e8);
+const Color grey03 = Color(0xffd0d6d8);
+const Color grey04 = Color(0xffa8afb1);
+const Color grey05 = Color(0xff7e8385);
+const Color grey06 = Color(0xff64696a);
+const Color grey07 = Color(0xff414445);
+const Color grey08 = Color(0xff373838);
+const Color pointRed = Color(0xffeb4b4b);
+const Color pointYellow = Color(0xfff8cb74);
+const Color pointGreen = Color(0xff30d07a);
 
 TextStyle Headline_H0(double fontsize, Color color) {
   return TextStyle(

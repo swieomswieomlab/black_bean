@@ -43,7 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: InputDecoration(
                     border: OutlineInputBorder(), label: Text("password")),
               )),
-              Container(
+          Container(
               margin: const EdgeInsets.all(5),
               child: TextField(
                   controller: nameController,
@@ -59,7 +59,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       .then((value) {
                     if (value.user!.email == null) {
                     } else {
-                      addUser(idController.text, value.user!.uid, nameController.text);
+                      addUser(idController.text, value.user!.uid,
+                          nameController.text);
                       Navigator.pop(context);
                     }
                     return value;
