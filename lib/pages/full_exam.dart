@@ -30,7 +30,8 @@ class _FullExamPageState extends State<FullExamPage> {
   bool remote_control = true;
 
   //아직 안 푼 문제 리스트 예시 넣어둠
-  List<int> not_solved_numbers = [1,2,3];
+  List<int> not_solved_numbers = [1, 2, 3];
+  List<int> corrects = [];
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _FullExamPageState extends State<FullExamPage> {
     return Scaffold(
       floatingActionButton: remote_control
           ? Container(
-            color: Colors.white,
+              color: Colors.white,
               margin: EdgeInsets.only(bottom: 100),
               child: ClipOval(
                 child: SizedBox(
@@ -202,14 +203,13 @@ class _FullExamPageState extends State<FullExamPage> {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 200.0),
                                     child: Column(children: [
-                                            IconButton(
-                                                onPressed: () {
-                                                goPrevious();
-                                                },
-                                                icon: Icon(
-                                                    Icons.arrow_back_ios)),
-                                            Text("이전"),
-                                          ]),
+                                      IconButton(
+                                          onPressed: () {
+                                            goPrevious();
+                                          },
+                                          icon: Icon(Icons.arrow_back_ios)),
+                                      Text("이전"),
+                                    ]),
                                   ),
                                   Column(
                                     children: [
@@ -225,7 +225,8 @@ class _FullExamPageState extends State<FullExamPage> {
                                       Container(
                                         child: FadeInImage.memoryNetwork(
                                           placeholder: kTransparentImage,
-                                          image: _problems[_numberState].problem,
+                                          image:
+                                              _problems[_numberState].problem,
                                           fit: BoxFit.fitWidth,
                                         ),
                                       ),
@@ -242,24 +243,28 @@ class _FullExamPageState extends State<FullExamPage> {
                                             SizedBox(width: 140),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                
                                                 SizedBox(
-                                                    width: space_between_numbers),
+                                                    width:
+                                                        space_between_numbers),
                                                 number_button('1', 1),
                                                 SizedBox(
-                                                    width: space_between_numbers),
+                                                    width:
+                                                        space_between_numbers),
                                                 number_button('2', 2),
                                                 SizedBox(
-                                                    width: space_between_numbers),
+                                                    width:
+                                                        space_between_numbers),
                                                 number_button('3', 3),
                                                 SizedBox(
-                                                    width: space_between_numbers),
+                                                    width:
+                                                        space_between_numbers),
                                                 number_button('4', 4),
                                                 SizedBox(
-                                                    width: space_between_numbers),
-                                                
+                                                    width:
+                                                        space_between_numbers),
                                               ],
                                             ),
                                             // SizedBox(width: 140),
@@ -267,20 +272,18 @@ class _FullExamPageState extends State<FullExamPage> {
                                           ],
                                         ),
                                       ),
-                                      
                                     ],
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 200.0),
                                     child: Column(children: [
-                                            IconButton(
-                                                onPressed: () {
-                                                goNext();
-                                                },
-                                                icon: Icon(
-                                                    Icons.arrow_forward_ios)),
-                                            Text("다음"),
-                                          ]),
+                                      IconButton(
+                                          onPressed: () {
+                                            goNext();
+                                          },
+                                          icon: Icon(Icons.arrow_forward_ios)),
+                                      Text("다음"),
+                                    ]),
                                   ),
                                 ],
                               ),
@@ -301,14 +304,14 @@ class _FullExamPageState extends State<FullExamPage> {
   }
 
   ElevatedButton submit_button() => ElevatedButton(
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(140, 48)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+        style: ButtonStyle(
+          fixedSize: MaterialStateProperty.all(Size(140, 48)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
           ),
         ),
-
         onPressed: () {
           // number selected, check if it's correct
           setState(() {
@@ -329,7 +332,6 @@ class _FullExamPageState extends State<FullExamPage> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  
                   titlePadding: EdgeInsets.only(
                       top: 60.0, left: 94.0, right: 94.0, bottom: 0.0),
                   // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
