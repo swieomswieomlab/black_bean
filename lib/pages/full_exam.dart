@@ -20,7 +20,7 @@ class _FullExamPageState extends State<FullExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
   double space_between_numbers = 48;
   //0 for init, 1 for correct, 2 for wrong
-  late List<int> corrects;
+  late List<int> _selectedNumbers;
 
   late Future<List<Problem>> _loadProblemsFuture;
   late List<Problem> _problems;
@@ -41,8 +41,7 @@ class _FullExamPageState extends State<FullExamPage> {
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
-      corrects = List.generate(finalNumber, (index) => 0);
-      // print("Number of problems: " + finalNumber.toString());
+      _selectedNumbers = List.generate(finalNumber, (index) => -1);
       return loadedProblems;
     });
   }
@@ -204,7 +203,9 @@ class _FullExamPageState extends State<FullExamPage> {
                                     padding: const EdgeInsets.only(top: 200.0),
                                     child: Column(children: [
                                             IconButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                goPrevious();
+                                                },
                                                 icon: Icon(
                                                     Icons.arrow_back_ios)),
                                             Text("이전"),
@@ -273,7 +274,9 @@ class _FullExamPageState extends State<FullExamPage> {
                                     padding: const EdgeInsets.only(top: 200.0),
                                     child: Column(children: [
                                             IconButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                goNext();
+                                                },
                                                 icon: Icon(
                                                     Icons.arrow_forward_ios)),
                                             Text("다음"),
@@ -298,14 +301,14 @@ class _FullExamPageState extends State<FullExamPage> {
   }
 
   ElevatedButton submit_button() => ElevatedButton(
-        style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all(Size(140, 48)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
+      style: ButtonStyle(
+        fixedSize: MaterialStateProperty.all(Size(140, 48)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
           ),
         ),
+
         onPressed: () {
           // number selected, check if it's correct
           setState(() {
@@ -429,4 +432,78 @@ class _FullExamPageState extends State<FullExamPage> {
       ),
     );
   }
+
+  int goPrevious() {
+    setState(() {
+      if (_numberState > 0) {
+        _selectedNumbers[_numberState] = _selectedNumber;
+        _numberState -= 1;
+        _selectedNumber = _selectedNumbers[_numberState];
+      }
+    });
+    return _numberState;
+  }
+
+  int goNext() {
+    setState(() {
+      if (_numberState < (finalNumber - 1)) {
+        _selectedNumbers[_numberState] = _selectedNumber;
+        _numberState += 1;
+        _selectedNumber = _selectedNumbers[_numberState];
+      }
+    });
+    return _numberState;
+  }
 }
+
+
+
+
+ // // number selected, check if it's correct
+          // setState(() {
+          //   _selectedNumbers[_numberState] = _selectedNumber;
+          //   int answer = _problems[_numberState].answer;
+          //   if (answer == _selectedNumber) {
+          //     corrects[_numberState] = 1; // correct
+          //   } else {
+          //     corrects[_numberState] = 2; // wrong
+          //   }
+          //   //print if problem is correct
+          //   if (corrects[_numberState] == 1) {
+          //     print("$_numberState+1, Correct!");
+          //   } else {
+          //     print("$_numberState+1, Wrong!");
+          //   }
+          //   //if final number, route to grading page
+          //   if (_numberState == finalNumber - 1) {
+          //     showDialog<String>(
+          //       context: context,
+          //       builder: (BuildContext context) => AlertDialog(
+          //         title: const Text('AlertDialog Title'),
+          //         content: const Text('AlertDialog description'),
+          //         actions: <Widget>[
+          //           TextButton(
+          //             onPressed: () {
+          //               Navigator.pop(context, 'Cancel');
+          //             },
+          //             child: const Text('Cancel'),
+          //           ),
+          //           TextButton(
+          //             onPressed: () {
+          //               Navigator.pop(context, 'OK');
+          //               Navigator.pushNamed(context, '/gradingPage',
+          //                   arguments: GradingArguments(corrects, _problems));
+          //               _numberState = 0;
+          //             },
+          //             child: const Text('OK'),
+          //           ),
+          //         ],
+          //       ),
+          //     );
+          //   }
+          //   //repetive args
+          //   if (_numberState < finalNumber - 1) {
+          //     _numberState += 1;
+          //   }
+          //   _selectedNumber = _selectedNumbers[_numberState];
+          // });
