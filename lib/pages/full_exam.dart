@@ -1,17 +1,14 @@
-import 'dart:js_util';
-
-import 'package:black_bean/pages/problem_make.dart';
-import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../textstyle.dart';
 import '../class/grading_arguments.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';
 
 class FullExamPage extends StatefulWidget {
-  FullExamPage({Key? key}) : super(key: key);
+  const FullExamPage({Key? key}) : super(key: key);
 
   @override
   State<FullExamPage> createState() => _FullExamPageState();
@@ -19,7 +16,7 @@ class FullExamPage extends StatefulWidget {
 
 class _FullExamPageState extends State<FullExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
-  double space_between_numbers = 48;
+  final double spaceBetweenNumbers = 48;
   //0 for init, 1 for correct, 2 for wrong
   late List<int> _selectedNumbers;
 
@@ -28,7 +25,7 @@ class _FullExamPageState extends State<FullExamPage> {
   int _selectedNumber = -1;
   int _numberState = 0;
   int finalNumber = 99;
-  bool remote_control = true;
+  bool remoteControl = true;
 
   List<int> corrects = [];
 
@@ -49,10 +46,10 @@ class _FullExamPageState extends State<FullExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: remote_control
+      floatingActionButton: remoteControl
           ? Container(
               color: Colors.white,
-              margin: EdgeInsets.only(bottom: 100),
+              margin: const EdgeInsets.only(bottom: 100),
               child: ClipOval(
                 child: SizedBox(
                   width: 56,
@@ -60,15 +57,15 @@ class _FullExamPageState extends State<FullExamPage> {
                   child: OutlinedButton(
                     onPressed: () {
                       setState(() {
-                        remote_control = !remote_control;
+                        remoteControl = !remoteControl;
                       });
                     },
                     style: OutlinedButton.styleFrom(
-                      shape: CircleBorder(),
-                      side: BorderSide(width: 2.0, color: Colors.blue),
-                      minimumSize: Size(56, 56),
+                      shape: const CircleBorder(),
+                      side: const BorderSide(width: 2.0, color: Colors.blue),
+                      minimumSize: const Size(56, 56),
                     ),
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                   ),
                 ),
               ),
@@ -76,16 +73,16 @@ class _FullExamPageState extends State<FullExamPage> {
           : Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Color(0xffC5D9E9), width: 2),
+                border: Border.all(color: const Color(0xffC5D9E9), width: 2),
                 borderRadius: BorderRadius.circular(8),
               ),
-              margin: EdgeInsets.only(bottom: 100),
+              margin: const EdgeInsets.only(bottom: 100),
               width: 280,
               height: 270,
               child: Column(children: [
                 Row(
                   children: [
-                    SizedBox(width: 40),
+                    const SizedBox(width: 40),
                     Expanded(
                       child: Text(
                         "문제 리모콘",
@@ -94,10 +91,13 @@ class _FullExamPageState extends State<FullExamPage> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.clear),
+                      icon: const Icon(Icons.clear),
+                      hoverColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       onPressed: () {
                         setState(() {
-                          remote_control = !remote_control;
+                          remoteControl = !remoteControl;
                         });
                       },
                       alignment: Alignment.centerRight,
@@ -106,33 +106,33 @@ class _FullExamPageState extends State<FullExamPage> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: GridView(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 5,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
                       // spacing: 10,
                       // runSpacing: 10,
-                      children: List.generate(20, (index) {
+                      children: List.generate(finalNumber, (index) {
                         return Container(
                           width: 38,
                           height: 38,
                           decoration: BoxDecoration(
                             color: grey01,
                             shape: BoxShape.circle,
+                            border: index == _numberState? Border.all(color: mainSkyBlue, width: 2.0) : const Border(),
                           ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                remote_control = !remote_control;
-                              });
+                              onRCTap(index);
                             },
                             child: Center(
                               child: Text(
                                 "${index + 1}",
-                                style: Body_Bd1(14, grey06),
+                                style: index == _numberState? Body_Bd1(14, mainSkyBlue) :Body_Bd1(14, grey06),
                                 softWrap: false,
                               ),
                             ),
@@ -160,7 +160,7 @@ class _FullExamPageState extends State<FullExamPage> {
             child: Container(
               height: 70,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 // color: Colors.white,
                 border: Border(
                   top: BorderSide(
@@ -169,31 +169,32 @@ class _FullExamPageState extends State<FullExamPage> {
                   ),
                 ),
               ),
-              padding: EdgeInsets.only(bottom: 20, top: 20),
+              padding: const EdgeInsets.only(bottom: 20, top: 20),
             ),
           ),
           Center(
             child: Column(
               children: [
-                SizedBox(height: 36),
+                const SizedBox(height: 36),
                 //exam image
                 FutureBuilder<List<Problem>>(
                   future: _loadProblemsFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // show progress indicator while loading
+                      return const CircularProgressIndicator(); // show progress indicator while loading
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
                       _problems = snapshot.data!;
                       return Expanded(
                         child: SingleChildScrollView(
-                          physics: AlwaysScrollableScrollPhysics(),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 40),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 40),
                               width: 1200,
                               height: MediaQuery.of(context).size.height - 100,
                               child: Row(
@@ -206,8 +207,9 @@ class _FullExamPageState extends State<FullExamPage> {
                                           onPressed: () {
                                             goPrevious();
                                           },
-                                          icon: Icon(Icons.arrow_back_ios)),
-                                      Text("이전"),
+                                          icon:
+                                              const Icon(Icons.arrow_back_ios)),
+                                      const Text("이전"),
                                     ]),
                                   ),
                                   Column(
@@ -221,17 +223,14 @@ class _FullExamPageState extends State<FullExamPage> {
                                           style: Tiny_T1(16, mainSkyBlue),
                                         ),
                                       ),
-                                      Container(
-                                        child: FadeInImage.memoryNetwork(
-                                          placeholder: kTransparentImage,
-                                          image:
-                                              _problems[_numberState].problem,
-                                          fit: BoxFit.fitWidth,
-                                        ),
+                                      FadeInImage.memoryNetwork(
+                                        placeholder: kTransparentImage,
+                                        image: _problems[_numberState].problem,
+                                        fit: BoxFit.fitWidth,
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
-                                      Container(
+                                      SizedBox(
                                         width: 1000,
                                         child: Row(
                                           mainAxisAlignment:
@@ -239,31 +238,26 @@ class _FullExamPageState extends State<FullExamPage> {
                                           // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
 
                                           children: [
-                                            SizedBox(width: 140),
+                                            const SizedBox(width: 140),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
+                                                    width: spaceBetweenNumbers),
                                                 numberButton('1', 1),
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
+                                                    width: spaceBetweenNumbers),
                                                 numberButton('2', 2),
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
+                                                    width: spaceBetweenNumbers),
                                                 numberButton('3', 3),
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
+                                                    width: spaceBetweenNumbers),
                                                 numberButton('4', 4),
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
+                                                    width: spaceBetweenNumbers),
                                               ],
                                             ),
                                             // SizedBox(width: 140),
@@ -280,7 +274,8 @@ class _FullExamPageState extends State<FullExamPage> {
                                           onPressed: () {
                                             goNext();
                                           },
-                                          icon: const Icon(Icons.arrow_forward_ios)),
+                                          icon: const Icon(
+                                              Icons.arrow_forward_ios)),
                                       const Text("다음"),
                                     ]),
                                   ),
@@ -302,10 +297,16 @@ class _FullExamPageState extends State<FullExamPage> {
     );
   }
 
+  void onRCTap(int index) {
+    return setState(() {
+      _numberState = index;
+    });
+  }
+
   ElevatedButton submitButton() {
     return ElevatedButton(
       style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(140, 48)),
+        fixedSize: MaterialStateProperty.all(const Size(140, 48)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -322,7 +323,10 @@ class _FullExamPageState extends State<FullExamPage> {
     setState(() {
       showDialog<String>(
         context: context,
-        builder: (BuildContext context) => submitAlertDialog(notSolvedNumbers: notSolvedNumbers, corrects: corrects, problems: _problems),
+        builder: (BuildContext context) => submitAlertDialog(
+            notSolvedNumbers: notSolvedNumbers,
+            corrects: corrects,
+            problems: _problems),
       );
     });
   }
@@ -419,9 +423,7 @@ class submitAlertDialog extends StatelessWidget {
       // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
       contentPadding: const EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
       title: Text(
-        notSolvedNumbers.isEmpty
-        ?'시험지를 채점할까요?'
-        :'아직 안 푼 문제가 있어요!',
+        notSolvedNumbers.isEmpty ? '시험지를 채점할까요?' : '아직 안 푼 문제가 있어요!',
         style: Headline_H2(36, Colors.black),
         textAlign: TextAlign.center,
       ),
@@ -442,8 +444,8 @@ class submitAlertDialog extends StatelessWidget {
             Navigator.pop(context, 'Cancel');
           },
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             backgroundColor: grey03,
             minimumSize: const Size(238, 64),
           ),
@@ -455,12 +457,12 @@ class submitAlertDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             Navigator.pop(context, 'OK');
-            Navigator.pushNamed(context, '/gradingPage',
+            Navigator.popAndPushNamed(context, '/gradingPage',
                 arguments: GradingArguments(corrects, _problems));
           },
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             backgroundColor: mainSkyBlue,
             minimumSize: const Size(238, 64),
           ),
