@@ -1,16 +1,14 @@
-import 'dart:js_util';
-
-import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../textstyle.dart';
 import '../class/grading_arguments.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';
 
 class FullExamPage extends StatefulWidget {
-  FullExamPage({Key? key}) : super(key: key);
+  const FullExamPage({Key? key}) : super(key: key);
 
   @override
   State<FullExamPage> createState() => _FullExamPageState();
@@ -18,7 +16,7 @@ class FullExamPage extends StatefulWidget {
 
 class _FullExamPageState extends State<FullExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
-  double space_between_numbers = 48;
+  final double spaceBetweenNumbers = 48;
   //0 for init, 1 for correct, 2 for wrong
   late List<int> _selectedNumbers;
 
@@ -27,11 +25,9 @@ class _FullExamPageState extends State<FullExamPage> {
   int _selectedNumber = -1;
   int _numberState = 0;
   int finalNumber = 99;
-  bool remote_control = true;
+  bool remoteControl = true;
 
   List<int> corrects = [];
-
-  var not_solved_numbers;
 
   @override
   void initState() {
@@ -50,10 +46,10 @@ class _FullExamPageState extends State<FullExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: remote_control
+      floatingActionButton: remoteControl
           ? Container(
               color: Colors.white,
-              margin: EdgeInsets.only(bottom: 100),
+              margin: const EdgeInsets.only(bottom: 100),
               child: ClipOval(
                 child: SizedBox(
                   width: 56,
@@ -61,15 +57,15 @@ class _FullExamPageState extends State<FullExamPage> {
                   child: OutlinedButton(
                     onPressed: () {
                       setState(() {
-                        remote_control = !remote_control;
+                        remoteControl = !remoteControl;
                       });
                     },
-                    child: Icon(Icons.add),
                     style: OutlinedButton.styleFrom(
-                      shape: CircleBorder(),
-                      side: BorderSide(width: 2.0, color: Colors.blue),
-                      minimumSize: Size(56, 56),
+                      shape: const CircleBorder(),
+                      side: const BorderSide(width: 2.0, color: Colors.blue),
+                      minimumSize: const Size(56, 56),
                     ),
+                    child: const Icon(Icons.add),
                   ),
                 ),
               ),
@@ -77,16 +73,16 @@ class _FullExamPageState extends State<FullExamPage> {
           : Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Color(0xffC5D9E9), width: 2),
+                border: Border.all(color: const Color(0xffC5D9E9), width: 2),
                 borderRadius: BorderRadius.circular(8),
               ),
-              margin: EdgeInsets.only(bottom: 100),
+              margin: const EdgeInsets.only(bottom: 100),
               width: 280,
               height: 270,
               child: Column(children: [
                 Row(
                   children: [
-                    SizedBox(width: 40),
+                    const SizedBox(width: 40),
                     Expanded(
                       child: Text(
                         "문제 리모콘",
@@ -95,10 +91,13 @@ class _FullExamPageState extends State<FullExamPage> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.clear),
+                      icon: const Icon(Icons.clear),
+                      hoverColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       onPressed: () {
                         setState(() {
-                          remote_control = !remote_control;
+                          remoteControl = !remoteControl;
                         });
                       },
                       alignment: Alignment.centerRight,
@@ -107,33 +106,33 @@ class _FullExamPageState extends State<FullExamPage> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: GridView(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 5,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
                       // spacing: 10,
                       // runSpacing: 10,
-                      children: List.generate(20, (index) {
+                      children: List.generate(finalNumber, (index) {
                         return Container(
                           width: 38,
                           height: 38,
                           decoration: BoxDecoration(
                             color: grey01,
                             shape: BoxShape.circle,
+                            border: index == _numberState? Border.all(color: mainSkyBlue, width: 2.0) : const Border(),
                           ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                remote_control = !remote_control;
-                              });
+                              onRCTap(index);
                             },
                             child: Center(
                               child: Text(
                                 "${index + 1}",
-                                style: Body_Bd1(14, grey06),
+                                style: index == _numberState? Body_Bd1(14, mainSkyBlue) :Body_Bd1(14, grey06),
                                 softWrap: false,
                               ),
                             ),
@@ -161,7 +160,7 @@ class _FullExamPageState extends State<FullExamPage> {
             child: Container(
               height: 70,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 // color: Colors.white,
                 border: Border(
                   top: BorderSide(
@@ -170,31 +169,32 @@ class _FullExamPageState extends State<FullExamPage> {
                   ),
                 ),
               ),
-              padding: EdgeInsets.only(bottom: 20, top: 20),
+              padding: const EdgeInsets.only(bottom: 20, top: 20),
             ),
           ),
           Center(
             child: Column(
               children: [
-                SizedBox(height: 36),
+                const SizedBox(height: 36),
                 //exam image
                 FutureBuilder<List<Problem>>(
                   future: _loadProblemsFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // show progress indicator while loading
+                      return const CircularProgressIndicator(); // show progress indicator while loading
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
                       _problems = snapshot.data!;
                       return Expanded(
                         child: SingleChildScrollView(
-                          physics: AlwaysScrollableScrollPhysics(),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 40),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 40),
                               width: 1200,
                               height: MediaQuery.of(context).size.height - 100,
                               child: Row(
@@ -207,8 +207,9 @@ class _FullExamPageState extends State<FullExamPage> {
                                           onPressed: () {
                                             goPrevious();
                                           },
-                                          icon: Icon(Icons.arrow_back_ios)),
-                                      Text("이전"),
+                                          icon:
+                                              const Icon(Icons.arrow_back_ios)),
+                                      const Text("이전"),
                                     ]),
                                   ),
                                   Column(
@@ -222,17 +223,14 @@ class _FullExamPageState extends State<FullExamPage> {
                                           style: Tiny_T1(16, mainSkyBlue),
                                         ),
                                       ),
-                                      Container(
-                                        child: FadeInImage.memoryNetwork(
-                                          placeholder: kTransparentImage,
-                                          image:
-                                              _problems[_numberState].problem,
-                                          fit: BoxFit.fitWidth,
-                                        ),
+                                      FadeInImage.memoryNetwork(
+                                        placeholder: kTransparentImage,
+                                        image: _problems[_numberState].problem,
+                                        fit: BoxFit.fitWidth,
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
-                                      Container(
+                                      SizedBox(
                                         width: 1000,
                                         child: Row(
                                           mainAxisAlignment:
@@ -240,31 +238,26 @@ class _FullExamPageState extends State<FullExamPage> {
                                           // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
 
                                           children: [
-                                            SizedBox(width: 140),
+                                            const SizedBox(width: 140),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
-                                                number_button('1', 1),
+                                                    width: spaceBetweenNumbers),
+                                                numberButton('1', 1),
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
-                                                number_button('2', 2),
+                                                    width: spaceBetweenNumbers),
+                                                numberButton('2', 2),
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
-                                                number_button('3', 3),
+                                                    width: spaceBetweenNumbers),
+                                                numberButton('3', 3),
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
-                                                number_button('4', 4),
+                                                    width: spaceBetweenNumbers),
+                                                numberButton('4', 4),
                                                 SizedBox(
-                                                    width:
-                                                        space_between_numbers),
+                                                    width: spaceBetweenNumbers),
                                               ],
                                             ),
                                             // SizedBox(width: 140),
@@ -281,8 +274,9 @@ class _FullExamPageState extends State<FullExamPage> {
                                           onPressed: () {
                                             goNext();
                                           },
-                                          icon: Icon(Icons.arrow_forward_ios)),
-                                      Text("다음"),
+                                          icon: const Icon(
+                                              Icons.arrow_forward_ios)),
+                                      const Text("다음"),
                                     ]),
                                   ),
                                 ],
@@ -303,10 +297,16 @@ class _FullExamPageState extends State<FullExamPage> {
     );
   }
 
+  void onRCTap(int index) {
+    return setState(() {
+      _numberState = index;
+    });
+  }
+
   ElevatedButton submitButton() {
     return ElevatedButton(
       style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(140, 48)),
+        fixedSize: MaterialStateProperty.all(const Size(140, 48)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -319,102 +319,30 @@ class _FullExamPageState extends State<FullExamPage> {
   }
 
   void submit() {
-    // number selected, check if it's correct
+    List<int> notSolvedNumbers = checkanswers();
     setState(() {
-      int answer = _problems[_numberState].answer;
-      if (answer == _selectedNumber) {
-        corrects[_numberState] = 1; // correct
-      } else {
-        corrects[_numberState] = 2; // wrong
-      }
-      //print if problem is correct
-      if (corrects[_numberState] == 1) {
-        print("Correct!");
-      } else {
-        print("Wrong!");
-      }
-      //if final number, route to grading page
-      if (_numberState == finalNumber - 1) {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            titlePadding: EdgeInsets.only(
-                top: 60.0, left: 94.0, right: 94.0, bottom: 0.0),
-            // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
-            contentPadding: EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
-
-            title: Text(
-              '아직 안 푼 문제가 있어요!',
-              style: Headline_H2(36, Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            content: Text(
-              '${not_solved_numbers}번 문제를 아직 안 풀었어요.\n그대로 채점할까요? 다시 되돌릴 수 없어요.',
-              style: Body_Bd2(24, grey08),
-              textAlign: TextAlign.center,
-            ),
-            actionsPadding: EdgeInsets.only(
-              bottom: 36.0,
-            ),
-            buttonPadding: EdgeInsets.all(24),
-            actions: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, 'Cancel');
-                },
-                child: Text(
-                  '돌아가기',
-                  style: Button_Bt1(24, mainBlack),
-                ),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  backgroundColor: grey03,
-                  minimumSize: Size(238, 64),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, 'OK');
-                  Navigator.pushNamed(context, '/gradingPage',
-                      arguments: GradingArguments(corrects, _problems));
-                  _numberState = 0;
-                },
-                child: Text(
-                  '채점하기',
-                  style: Button_Bt1(24, Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  backgroundColor: mainSkyBlue,
-                  minimumSize: Size(238, 64),
-                ),
-              ),
-            ],
-            actionsAlignment: MainAxisAlignment.center,
-          ),
-        );
-      }
-      //repetive args
-      if (_numberState < finalNumber - 1) {
-        _numberState += 1;
-      }
-      _selectedNumber = -1;
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => submitAlertDialog(
+            notSolvedNumbers: notSolvedNumbers,
+            corrects: corrects,
+            problems: _problems),
+      );
     });
   }
 
-  OutlinedButton number_button(String number, int value) {
+  OutlinedButton numberButton(String number, int value) {
     bool isSelected = _selectedNumber == value;
 
     return OutlinedButton(
       onPressed: () {
         setState(() {
           _selectedNumber = isSelected ? -1 : value;
+          _selectedNumbers[_numberState] = _selectedNumber;
         });
       },
       style: ButtonStyle(
-        side: MaterialStateProperty.all(BorderSide(color: Colors.black)),
+        side: MaterialStateProperty.all(const BorderSide(color: Colors.black)),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
             if (isSelected) {
@@ -424,8 +352,8 @@ class _FullExamPageState extends State<FullExamPage> {
             }
           },
         ),
-        fixedSize: MaterialStateProperty.all(Size(44, 44)),
-        shape: MaterialStateProperty.all(CircleBorder()),
+        fixedSize: MaterialStateProperty.all(const Size(44, 44)),
+        shape: MaterialStateProperty.all(const CircleBorder()),
       ),
       child: Text(
         number,
@@ -440,7 +368,6 @@ class _FullExamPageState extends State<FullExamPage> {
   int goPrevious() {
     setState(() {
       if (_numberState > 0) {
-        _selectedNumbers[_numberState] = _selectedNumber;
         _numberState -= 1;
         _selectedNumber = _selectedNumbers[_numberState];
       }
@@ -451,63 +378,101 @@ class _FullExamPageState extends State<FullExamPage> {
   int goNext() {
     setState(() {
       if (_numberState < (finalNumber - 1)) {
-        _selectedNumbers[_numberState] = _selectedNumber;
         _numberState += 1;
         _selectedNumber = _selectedNumbers[_numberState];
       }
     });
     return _numberState;
   }
+
+  List<int> checkanswers() {
+    for (int i = 0; i < finalNumber; i++) {
+      if (_selectedNumbers[i] == _problems[i].answer) {
+        corrects.add(1);
+      } else {
+        corrects.add(2);
+      }
+    }
+    List<int> unSolvedNumbers = [];
+    for (int i = 0; i < finalNumber; i++) {
+      if (_selectedNumbers[i] == -1) {
+        unSolvedNumbers.add(i + 1);
+      }
+    }
+    return unSolvedNumbers;
+  }
 }
 
+class submitAlertDialog extends StatelessWidget {
+  const submitAlertDialog({
+    super.key,
+    required this.notSolvedNumbers,
+    required this.corrects,
+    required List<Problem> problems,
+  }) : _problems = problems;
 
+  final List<int> notSolvedNumbers;
+  final List<int> corrects;
+  final List<Problem> _problems;
 
-
- // // number selected, check if it's correct
-          // setState(() {
-          //   _selectedNumbers[_numberState] = _selectedNumber;
-          //   int answer = _problems[_numberState].answer;
-          //   if (answer == _selectedNumber) {
-          //     corrects[_numberState] = 1; // correct
-          //   } else {
-          //     corrects[_numberState] = 2; // wrong
-          //   }
-          //   //print if problem is correct
-          //   if (corrects[_numberState] == 1) {
-          //     print("$_numberState+1, Correct!");
-          //   } else {
-          //     print("$_numberState+1, Wrong!");
-          //   }
-          //   //if final number, route to grading page
-          //   if (_numberState == finalNumber - 1) {
-          //     showDialog<String>(
-          //       context: context,
-          //       builder: (BuildContext context) => AlertDialog(
-          //         title: const Text('AlertDialog Title'),
-          //         content: const Text('AlertDialog description'),
-          //         actions: <Widget>[
-          //           TextButton(
-          //             onPressed: () {
-          //               Navigator.pop(context, 'Cancel');
-          //             },
-          //             child: const Text('Cancel'),
-          //           ),
-          //           TextButton(
-          //             onPressed: () {
-          //               Navigator.pop(context, 'OK');
-          //               Navigator.pushNamed(context, '/gradingPage',
-          //                   arguments: GradingArguments(corrects, _problems));
-          //               _numberState = 0;
-          //             },
-          //             child: const Text('OK'),
-          //           ),
-          //         ],
-          //       ),
-          //     );
-          //   }
-          //   //repetive args
-          //   if (_numberState < finalNumber - 1) {
-          //     _numberState += 1;
-          //   }
-          //   _selectedNumber = _selectedNumbers[_numberState];
-          // });
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      titlePadding: const EdgeInsets.only(
+          top: 60.0, left: 94.0, right: 94.0, bottom: 0.0),
+      // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
+      contentPadding: const EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
+      title: Text(
+        notSolvedNumbers.isEmpty ? '시험지를 채점할까요?' : '아직 안 푼 문제가 있어요!',
+        style: Headline_H2(36, Colors.black),
+        textAlign: TextAlign.center,
+      ),
+      content: Text(
+        notSolvedNumbers.isEmpty
+            ? '시험지를 제출하고 문제를 채점하시겠어요?\n문제를 채점한 후에는 다시 되돌릴 수 없어요.'
+            : '${(notSolvedNumbers).join(', ')}번 문제를 아직 안 풀었어요.\n그대로 채점할까요? 다시 되돌릴 수 없어요.',
+        style: Body_Bd2(24, grey08),
+        textAlign: TextAlign.center,
+      ),
+      actionsPadding: const EdgeInsets.only(
+        bottom: 36.0,
+      ),
+      buttonPadding: const EdgeInsets.all(24),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context, 'Cancel');
+          },
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            backgroundColor: grey03,
+            minimumSize: const Size(238, 64),
+          ),
+          child: Text(
+            '돌아가기',
+            style: Button_Bt1(24, mainBlack),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context, 'OK');
+            Navigator.popAndPushNamed(context, '/gradingPage',
+                arguments: GradingArguments(corrects, _problems));
+          },
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            backgroundColor: mainSkyBlue,
+            minimumSize: const Size(238, 64),
+          ),
+          child: Text(
+            '채점하기',
+            style: Button_Bt1(24, Colors.white),
+          ),
+        ),
+      ],
+      actionsAlignment: MainAxisAlignment.center,
+    );
+  }
+}
