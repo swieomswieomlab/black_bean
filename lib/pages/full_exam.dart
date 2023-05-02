@@ -29,9 +29,9 @@ class _FullExamPageState extends State<FullExamPage> {
   int finalNumber = 99;
   bool remote_control = true;
 
-  //아직 안 푼 문제 리스트 예시 넣어둠
-  List<int> not_solved_numbers = [1, 2, 3];
   List<int> corrects = [];
+
+  var not_solved_numbers;
 
   @override
   void initState() {
@@ -268,7 +268,7 @@ class _FullExamPageState extends State<FullExamPage> {
                                               ],
                                             ),
                                             // SizedBox(width: 140),
-                                            submit_button(),
+                                            submitButton(),
                                           ],
                                         ),
                                       ),
@@ -303,104 +303,106 @@ class _FullExamPageState extends State<FullExamPage> {
     );
   }
 
-  ElevatedButton submit_button() => ElevatedButton(
-        style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all(Size(140, 48)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
+  ElevatedButton submitButton() {
+    return ElevatedButton(
+      style: ButtonStyle(
+        fixedSize: MaterialStateProperty.all(Size(140, 48)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
           ),
         ),
-        onPressed: () {
-          // number selected, check if it's correct
-          setState(() {
-            int answer = _problems[_numberState].answer;
-            if (answer == _selectedNumber) {
-              corrects[_numberState] = 1; // correct
-            } else {
-              corrects[_numberState] = 2; // wrong
-            }
-            //print if problem is correct
-            if (corrects[_numberState] == 1) {
-              print("Correct!");
-            } else {
-              print("Wrong!");
-            }
-            //if final number, route to grading page
-            if (_numberState == finalNumber - 1) {
-              showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  titlePadding: EdgeInsets.only(
-                      top: 60.0, left: 94.0, right: 94.0, bottom: 0.0),
-                  // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
-                  contentPadding: EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
+      ),
+      onPressed: submit,
+      child: const Text('채점'),
+    );
+  }
 
-                  title: Text(
-                    '아직 안 푼 문제가 있어요!',
-                    style: Headline_H2(36, Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
-                  content: Text(
-                    '${not_solved_numbers}번 문제를 아직 안 풀었어요.\n그대로 채점할까요? 다시 되돌릴 수 없어요.',
-                    style: Body_Bd2(24, grey08),
-                    textAlign: TextAlign.center,
-                  ),
-                  actionsPadding: EdgeInsets.only(
-                    bottom: 36.0,
-                  ),
-                  buttonPadding: EdgeInsets.all(24),
-                  actions: <Widget>[
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context, 'Cancel');
-                      },
-                      child: Text(
-                        '돌아가기',
-                        style: Button_Bt1(24, mainBlack),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        backgroundColor: grey03,
-                        minimumSize: Size(238, 64),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context, 'OK');
-                        Navigator.pushNamed(context, '/gradingPage',
-                            arguments: GradingArguments(corrects, _problems));
-                        _numberState = 0;
-                      },
-                      child: Text(
-                        '채점하기',
-                        style: Button_Bt1(24, Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        backgroundColor: mainSkyBlue,
-                        minimumSize: Size(238, 64),
-                      ),
-                    ),
-                  ],
-                  actionsAlignment: MainAxisAlignment.center,
+  void submit() {
+    // number selected, check if it's correct
+    setState(() {
+      int answer = _problems[_numberState].answer;
+      if (answer == _selectedNumber) {
+        corrects[_numberState] = 1; // correct
+      } else {
+        corrects[_numberState] = 2; // wrong
+      }
+      //print if problem is correct
+      if (corrects[_numberState] == 1) {
+        print("Correct!");
+      } else {
+        print("Wrong!");
+      }
+      //if final number, route to grading page
+      if (_numberState == finalNumber - 1) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            titlePadding: EdgeInsets.only(
+                top: 60.0, left: 94.0, right: 94.0, bottom: 0.0),
+            // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
+            contentPadding: EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
+
+            title: Text(
+              '아직 안 푼 문제가 있어요!',
+              style: Headline_H2(36, Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            content: Text(
+              '${not_solved_numbers}번 문제를 아직 안 풀었어요.\n그대로 채점할까요? 다시 되돌릴 수 없어요.',
+              style: Body_Bd2(24, grey08),
+              textAlign: TextAlign.center,
+            ),
+            actionsPadding: EdgeInsets.only(
+              bottom: 36.0,
+            ),
+            buttonPadding: EdgeInsets.all(24),
+            actions: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context, 'Cancel');
+                },
+                child: Text(
+                  '돌아가기',
+                  style: Button_Bt1(24, mainBlack),
                 ),
-              );
-            }
-            //repetive args
-            if (_numberState < finalNumber - 1) {
-              _numberState += 1;
-            }
-            _selectedNumber = -1;
-          });
-        },
-        child: _numberState == finalNumber - 1
-            ? const Text('채점')
-            : const Text('다음'),
-      );
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  backgroundColor: grey03,
+                  minimumSize: Size(238, 64),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context, 'OK');
+                  Navigator.pushNamed(context, '/gradingPage',
+                      arguments: GradingArguments(corrects, _problems));
+                  _numberState = 0;
+                },
+                child: Text(
+                  '채점하기',
+                  style: Button_Bt1(24, Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  backgroundColor: mainSkyBlue,
+                  minimumSize: Size(238, 64),
+                ),
+              ),
+            ],
+            actionsAlignment: MainAxisAlignment.center,
+          ),
+        );
+      }
+      //repetive args
+      if (_numberState < finalNumber - 1) {
+        _numberState += 1;
+      }
+      _selectedNumber = -1;
+    });
+  }
 
   OutlinedButton number_button(String number, int value) {
     bool isSelected = _selectedNumber == value;
