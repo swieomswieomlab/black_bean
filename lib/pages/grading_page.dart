@@ -34,7 +34,6 @@ class _GradingPageState extends State<GradingPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _score = (corrects.where((number) => number == 1).length) *
         100 ~/
         corrects.length;

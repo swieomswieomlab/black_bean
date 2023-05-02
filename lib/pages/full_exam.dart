@@ -1,5 +1,6 @@
 import 'dart:js_util';
 
+import 'package:black_bean/pages/problem_make.dart';
 import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -30,8 +31,6 @@ class _FullExamPageState extends State<FullExamPage> {
   bool remote_control = true;
 
   List<int> corrects = [];
-
-  var not_solved_numbers;
 
   @override
   void initState() {
@@ -64,12 +63,12 @@ class _FullExamPageState extends State<FullExamPage> {
                         remote_control = !remote_control;
                       });
                     },
-                    child: Icon(Icons.add),
                     style: OutlinedButton.styleFrom(
                       shape: CircleBorder(),
                       side: BorderSide(width: 2.0, color: Colors.blue),
                       minimumSize: Size(56, 56),
                     ),
+                    child: Icon(Icons.add),
                   ),
                 ),
               ),
@@ -249,19 +248,19 @@ class _FullExamPageState extends State<FullExamPage> {
                                                 SizedBox(
                                                     width:
                                                         space_between_numbers),
-                                                number_button('1', 1),
+                                                numberButton('1', 1),
                                                 SizedBox(
                                                     width:
                                                         space_between_numbers),
-                                                number_button('2', 2),
+                                                numberButton('2', 2),
                                                 SizedBox(
                                                     width:
                                                         space_between_numbers),
-                                                number_button('3', 3),
+                                                numberButton('3', 3),
                                                 SizedBox(
                                                     width:
                                                         space_between_numbers),
-                                                number_button('4', 4),
+                                                numberButton('4', 4),
                                                 SizedBox(
                                                     width:
                                                         space_between_numbers),
@@ -281,8 +280,8 @@ class _FullExamPageState extends State<FullExamPage> {
                                           onPressed: () {
                                             goNext();
                                           },
-                                          icon: Icon(Icons.arrow_forward_ios)),
-                                      Text("다음"),
+                                          icon: const Icon(Icons.arrow_forward_ios)),
+                                      const Text("다음"),
                                     ]),
                                   ),
                                 ],
@@ -319,102 +318,27 @@ class _FullExamPageState extends State<FullExamPage> {
   }
 
   void submit() {
-    // number selected, check if it's correct
+    List<int> notSolvedNumbers = checkanswers();
     setState(() {
-      int answer = _problems[_numberState].answer;
-      if (answer == _selectedNumber) {
-        corrects[_numberState] = 1; // correct
-      } else {
-        corrects[_numberState] = 2; // wrong
-      }
-      //print if problem is correct
-      if (corrects[_numberState] == 1) {
-        print("Correct!");
-      } else {
-        print("Wrong!");
-      }
-      //if final number, route to grading page
-      if (_numberState == finalNumber - 1) {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            titlePadding: EdgeInsets.only(
-                top: 60.0, left: 94.0, right: 94.0, bottom: 0.0),
-            // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
-            contentPadding: EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
-
-            title: Text(
-              '아직 안 푼 문제가 있어요!',
-              style: Headline_H2(36, Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            content: Text(
-              '${not_solved_numbers}번 문제를 아직 안 풀었어요.\n그대로 채점할까요? 다시 되돌릴 수 없어요.',
-              style: Body_Bd2(24, grey08),
-              textAlign: TextAlign.center,
-            ),
-            actionsPadding: EdgeInsets.only(
-              bottom: 36.0,
-            ),
-            buttonPadding: EdgeInsets.all(24),
-            actions: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, 'Cancel');
-                },
-                child: Text(
-                  '돌아가기',
-                  style: Button_Bt1(24, mainBlack),
-                ),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  backgroundColor: grey03,
-                  minimumSize: Size(238, 64),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, 'OK');
-                  Navigator.pushNamed(context, '/gradingPage',
-                      arguments: GradingArguments(corrects, _problems));
-                  _numberState = 0;
-                },
-                child: Text(
-                  '채점하기',
-                  style: Button_Bt1(24, Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  backgroundColor: mainSkyBlue,
-                  minimumSize: Size(238, 64),
-                ),
-              ),
-            ],
-            actionsAlignment: MainAxisAlignment.center,
-          ),
-        );
-      }
-      //repetive args
-      if (_numberState < finalNumber - 1) {
-        _numberState += 1;
-      }
-      _selectedNumber = -1;
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => submitAlertDialog(notSolvedNumbers: notSolvedNumbers, corrects: corrects, problems: _problems),
+      );
     });
   }
 
-  OutlinedButton number_button(String number, int value) {
+  OutlinedButton numberButton(String number, int value) {
     bool isSelected = _selectedNumber == value;
 
     return OutlinedButton(
       onPressed: () {
         setState(() {
           _selectedNumber = isSelected ? -1 : value;
+          _selectedNumbers[_numberState] = _selectedNumber;
         });
       },
       style: ButtonStyle(
-        side: MaterialStateProperty.all(BorderSide(color: Colors.black)),
+        side: MaterialStateProperty.all(const BorderSide(color: Colors.black)),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
             if (isSelected) {
@@ -424,8 +348,8 @@ class _FullExamPageState extends State<FullExamPage> {
             }
           },
         ),
-        fixedSize: MaterialStateProperty.all(Size(44, 44)),
-        shape: MaterialStateProperty.all(CircleBorder()),
+        fixedSize: MaterialStateProperty.all(const Size(44, 44)),
+        shape: MaterialStateProperty.all(const CircleBorder()),
       ),
       child: Text(
         number,
@@ -440,7 +364,6 @@ class _FullExamPageState extends State<FullExamPage> {
   int goPrevious() {
     setState(() {
       if (_numberState > 0) {
-        _selectedNumbers[_numberState] = _selectedNumber;
         _numberState -= 1;
         _selectedNumber = _selectedNumbers[_numberState];
       }
@@ -451,63 +374,103 @@ class _FullExamPageState extends State<FullExamPage> {
   int goNext() {
     setState(() {
       if (_numberState < (finalNumber - 1)) {
-        _selectedNumbers[_numberState] = _selectedNumber;
         _numberState += 1;
         _selectedNumber = _selectedNumbers[_numberState];
       }
     });
     return _numberState;
   }
+
+  List<int> checkanswers() {
+    for (int i = 0; i < finalNumber; i++) {
+      if (_selectedNumbers[i] == _problems[i].answer) {
+        corrects.add(1);
+      } else {
+        corrects.add(2);
+      }
+    }
+    List<int> unSolvedNumbers = [];
+    for (int i = 0; i < finalNumber; i++) {
+      if (_selectedNumbers[i] == -1) {
+        unSolvedNumbers.add(i + 1);
+      }
+    }
+    return unSolvedNumbers;
+  }
 }
 
+class submitAlertDialog extends StatelessWidget {
+  const submitAlertDialog({
+    super.key,
+    required this.notSolvedNumbers,
+    required this.corrects,
+    required List<Problem> problems,
+  }) : _problems = problems;
 
+  final List<int> notSolvedNumbers;
+  final List<int> corrects;
+  final List<Problem> _problems;
 
-
- // // number selected, check if it's correct
-          // setState(() {
-          //   _selectedNumbers[_numberState] = _selectedNumber;
-          //   int answer = _problems[_numberState].answer;
-          //   if (answer == _selectedNumber) {
-          //     corrects[_numberState] = 1; // correct
-          //   } else {
-          //     corrects[_numberState] = 2; // wrong
-          //   }
-          //   //print if problem is correct
-          //   if (corrects[_numberState] == 1) {
-          //     print("$_numberState+1, Correct!");
-          //   } else {
-          //     print("$_numberState+1, Wrong!");
-          //   }
-          //   //if final number, route to grading page
-          //   if (_numberState == finalNumber - 1) {
-          //     showDialog<String>(
-          //       context: context,
-          //       builder: (BuildContext context) => AlertDialog(
-          //         title: const Text('AlertDialog Title'),
-          //         content: const Text('AlertDialog description'),
-          //         actions: <Widget>[
-          //           TextButton(
-          //             onPressed: () {
-          //               Navigator.pop(context, 'Cancel');
-          //             },
-          //             child: const Text('Cancel'),
-          //           ),
-          //           TextButton(
-          //             onPressed: () {
-          //               Navigator.pop(context, 'OK');
-          //               Navigator.pushNamed(context, '/gradingPage',
-          //                   arguments: GradingArguments(corrects, _problems));
-          //               _numberState = 0;
-          //             },
-          //             child: const Text('OK'),
-          //           ),
-          //         ],
-          //       ),
-          //     );
-          //   }
-          //   //repetive args
-          //   if (_numberState < finalNumber - 1) {
-          //     _numberState += 1;
-          //   }
-          //   _selectedNumber = _selectedNumbers[_numberState];
-          // });
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      titlePadding: const EdgeInsets.only(
+          top: 60.0, left: 94.0, right: 94.0, bottom: 0.0),
+      // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
+      contentPadding: const EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
+      title: Text(
+        notSolvedNumbers.isEmpty
+        ?'시험지를 채점할까요?'
+        :'아직 안 푼 문제가 있어요!',
+        style: Headline_H2(36, Colors.black),
+        textAlign: TextAlign.center,
+      ),
+      content: Text(
+        notSolvedNumbers.isEmpty
+            ? '시험지를 제출하고 문제를 채점하시겠어요?\n문제를 채점한 후에는 다시 되돌릴 수 없어요.'
+            : '${(notSolvedNumbers).join(', ')}번 문제를 아직 안 풀었어요.\n그대로 채점할까요? 다시 되돌릴 수 없어요.',
+        style: Body_Bd2(24, grey08),
+        textAlign: TextAlign.center,
+      ),
+      actionsPadding: const EdgeInsets.only(
+        bottom: 36.0,
+      ),
+      buttonPadding: const EdgeInsets.all(24),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context, 'Cancel');
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8)),
+            backgroundColor: grey03,
+            minimumSize: const Size(238, 64),
+          ),
+          child: Text(
+            '돌아가기',
+            style: Button_Bt1(24, mainBlack),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context, 'OK');
+            Navigator.pushNamed(context, '/gradingPage',
+                arguments: GradingArguments(corrects, _problems));
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8)),
+            backgroundColor: mainSkyBlue,
+            minimumSize: const Size(238, 64),
+          ),
+          child: Text(
+            '채점하기',
+            style: Button_Bt1(24, Colors.white),
+          ),
+        ),
+      ],
+      actionsAlignment: MainAxisAlignment.center,
+    );
+  }
+}
