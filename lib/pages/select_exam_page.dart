@@ -25,6 +25,8 @@ class _SelectExamPageState extends State<SelectExamPage> {
   List<int> contained_num = [1];
   bool selected = false;
   int selected_num = -1;
+  String selectedYear = '';
+  String selectedRound = '';
 
   @override
   Widget build(BuildContext context) {
@@ -50,66 +52,148 @@ class _SelectExamPageState extends State<SelectExamPage> {
                 SizedBox(
                   height: 62,
                 ),
-                Container(
-                  height: 130,
-                  width: 600,
-                  child: Wrap(
-                    spacing: 28,
-                    runSpacing: 32,
-                    children: List.generate(
-                        6,
-                        (index) => GestureDetector(
-                              onTap: () {
-                                print(index);
-                                setState(() {
-                                  selected = true;
-                                  selected_num = index;
-                                });
-                              },
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: 150,
-                                    height: 70,
-                                    child: contained_num.contains(index)
-                                        ? selected_num == index
-                                            ? Image.asset(
-                                                "assets/subject_buttons/button_subject_pressed_${subject[index]}.png",
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                fit: BoxFit.contain,
-                                              )
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 130,
+                      width: 600,
+                      child: Wrap(
+                        spacing: 28,
+                        runSpacing: 32,
+                        children: List.generate(
+                            6,
+                            (index) => GestureDetector(
+                                  onTap: () {
+                                    print(index);
+                                    setState(() {
+                                      selected = true;
+                                      selected_num = index;
+                                    });
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        width: 150,
+                                        height: 70,
+                                        child: contained_num.contains(index)
+                                            ? selected_num == index
+                                                ? Image.asset(
+                                                    "assets/subject_buttons/button_subject_pressed_${subject[index]}.png",
+                                                    alignment:
+                                                        Alignment.bottomCenter,
+                                                    fit: BoxFit.contain,
+                                                  )
+                                                : Image.asset(
+                                                    "assets/subject_buttons/button_subject_default_${subject[index]}.png",
+                                                    alignment:
+                                                        Alignment.bottomCenter,
+                                                    fit: BoxFit.contain)
                                             : Image.asset(
-                                                "assets/subject_buttons/button_subject_default_${subject[index]}.png",
+                                                "assets/subject_buttons/button_subject_disabled.png",
                                                 alignment:
                                                     Alignment.bottomCenter,
-                                                fit: BoxFit.contain)
-                                        : Image.asset(
-                                            "assets/subject_buttons/button_subject_disabled.png",
-                                            alignment: Alignment.bottomCenter,
-                                            fit: BoxFit.contain),
+                                                fit: BoxFit.contain),
+                                      ),
+                                      Positioned.fill(
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              bottom: selected_num == index
+                                                  ? contained_num
+                                                          .contains(index)
+                                                      ? 0
+                                                      : 15
+                                                  : 15),
+                                          alignment: Alignment.center,
+                                          child: Text(subject_kor[index],
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  Body_Bd1(20, Colors.white)),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Positioned.fill(
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: selected_num == index
-                                              ? contained_num.contains(index)
-                                                  ? 0
-                                                  : 15
-                                              : 15),
-                                      alignment: Alignment.center,
-                                      child: Text(subject_kor[index],
-                                          textAlign: TextAlign.center,
-                                          style: Body_Bd1(20, Colors.white)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )),
-                  ),
+                                )),
+                      ),
+                    ),
+                    //년도 드랍다운 버튼 
+                    Container(
+                      width: 180,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: grey05),
+                      ),
+                      child: DropdownButton<String>(
+                        alignment: AlignmentDirectional.center,
+                        value: selectedYear,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedYear = newValue!;
+                          });
+                        },
+                        items: <String>[
+                          '',
+                          '2021',
+                          '2022',
+                          '2023'
+                        ] //여기에 해당 과목 문제 있는 연도 리스트
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              "  $value년도",
+                              style: Body_Bd3(20,
+                                  selectedYear == value ? mainBlack : grey05),
+                            ), //value에 년도 추가되어서 출력
+                          );
+                        }).toList(),
+                        isExpanded: true,
+                        underline: Container(),
+                        dropdownColor: Colors.white,
+                        elevation: 0,
+                      ),
+                    ),
+                    SizedBox(width: 24),
+                    //차수 드랍다운 버튼 
+                    Container(
+                      width: 180,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: grey05),
+                      ),
+                      child: DropdownButton<String>(
+                        alignment: AlignmentDirectional.center,
+                        value: selectedRound,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedRound = newValue!;
+                          });
+                        },
+                        items: <String>[
+                          '',
+                          '1',
+                          '2',
+                        ] //여기에 해당 과목 문제 있는 연도 리스트
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              "  $value차",
+                              style: Body_Bd3(20,
+                                  selectedRound == value ? mainBlack : grey05),
+                            ), //value에 년도 추가되어서 출력
+                          );
+                        }).toList(),
+                        isExpanded: true,
+                        underline: Container(),
+                        dropdownColor: Colors.white,
+                        elevation: 0,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 50,
                 ),
                 Row(
                   children: [
