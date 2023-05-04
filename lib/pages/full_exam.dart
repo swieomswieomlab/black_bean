@@ -34,7 +34,7 @@ class _FullExamPageState extends State<FullExamPage> {
     super.initState();
 
     _loadProblemsFuture = _firebaseService
-        .loadProblemYearFromDatabase('High', 'Math', '2022-1')
+        .loadProblemYearFromDatabase('High', 'Math', '2099-1')
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
@@ -227,6 +227,7 @@ class _FullExamPageState extends State<FullExamPage> {
                                         placeholder: kTransparentImage,
                                         image: _problems[_numberState].problem,
                                         fit: BoxFit.fitWidth,
+                                        fadeInDuration: const Duration(milliseconds: 100),
                                       ),
                                       const Spacer(),
                                       // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
