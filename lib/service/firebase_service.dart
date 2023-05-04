@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'dart:io';
 
+import 'package:black_bean/model/major_section_name.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,21 +27,19 @@ class FirebaseService {
     UploadTask uploadTask = ref.putFile(File(pickedImage.path));
     final snapshot = await uploadTask.whenComplete(() => null);
     final urlImageUser = await snapshot.ref.getDownloadURL();
-
-    print('firebase_service_dart line 26: Image URL: $urlImageUser');
   }
 
   //웹에서 파이어스토어에 이미지 업로드 할 때 사용하는 함수
-  Future<void> uploadImage_web(XFile pickedFile, imageName) async {
+  Future<void> uploadImageWeb(XFile pickedFile, imageName) async {
     if (pickedFile != null) {
       final snapshot = await _storage
           .ref()
           .child('images/$imageName')
           .putData(await pickedFile.readAsBytes());
       var imgUrl = await snapshot.ref.getDownloadURL();
-      print('firebase_service_dart line 37: Upload complete!  $imgUrl');
+      // print('firebase_service_dart line 37: Upload complete!  $imgUrl');
     } else {
-      print('firebase_service_dart line 38: No image selected.');
+      // print('firebase_service_dart line 38: No image selected.');
     }
   }
 
@@ -48,9 +49,8 @@ class FirebaseService {
     Reference ref = FirebaseStorage.instance.ref().child('images/$imageName');
     UploadTask uploadTask =
         ref.putData(bytes, SettableMetadata(contentType: 'image/png'));
-    TaskSnapshot taskSnapshot = await uploadTask
-        .whenComplete(() => print('done'))
-        .catchError((error) => print('something went wrong'));
+    TaskSnapshot taskSnapshot =
+        await uploadTask.whenComplete(() {}).catchError((error) {});
     String url = await taskSnapshot.ref.getDownloadURL();
     return url;
   }
@@ -70,9 +70,7 @@ class FirebaseService {
           .collection('problems')
           .doc() // this will create a new document with an automatically generated ID
           .set(problem.toMap());
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   //문제 하나 불러오는 함수
@@ -128,7 +126,8 @@ class FirebaseService {
     List<Problem> problems = [];
 
     querySnapshot.docs.forEach((documentSnapshot) {
-      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
 
       var answer = data['answer'];
       var iSection = data['iSection'];
@@ -170,7 +169,8 @@ class FirebaseService {
     List<Problem> problems = [];
 
     querySnapshot.docs.forEach((documentSnapshot) {
-      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
 
       var answer = data['answer'];
       var iSection = data['iSection'];
@@ -197,6 +197,37 @@ class FirebaseService {
     return problems;
   }
 
+  //단원명 불러오기
+  Future<List<MajorSectionName>> loadMajorSectionNameFromDatabase(
+    String degree,
+    String subject,
+  ) async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('degree')
+        .doc(degree)
+        .collection('subject')
+        .doc(subject)
+        .collection('MajorSectionName')
+        .get();
 
-  
+    List<MajorSectionName> majorSectionNames = [];
+
+    querySnapshot.docs.forEach((documentSnapshot) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      var sectionNumber = int.parse(documentSnapshot.id);
+      var name = data['name'];
+
+      MajorSectionName majorSectionName = MajorSectionName(
+        sectionNumber: sectionNumber,
+        name: name,
+      );
+
+      majorSectionNames.add(majorSectionName);
+    });
+
+
+    return majorSectionNames;
+  }
 }
