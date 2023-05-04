@@ -67,34 +67,28 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                   onTap: () {
                                     print(index);
                                     setState(() {
-                                      selected = true;
-                                      selected_num = index;
+                                      if (contained_num.contains(index)) {
+                                        selected = true;
+                                        selected_num = index;
+                                      }
+
                                     });
                                   },
                                   child: Stack(
                                     children: [
                                       Container(
-                                        width: 150,
-                                        height: 70,
-                                        child: contained_num.contains(index)
-                                            ? selected_num == index
-                                                ? Image.asset(
-                                                    "assets/subject_buttons/button_subject_pressed_${subject[index]}.png",
-                                                    alignment:
-                                                        Alignment.bottomCenter,
-                                                    fit: BoxFit.contain,
-                                                  )
-                                                : Image.asset(
-                                                    "assets/subject_buttons/button_subject_default_${subject[index]}.png",
-                                                    alignment:
-                                                        Alignment.bottomCenter,
-                                                    fit: BoxFit.contain)
-                                            : Image.asset(
-                                                "assets/subject_buttons/button_subject_disabled.png",
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                fit: BoxFit.contain),
-                                      ),
+                                          width: 150,
+                                          height: 70,
+                                          child: Image.asset(
+                                            contained_num.contains(index)
+                                                ? selected_num == index
+                                                    ? "assets/subject_buttons/button_subject_pressed_${subject[index]}.png"
+                                                    : "assets/subject_buttons/button_subject_default_${subject[index]}.png"
+                                                : "assets/subject_buttons/button_subject_disabled.png",
+                                            alignment: Alignment.bottomCenter,
+                                            fit: BoxFit.contain,
+                                          )),
+
                                       Positioned.fill(
                                         child: Container(
                                           padding: EdgeInsets.only(
@@ -116,7 +110,8 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                 )),
                       ),
                     ),
-                    //년도 드랍다운 버튼 
+                    //년도 드랍다운 버튼
+
                     Container(
                       width: 180,
                       height: 38,
@@ -154,7 +149,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                       ),
                     ),
                     SizedBox(width: 24),
-                    //차수 드랍다운 버튼 
+                    //차수 드랍다운 버튼
                     Container(
                       width: 180,
                       height: 38,
@@ -178,7 +173,8 @@ class _SelectExamPageState extends State<SelectExamPage> {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
-                              "  $value차",
+                              value == "" ? "  차수" : "  $value차",
+
                               style: Body_Bd3(20,
                                   selectedRound == value ? mainBlack : grey05),
                             ), //value에 년도 추가되어서 출력
@@ -211,21 +207,102 @@ class _SelectExamPageState extends State<SelectExamPage> {
                     ),
                     Spacer(),
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (selected_num != -1) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                    titlePadding: EdgeInsets.only(top: 60),
+                                    title: Text(
+                                        "${subject_kor[selected_num]} 모의고사를 시작할까요?",
+                                        style: Headline_H2(36, mainBlack),
+                                        textAlign: TextAlign.center),
+                                    content: Text("시작하기를 누르면 모의고사 문제가 시작돼요.",
+                                        style: Body_Bd2(24, grey08),
+                                        textAlign: TextAlign.center),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.zero),
+                                    actionsPadding: EdgeInsets.only(
+                                        left: 40,
+                                        right: 40,
+                                        top: 60,
+                                        bottom: 36),
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                          ),
+                                          elevation:
+                                              MaterialStateProperty.all(0),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(grey03),
+                                          minimumSize:
+                                              MaterialStateProperty.all(
+                                                  Size(238, 64)),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          "돌아가기",
+                                          style: Button_Bt1(24, grey07),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                          ),
+                                          minimumSize:
+                                              MaterialStateProperty.all(
+                                                  Size(238, 64)),
+                                          elevation:
+                                              MaterialStateProperty.all(0),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  mainSkyBlue),
+                                        ),
+                                        onPressed: () {},
+                                        child: Text(
+                                          "시작하기",
+                                          style: Button_Bt1(24, Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                    actionsAlignment: MainAxisAlignment.center,
+                                  ));
+                        }
+                      },
                       child: Icon(
                         Icons.arrow_forward,
                         size: 44,
                       ),
                       style: ButtonStyle(
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          CircleBorder(),
-                        ),
-                        minimumSize: MaterialStateProperty.all<Size>(
-                          Size(96, 96),
-                        ),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.grey),
-                      ),
+                          side: MaterialStateProperty.all<BorderSide>(
+                            BorderSide(
+                              color: selected_num == -1
+                                  ? Colors.grey
+                                  : Colors.black,
+                              width: 2,
+                            ),
+                          ),
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                            CircleBorder(),
+                          ),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                            Size(96, 96),
+                          ),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              selected_num == -1 ? Colors.grey : Colors.black)),
                     )
                   ],
                 )
