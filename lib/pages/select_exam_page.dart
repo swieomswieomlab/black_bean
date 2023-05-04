@@ -71,6 +71,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                         selected = true;
                                         selected_num = index;
                                       }
+
                                     });
                                   },
                                   child: Stack(
@@ -87,6 +88,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                             alignment: Alignment.bottomCenter,
                                             fit: BoxFit.contain,
                                           )),
+
                                       Positioned.fill(
                                         child: Container(
                                           padding: EdgeInsets.only(
@@ -109,6 +111,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                       ),
                     ),
                     //년도 드랍다운 버튼
+
                     Container(
                       width: 180,
                       height: 38,
@@ -171,6 +174,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                             value: value,
                             child: Text(
                               value == "" ? "  차수" : "  $value차",
+
                               style: Body_Bd3(20,
                                   selectedRound == value ? mainBlack : grey05),
                             ), //value에 년도 추가되어서 출력

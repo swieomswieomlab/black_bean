@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:black_bean/model/major_section_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -22,8 +23,13 @@ class _TestPageState extends State<TestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ElevatedButton(
-        onPressed: (() {
-          firebaseService.loadProblemFromDatabase('High', 'Math', '2022-1', 1);
+        onPressed: (() async {
+          List<MajorSectionName> a = await firebaseService
+              .loadMajorSectionNameFromDatabase('High', 'Math');
+          a.forEach((majorSectionName) {
+            print('Section Number: ${majorSectionName.sectionNumber}');
+            print('Name: ${majorSectionName.name}');
+          });
         }),
         child: const Text("PRINT"),
       ),

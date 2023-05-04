@@ -37,7 +37,7 @@ class ProblemMakeWidget extends StatefulWidget {
 
 List<String> degree = ['High', 'Middle'];
 List<String> subject = ['Math', 'Korean'];
-List<String> year = ['2020-1','2020-2','2021-1','2021-2','2022-1', '2022-2', '2023-1'];
+List<String> year = ['2020-1','2020-2','2021-1','2021-2','2022-1', '2022-2', '2023-1','2099-1'];
 List<String> number = List.generate(22, (i) => (i + 1).toString());
 List<String> majorSection = List.generate(9, (i) => (i + 1).toString());
 List<String> interSection = List.generate(9, (i) => (i + 1).toString());
