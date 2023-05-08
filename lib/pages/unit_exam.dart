@@ -1,3 +1,4 @@
+import 'package:black_bean/pages/problem_make.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -6,6 +7,9 @@ import '../class/grading_arguments.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';
+
+//문제 정답 여부 나타내는 enum 변수에 사용
+enum AnswerType { basic, wrong, correct }
 
 class UnitExamPage extends StatefulWidget {
   const UnitExamPage({Key? key}) : super(key: key);
@@ -26,6 +30,8 @@ class _UnitExamPageState extends State<UnitExamPage> {
   int _numberState = 0;
   int finalNumber = 99;
   bool remoteControl = true;
+  AnswerType answerType = AnswerType.basic; //정답 여부 나타내는 변수. 하단 버튼 부분 색상 변경에 사용.
+  bool isCorrect = false;
 
   List<int> corrects = [];
 
@@ -34,11 +40,12 @@ class _UnitExamPageState extends State<UnitExamPage> {
     super.initState();
 
     _loadProblemsFuture = _firebaseService
-        .loadProblemYearFromDatabase('High', 'Math', '2022-1')
+        .loadProblemYearFromDatabase('High', 'Math', '2099-1')
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
-      _selectedNumbers = List.generate(finalNumber, (index) => -1);
+      corrects = List.generate(finalNumber, (index) => 0);
+
       return loadedProblems;
     });
   }
@@ -123,7 +130,9 @@ class _UnitExamPageState extends State<UnitExamPage> {
                           decoration: BoxDecoration(
                             color: grey01,
                             shape: BoxShape.circle,
-                            border: index == _numberState? Border.all(color: mainSkyBlue, width: 2.0) : const Border(),
+                            border: index == _numberState
+                                ? Border.all(color: mainSkyBlue, width: 2.0)
+                                : const Border(),
                           ),
                           child: InkWell(
                             onTap: () {
@@ -132,7 +141,9 @@ class _UnitExamPageState extends State<UnitExamPage> {
                             child: Center(
                               child: Text(
                                 "${index + 1}",
-                                style: index == _numberState? Body_Bd1(14, mainSkyBlue) :Body_Bd1(14, grey06),
+                                style: index == _numberState
+                                    ? Body_Bd1(14, mainSkyBlue)
+                                    : Body_Bd1(14, grey06),
                                 softWrap: false,
                               ),
                             ),
@@ -160,11 +171,19 @@ class _UnitExamPageState extends State<UnitExamPage> {
             child: Container(
               height: 70,
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                // color: Colors.white,
+              decoration: BoxDecoration(
+                color: answerType == AnswerType.basic
+                    ? Colors.white
+                    : answerType == AnswerType.correct
+                        ? Color(0xffF3FFF8)
+                        : Color(0xffFEF5F5),
                 border: Border(
                   top: BorderSide(
-                    color: Colors.black,
+                    color: answerType == AnswerType.basic
+                        ? grey04
+                        : answerType == AnswerType.correct
+                            ? pointGreen
+                            : pointRed,
                     width: 1.0,
                   ),
                 ),
@@ -246,22 +265,22 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                               children: [
                                                 SizedBox(
                                                     width: spaceBetweenNumbers),
-                                                numberButton('1', 1),
+                                                number_button('1', 1),
                                                 SizedBox(
                                                     width: spaceBetweenNumbers),
-                                                numberButton('2', 2),
+                                                number_button('2', 2),
                                                 SizedBox(
                                                     width: spaceBetweenNumbers),
-                                                numberButton('3', 3),
+                                                number_button('3', 3),
                                                 SizedBox(
                                                     width: spaceBetweenNumbers),
-                                                numberButton('4', 4),
+                                                number_button('4', 4),
                                                 SizedBox(
                                                     width: spaceBetweenNumbers),
                                               ],
                                             ),
                                             // SizedBox(width: 140),
-                                            submitButton(),
+                                            submit_button(),
                                           ],
                                         ),
                                       ),
@@ -303,20 +322,71 @@ class _UnitExamPageState extends State<UnitExamPage> {
     });
   }
 
-  ElevatedButton submitButton() {
-    return ElevatedButton(
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(const Size(140, 48)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+  ElevatedButton submit_button() => ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+            (states) {
+              if (answerType == AnswerType.basic) {
+                return mainSkyBlue;
+              } else if (answerType == AnswerType.correct) {
+                return pointGreen;
+              } else {
+                return pointRed;
+              }
+            },
+          ),
+          fixedSize: MaterialStateProperty.all(Size(140, 48)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
           ),
         ),
-      ),
-      onPressed: submit,
-      child: const Text('채점'),
-    );
-  }
+        onPressed: () {
+          // number selected, check if it's correct
+          setState(() {
+            int answer = _problems[_numberState].answer;
+
+            if (isCorrect == false) {
+              if (answer == _selectedNumber) { //정답 맞춘 경우 correct
+                corrects[_numberState] = 1; // correct
+                answerType = AnswerType.correct;
+                isCorrect = true;
+              } else { //정답 못 맞춘 경우 wrong
+                corrects[_numberState] = 2; // wrong
+                answerType = AnswerType.wrong;
+              }
+            } else { //정답 맞춘 후 '다음' 버튼으로 바뀌고 다음 문제로 넘어가는 부분
+              answerType = AnswerType.basic;
+              isCorrect = false;
+              _numberState += 1;
+              _selectedNumber = -1;
+            }
+
+            //print if problem is correct
+            if (corrects[_numberState] == 1) {
+              print("Correct!");
+            } else {
+              print("Wrong!");
+            }
+            //if final number, route to grading page
+            if (_numberState == finalNumber - 1) {
+                        Navigator.pushNamed(context, '/gradingPage',
+                            arguments: GradingArguments(corrects, _problems));
+                        _numberState = 0;
+            }
+          });
+
+          // when problems are finishied, route to grading page
+          // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
+        },
+        child: !isCorrect
+            //_numberState == finalNumber - 1
+            ? const Text('채점')
+            : _numberState == finalNumber - 1
+                ? const Text('결과보기')
+                : const Text('다음'),
+      );
 
   void submit() {
     List<int> notSolvedNumbers = checkanswers();
@@ -331,35 +401,54 @@ class _UnitExamPageState extends State<UnitExamPage> {
     });
   }
 
-  OutlinedButton numberButton(String number, int value) {
+  OutlinedButton number_button(String number, int value) {
     bool isSelected = _selectedNumber == value;
 
     return OutlinedButton(
       onPressed: () {
         setState(() {
           _selectedNumber = isSelected ? -1 : value;
-          _selectedNumbers[_numberState] = _selectedNumber;
         });
       },
       style: ButtonStyle(
-        side: MaterialStateProperty.all(const BorderSide(color: Colors.black)),
+        side: MaterialStateProperty.all(BorderSide(
+          color: isSelected
+              ? answerType == AnswerType.basic
+                  ? mainSkyBlue
+                  : answerType == AnswerType.correct
+                      ? pointGreen
+                      : pointRed
+              : Colors.black,
+        )),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
             if (isSelected) {
-              return Colors.blue;
+              return isSelected
+                  ? answerType == AnswerType.basic
+                      ? mainLightBlue
+                      : answerType == AnswerType.correct
+                          ? Color(0xffE7FFF2)
+                          : Color(0xffFDE5E5)
+                  : Colors.black;
             } else {
               return null;
             }
           },
         ),
-        fixedSize: MaterialStateProperty.all(const Size(44, 44)),
-        shape: MaterialStateProperty.all(const CircleBorder()),
+        fixedSize: MaterialStateProperty.all(Size(44, 44)),
+        shape: MaterialStateProperty.all(CircleBorder()),
       ),
       child: Text(
         number,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: isSelected ? Colors.white : Colors.black,
+          color: isSelected
+              ? answerType == AnswerType.basic
+                  ? mainSkyBlue
+                  : answerType == AnswerType.correct
+                      ? pointGreen
+                      : pointRed
+              : Colors.black,
         ),
       ),
     );
