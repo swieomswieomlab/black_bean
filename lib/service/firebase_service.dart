@@ -74,7 +74,7 @@ class FirebaseService {
   }
 
   //문제 하나 불러오는 함수
-  Future<Problem> loadProblemFromDatabase(
+  Future<Problem> loadOneProblemFromDatabase(
       String degree, String subject, String year, int number) async {
     DocumentSnapshot documentSnapshot = await _firestore
         .collection('degree')
@@ -111,7 +111,7 @@ class FirebaseService {
     return problem;
   }
 
-  //함수에서 문제 리스트 불러오기
+  //연도별 문제 불러오기
   Future<List<Problem>> loadProblemYearFromDatabase(
       String degree, String subject, String year) async {
     QuerySnapshot querySnapshot = await _firestore
@@ -154,8 +154,8 @@ class FirebaseService {
     return problems;
   }
 
-  //함수에서 문제 리스트 불러오기
-  Future<List<Problem>> loadProblemWeaknessFromDatabase(
+  //여러 대단원 문제 불러오기 (현재 사용 안함)
+  Future<List<Problem>> loadProblemMajorSectionsFromDatabase(
       String degree, String subject, List<int> mSections) async {
     QuerySnapshot querySnapshot = await _firestore
         .collection('degree')
@@ -197,6 +197,96 @@ class FirebaseService {
     return problems;
   }
 
+  //선택 대단원의 해당 문제 다 불러오기
+  Future<List<Problem>> loadProblemMajorSectionFromDatabase(
+      String degree, String subject, int mSections) async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('degree')
+        .doc(degree)
+        .collection('subject')
+        .doc(subject)
+        .collection('problems')
+        .where('mSection', isEqualTo: mSections)
+        .get();
+
+    List<Problem> problems = [];
+
+    querySnapshot.docs.forEach((documentSnapshot) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      var answer = data['answer'];
+      var iSection = data['iSection'];
+      var mSection = data['mSection'];
+      var numberdata = data['number'];
+      var problemurl = data['problem'];
+      var sSection = data['sSection'];
+      var yeardata = data['year'];
+
+      Problem problem = Problem(
+          answer: answer,
+          iSection: iSection,
+          mSection: mSection,
+          number: numberdata,
+          problem: problemurl,
+          sSection: sSection,
+          year: yeardata);
+
+      // print(problem.toMap());
+
+      problems.add(problem);
+    });
+
+    return problems;
+  }
+
+  //소단원별로 문제 불러오기, 다 불러와서 랜덤 2개만 리턴
+  Future<List<Problem>> loadProblemSmallSectionFromDatabase(
+      String degree, String subject, int mSections, int sSections) async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('degree')
+        .doc(degree)
+        .collection('subject')
+        .doc(subject)
+        .collection('problems')
+        .where('mSection', isEqualTo: mSections)
+        .where('sSection', isEqualTo: sSections)
+        .get();
+
+    List<Problem> problems = [];
+
+    querySnapshot.docs.forEach((documentSnapshot) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      var answer = data['answer'];
+      var iSection = data['iSection'];
+      var mSection = data['mSection'];
+      var numberdata = data['number'];
+      var problemurl = data['problem'];
+      var sSection = data['sSection'];
+      var yeardata = data['year'];
+
+      Problem problem = Problem(
+          answer: answer,
+          iSection: iSection,
+          mSection: mSection,
+          number: numberdata,
+          problem: problemurl,
+          sSection: sSection,
+          year: yeardata);
+
+      // print(problem.toMap());
+
+      problems.add(problem);
+    });
+
+    problems.shuffle();
+
+    assert(problems.length >= 2);
+    return problems.sublist(0, 2);
+  }
+
   //단원명 불러오기
   Future<List<MajorSectionName>> loadMajorSectionNameFromDatabase(
     String degree,
@@ -226,7 +316,6 @@ class FirebaseService {
 
       majorSectionNames.add(majorSectionName);
     });
-
 
     return majorSectionNames;
   }

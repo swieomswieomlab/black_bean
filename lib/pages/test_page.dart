@@ -22,16 +22,32 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ElevatedButton(
-        onPressed: (() async {
-          List<MajorSectionName> a = await firebaseService
-              .loadMajorSectionNameFromDatabase('High', 'Math');
-          a.forEach((majorSectionName) {
-            print('Section Number: ${majorSectionName.sectionNumber}');
-            print('Name: ${majorSectionName.name}');
-          });
-        }),
-        child: const Text("PRINT"),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: (() async {
+              firebaseService
+                  .loadProblemMajorSectionFromDatabase('High', 'Math', 1)
+                  .then((value) {
+                value.forEach((element) {
+                  print(element.toMap());
+                });
+              });
+            }),
+            child: const Text("loadProblemMajorSectionFromDatabase"),
+          ),
+          ElevatedButton(
+              onPressed: ((() async {
+                firebaseService
+                    .loadProblemSmallSectionFromDatabase('High', 'Math', 1, 1)
+                    .then((value) {
+                  value.forEach((element) {
+                    print(element.toMap());
+                  });
+                });
+              })),
+              child: const Text("loadProblemSmallSectionFromDatabase"))
+        ],
       ),
     );
   }
