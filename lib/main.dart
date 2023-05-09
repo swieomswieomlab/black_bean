@@ -17,6 +17,8 @@ import 'pages/test_page.dart';
 import 'class/grading_arguments.dart';
 import 'package:flutter/foundation.dart';
 
+import 'pages/unit_exam.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/fullExam',
+        initialRoute: '/unitExam',
         routes: {
           '/': (context) => MyHomePage(),
           '/problemMake': (context) => ProblemMake(),
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
                   as GradingArguments),
           '/weaknessExam': (context) => WeaknessExamPage(),
           '/selectPage': (context) => SelectExamPage(),
+          '/unitExam': (context) => UnitExamPage(),
         },
       ),
     );
