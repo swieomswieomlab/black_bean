@@ -31,7 +31,7 @@ class _WeaknessExamPageState extends State<WeaknessExamPage> {
   @override
   void initState() {
     super.initState();
-    _loadProblemsFuture = _firebaseService.loadProblemWeaknessFromDatabase(
+    _loadProblemsFuture = _firebaseService.loadProblemMajorSectionsFromDatabase(
         'High', 'Math', [1]).then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;

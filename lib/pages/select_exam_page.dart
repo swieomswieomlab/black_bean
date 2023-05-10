@@ -20,11 +20,11 @@ class _SelectExamPageState extends State<SelectExamPage> {
     "history"
   ];
   //과목 목록 한국어
-  List<String> subject_kor = ["국어", "수학", "영어", "사회", "과학", "한국사"];
+  List<String> subjectKor = ["국어", "수학", "영어", "사회", "과학", "한국사"];
   //구현된 과목 번호
-  List<int> contained_num = [1];
+  List<int> containedNum = [1];
   bool selected = false;
-  int selected_num = -1;
+  int selectedNum = -1;
   String selectedYear = '';
   String selectedRound = '';
 
@@ -37,25 +37,25 @@ class _SelectExamPageState extends State<SelectExamPage> {
             child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 40),
+            margin: const EdgeInsets.symmetric(horizontal: 40),
             width: 1200,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("연습문제", style: Headline_H1(84, Colors.black)),
-                SizedBox(
+                const SizedBox(
                   height: 62,
                 ),
                 //TODO: 연습문제 설명 글 추후에 수정 필요
                 Text("연습문제에 대한 설명 글입니다.", style: Body_Bd1(26, Colors.black)),
                 Text("연습문제에 대한 설명 글입니다.", style: Body_Bd1(26, Colors.black)),
-                SizedBox(
+                const SizedBox(
                   height: 62,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 130,
                       width: 600,
                       child: Wrap(
@@ -67,21 +67,21 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                   onTap: () {
                                     print(index);
                                     setState(() {
-                                      if (contained_num.contains(index)) {
+                                      if (containedNum.contains(index)) {
                                         selected = true;
-                                        selected_num = index;
+                                        selectedNum = index;
                                       }
 
                                     });
                                   },
                                   child: Stack(
                                     children: [
-                                      Container(
+                                      SizedBox(
                                           width: 150,
                                           height: 70,
                                           child: Image.asset(
-                                            contained_num.contains(index)
-                                                ? selected_num == index
+                                            containedNum.contains(index)
+                                                ? selectedNum == index
                                                     ? "assets/subject_buttons/button_subject_pressed_${subject[index]}.png"
                                                     : "assets/subject_buttons/button_subject_default_${subject[index]}.png"
                                                 : "assets/subject_buttons/button_subject_disabled.png",
@@ -92,14 +92,14 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                       Positioned.fill(
                                         child: Container(
                                           padding: EdgeInsets.only(
-                                              bottom: selected_num == index
-                                                  ? contained_num
+                                              bottom: selectedNum == index
+                                                  ? containedNum
                                                           .contains(index)
                                                       ? 0
                                                       : 15
                                                   : 15),
                                           alignment: Alignment.center,
-                                          child: Text(subject_kor[index],
+                                          child: Text(subjectKor[index],
                                               textAlign: TextAlign.center,
                                               style:
                                                   Body_Bd1(20, Colors.white)),
@@ -148,7 +148,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                         elevation: 0,
                       ),
                     ),
-                    SizedBox(width: 24),
+                    const SizedBox(width: 24),
                     //차수 드랍다운 버튼
                     Container(
                       width: 180,
@@ -188,41 +188,41 @@ class _SelectExamPageState extends State<SelectExamPage> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 Row(
                   children: [
                     Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: mainLightBlue,
                       ),
-                      child: Text(
+                      child: const Text(
                         "\u{23F3}다른 과목들도 준비중이에요! 조금만 기다려주세요 :)",
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     OutlinedButton(
                       onPressed: () {
-                        if (selected_num != -1) {
+                        if (selectedNum != -1) {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                    titlePadding: EdgeInsets.only(top: 60),
+                                    titlePadding: const EdgeInsets.only(top: 60),
                                     title: Text(
-                                        "${subject_kor[selected_num]} 모의고사를 시작할까요?",
+                                        "${subjectKor[selectedNum]} 모의고사를 시작할까요?",
                                         style: Headline_H2(36, mainBlack),
                                         textAlign: TextAlign.center),
                                     content: Text("시작하기를 누르면 모의고사 문제가 시작돼요.",
                                         style: Body_Bd2(24, grey08),
                                         textAlign: TextAlign.center),
-                                    shape: RoundedRectangleBorder(
+                                    shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.zero),
-                                    actionsPadding: EdgeInsets.only(
+                                    actionsPadding: const EdgeInsets.only(
                                         left: 40,
                                         right: 40,
                                         top: 60,
@@ -243,7 +243,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                               MaterialStateProperty.all(grey03),
                                           minimumSize:
                                               MaterialStateProperty.all(
-                                                  Size(238, 64)),
+                                                  const Size(238, 64)),
                                         ),
                                         onPressed: () {
                                           Navigator.pop(context);
@@ -264,7 +264,7 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                           ),
                                           minimumSize:
                                               MaterialStateProperty.all(
-                                                  Size(238, 64)),
+                                                  const Size(238, 64)),
                                           elevation:
                                               MaterialStateProperty.all(0),
                                           backgroundColor:
@@ -282,27 +282,27 @@ class _SelectExamPageState extends State<SelectExamPage> {
                                   ));
                         }
                       },
-                      child: Icon(
-                        Icons.arrow_forward,
-                        size: 44,
-                      ),
                       style: ButtonStyle(
                           side: MaterialStateProperty.all<BorderSide>(
                             BorderSide(
-                              color: selected_num == -1
+                              color: selectedNum == -1
                                   ? Colors.grey
                                   : Colors.black,
                               width: 2,
                             ),
                           ),
                           shape: MaterialStateProperty.all<OutlinedBorder>(
-                            CircleBorder(),
+                            const CircleBorder(),
                           ),
                           minimumSize: MaterialStateProperty.all<Size>(
-                            Size(96, 96),
+                            const Size(96, 96),
                           ),
                           foregroundColor: MaterialStateProperty.all<Color>(
-                              selected_num == -1 ? Colors.grey : Colors.black)),
+                              selectedNum == -1 ? Colors.grey : Colors.black)),
+                      child: const Icon(
+                        Icons.arrow_forward,
+                        size: 44,
+                      ),
                     )
                   ],
                 )

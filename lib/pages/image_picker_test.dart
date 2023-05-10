@@ -1,24 +1,26 @@
+// ignore_for_file: avoid_print, unused_element
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:universal_html/html.dart' as html;
 
 
 
 
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Image Picker for Web Example',
       home: HomePage(),
     );
@@ -26,13 +28,15 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   final _picker = ImagePicker();
-  XFile? _pickedFile;
+  // XFile? _pickedFile;
   XFile? _image;
 
 //   Future<void> _pickImage() async {
@@ -53,7 +57,7 @@ Future<void> _pickImage() async {
         setState(() {
           _image = image;
         });
-        uploadImage_web(_image!);
+        uploadImageWeb(_image!);
         // _uploadImage2(_image!);
       } else {
         print("No image is selected.");
@@ -69,7 +73,7 @@ Future<void> _pickImage() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image Picker for Web Example'),
+        title: const Text('Image Picker for Web Example'),
       ),
       body: Center(
         child: _image != null
@@ -79,12 +83,12 @@ Future<void> _pickImage() async {
             // Text('Picked image: ${_pickedFile!.path}')
             // Image.file(File(_pickedFile!.path))
 
-            : Text('No image selected'),
+            : const Text('No image selected'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _pickImage,
         tooltip: 'Pick Image',
-        child: Icon(Icons.image),
+        child: const Icon(Icons.image),
       ),
     );
   }
@@ -109,7 +113,7 @@ Future<void> _uploadImage(XFile pickedImage) async {
 
 final _storage = FirebaseStorage.instance;
 
-Future<void> uploadImage_web(XFile pickedFile) async {
+Future<void> uploadImageWeb(XFile pickedFile) async {
   if (pickedFile != null) {
     final snapshot = await _storage
         .ref()

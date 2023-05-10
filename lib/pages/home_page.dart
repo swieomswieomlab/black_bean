@@ -13,13 +13,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Title"),
+        title: const Text("Title"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children:  <Widget>[
-            Text(
+            const Text(
               'Hello World!',
             ),
             //button that navigates to the image picker page
@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, '/imageTestPage');
               }
               ,
-              child: Text('image picker test'),
+              child: const Text('image picker test'),
             ),
           ],
         ),

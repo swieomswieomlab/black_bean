@@ -14,10 +14,10 @@ class GradingPage extends StatefulWidget {
         super(key: key);
 
   @override
-  _GradingPageState createState() => _GradingPageState();
+  GradingPageState createState() => GradingPageState();
 }
 
-class _GradingPageState extends State<GradingPage> {
+class GradingPageState extends State<GradingPage> {
   late List<Widget> textWidgets;
   late List<Problem> problems = widget._gradingArguments.problems;
   late List<int> corrects = widget._gradingArguments.corrects;
@@ -27,7 +27,7 @@ class _GradingPageState extends State<GradingPage> {
   int _selectedNumberAnswer = -1;
   late List<int> _selectedAnswers;
   int _selectedNumberProblem = -1;
-  Color _selectedColor = Colors.transparent;
+  // Color _selectedColor = Colors.transparent;
   bool clicked = false;
   int correctMessageState = -1;
   late List<bool> isCorrectList;
@@ -65,7 +65,7 @@ class _GradingPageState extends State<GradingPage> {
         onTap: () {
           setState(() {
             _selectedNumberProblem = number;
-            _selectedColor = Colors.blue;
+            // _selectedColor = Colors.blue;
             _selectedNumberAnswer = -1;
             correctMessageState = -1;
           });
@@ -80,7 +80,7 @@ class _GradingPageState extends State<GradingPage> {
           child: SingleChildScrollView(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Container(
+              child: SizedBox(
                 width: 1200,
                 // height: screenHeight,
                 child: Column(
@@ -92,7 +92,7 @@ class _GradingPageState extends State<GradingPage> {
                       // margin: EdgeInsets.symmetric(
                       //   horizontal: 156,
                       // ),
-                      color: Color(0xffF3F8FC),
+                      color: const Color(0xffF3F8FC),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -107,15 +107,15 @@ class _GradingPageState extends State<GradingPage> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
-                    Container(
+                    SizedBox(
                       height: 500,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 366,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,16 +124,16 @@ class _GradingPageState extends State<GradingPage> {
                                   "문항 별 채점 결과",
                                   style: Headline_H4(24, Colors.black),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 366,
                                   child: GridView(
-                                    physics: NeverScrollableScrollPhysics(),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 5,
                                       childAspectRatio: 70 / 94,
                                       mainAxisSpacing: 4.0,
@@ -145,97 +145,95 @@ class _GradingPageState extends State<GradingPage> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 60,
                           ),
-                          VerticalDivider(
+                          const VerticalDivider(
                             width: 20,
                             thickness: 1,
                             indent: 20,
                             endIndent: 0,
                             color: Colors.grey,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 60,
                           ),
                           Expanded(
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    "틀린 문제 다시 풀기",
-                                    style: Headline_H4(24, Colors.black),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 580,
-                                    child: _selectedNumberProblem != -1 &&
-                                            corrects[_selectedNumberProblem -
-                                                    1] ==
-                                                2
-                                        ? Image.network(
-                                            problems[_selectedNumberProblem - 1]
-                                                .problem,
-                                            fit: BoxFit.contain,
-                                          )
-                                        : const Text("수고하셨습니다~"),
-                                  ),
-                                  Spacer(),
-                                  // SizedBox(
-                                  //   height: 80,
-                                  // ),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: 217,
-                                      height: 38,
-                                      color: Color(0xFFFFF5DA),
-                                      child: correctMessageState == -1
-                                          ? Text("CMS 0",
-                                              style:
-                                                  Headline_H4(18, Colors.black))
-                                          : correctMessageState == 1
-                                              ? Text("CMS 1",
-                                                  style: Headline_H4(
-                                                      18, Colors.black))
-                                              : Text("\u{270F} 다시 한번 풀어보세요",
-                                                  style: Headline_H4(
-                                                      18, Colors.black)),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 24,
-                                  ),
-                                  _selectedNumberProblem > 0
-                                      ? Container(
-                                          width: 366,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              numberButton('1', 1,
-                                                  _selectedNumberProblem),
-                                              numberButton('2', 2,
-                                                  _selectedNumberProblem),
-                                              numberButton('3', 3,
-                                                  _selectedNumberProblem),
-                                              numberButton('4', 4,
-                                                  _selectedNumberProblem),
-                                            ],
-                                          ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  "틀린 문제 다시 풀기",
+                                  style: Headline_H4(24, Colors.black),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  width: 580,
+                                  child: _selectedNumberProblem != -1 &&
+                                          corrects[_selectedNumberProblem -
+                                                  1] ==
+                                              2
+                                      ? Image.network(
+                                          problems[_selectedNumberProblem - 1]
+                                              .problem,
+                                          fit: BoxFit.contain,
                                         )
-                                      : Container(),
-                                  SizedBox(
-                                    height: 60,
+                                      : const Text("수고하셨습니다~"),
+                                ),
+                                const Spacer(),
+                                // SizedBox(
+                                //   height: 80,
+                                // ),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 217,
+                                    height: 38,
+                                    color: const Color(0xFFFFF5DA),
+                                    child: correctMessageState == -1
+                                        ? Text("CMS 0",
+                                            style:
+                                                Headline_H4(18, Colors.black))
+                                        : correctMessageState == 1
+                                            ? Text("CMS 1",
+                                                style: Headline_H4(
+                                                    18, Colors.black))
+                                            : Text("\u{270F} 다시 한번 풀어보세요",
+                                                style: Headline_H4(
+                                                    18, Colors.black)),
                                   ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                                _selectedNumberProblem > 0
+                                    ? SizedBox(
+                                        width: 366,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            numberButton('1', 1,
+                                                _selectedNumberProblem),
+                                            numberButton('2', 2,
+                                                _selectedNumberProblem),
+                                            numberButton('3', 3,
+                                                _selectedNumberProblem),
+                                            numberButton('4', 4,
+                                                _selectedNumberProblem),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
+                                const SizedBox(
+                                  height: 60,
+                                ),
+                              ],
                             ),
                           )
                         ],
@@ -279,7 +277,7 @@ class _GradingPageState extends State<GradingPage> {
             }
           : null, // Set onPressed to null if button should be disabled
       style: ButtonStyle(
-        side: MaterialStateProperty.all(BorderSide(color: Colors.black)),
+        side: MaterialStateProperty.all(const BorderSide(color: Colors.black)),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
             if (_selectedNumberAnswer == value) {

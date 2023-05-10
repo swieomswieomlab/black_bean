@@ -22,6 +22,7 @@ class _FullExamPageState extends State<FullExamPage> {
 
   late Future<List<Problem>> _loadProblemsFuture;
   late List<Problem> _problems;
+  List<String> majorSectionNames = [];
   int _selectedNumber = -1;
   int _numberState = 0;
   int finalNumber = 99;
@@ -29,17 +30,31 @@ class _FullExamPageState extends State<FullExamPage> {
 
   List<int> corrects = [];
 
+  //TODO: REMOVE; TESTING ARGUMENTS
+  String testDegree = 'High';
+  String testSubject = 'Math';
+  String testYear = '2099-1';
+
   @override
   void initState() {
     super.initState();
 
     _loadProblemsFuture = _firebaseService
-        .loadProblemYearFromDatabase('High', 'Math', '2099-1')
+        .loadProblemYearFromDatabase(testDegree, testSubject, testYear)
         .then((loadedProblems) {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
       _selectedNumbers = List.generate(finalNumber, (index) => -1);
       return loadedProblems;
+    });
+
+    _firebaseService
+        .loadMajorSectionNameFromDatabase(testDegree, testSubject)
+        .then((loadedNames) {
+      loadedNames.sort((a, b) => a.sectionNumber.compareTo(b.sectionNumber));
+      for (var element in loadedNames) {
+        majorSectionNames.add(element.name);
+      }
     });
   }
 
@@ -123,7 +138,9 @@ class _FullExamPageState extends State<FullExamPage> {
                           decoration: BoxDecoration(
                             color: grey01,
                             shape: BoxShape.circle,
-                            border: index == _numberState? Border.all(color: mainSkyBlue, width: 2.0) : const Border(),
+                            border: index == _numberState
+                                ? Border.all(color: mainSkyBlue, width: 2.0)
+                                : const Border(),
                           ),
                           child: InkWell(
                             onTap: () {
@@ -132,7 +149,9 @@ class _FullExamPageState extends State<FullExamPage> {
                             child: Center(
                               child: Text(
                                 "${index + 1}",
-                                style: index == _numberState? Body_Bd1(14, mainSkyBlue) :Body_Bd1(14, grey06),
+                                style: index == _numberState
+                                    ? Body_Bd1(14, mainSkyBlue)
+                                    : Body_Bd1(14, grey06),
                                 softWrap: false,
                               ),
                             ),
@@ -148,7 +167,7 @@ class _FullExamPageState extends State<FullExamPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          "Exam index here | Subject here",
+          "이 UI가 바뀔 예정입니다.",
           style: Headline_H4(26, mainBlack),
         ),
       ),
@@ -186,6 +205,7 @@ class _FullExamPageState extends State<FullExamPage> {
                       return Text('Error: ${snapshot.error}');
                     } else {
                       _problems = snapshot.data!;
+                      var mSectionNumber = _problems[_numberState].mSection;
                       return Expanded(
                         child: SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
@@ -218,8 +238,7 @@ class _FullExamPageState extends State<FullExamPage> {
                                         // padding: EdgeInsets.only(left: 220),
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          //TODO: 단원명 불러오기
-                                          "${_problems[_numberState].mSection}단원|단원명",
+                                          "$mSectionNumber단원|${majorSectionNames[mSectionNumber - 1]}",
                                           style: Tiny_T1(16, mainSkyBlue),
                                         ),
                                       ),
@@ -227,7 +246,8 @@ class _FullExamPageState extends State<FullExamPage> {
                                         placeholder: kTransparentImage,
                                         image: _problems[_numberState].problem,
                                         fit: BoxFit.fitWidth,
-                                        fadeInDuration: const Duration(milliseconds: 100),
+                                        fadeInDuration:
+                                            const Duration(milliseconds: 100),
                                       ),
                                       const Spacer(),
                                       // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
@@ -324,7 +344,7 @@ class _FullExamPageState extends State<FullExamPage> {
     setState(() {
       showDialog<String>(
         context: context,
-        builder: (BuildContext context) => submitAlertDialog(
+        builder: (BuildContext context) => SubmitAlertDialog(
             notSolvedNumbers: notSolvedNumbers,
             corrects: corrects,
             problems: _problems),
@@ -404,8 +424,8 @@ class _FullExamPageState extends State<FullExamPage> {
   }
 }
 
-class submitAlertDialog extends StatelessWidget {
-  const submitAlertDialog({
+class SubmitAlertDialog extends StatelessWidget {
+  const SubmitAlertDialog({
     super.key,
     required this.notSolvedNumbers,
     required this.corrects,
