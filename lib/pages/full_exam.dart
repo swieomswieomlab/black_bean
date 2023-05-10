@@ -4,7 +4,6 @@ import 'package:transparent_image/transparent_image.dart';
 import '../textstyle.dart';
 import '../class/grading_arguments.dart';
 import '../model/problem.dart';
-import '../model/major_section_name.dart';
 
 import '../service/firebase_service.dart';
 
@@ -53,9 +52,9 @@ class _FullExamPageState extends State<FullExamPage> {
         .loadMajorSectionNameFromDatabase(testDegree, testSubject)
         .then((loadedNames) {
       loadedNames.sort((a, b) => a.sectionNumber.compareTo(b.sectionNumber));
-      loadedNames.forEach((element) {
+      for (var element in loadedNames) {
         majorSectionNames.add(element.name);
-      });
+      }
     });
   }
 
@@ -345,7 +344,7 @@ class _FullExamPageState extends State<FullExamPage> {
     setState(() {
       showDialog<String>(
         context: context,
-        builder: (BuildContext context) => submitAlertDialog(
+        builder: (BuildContext context) => SubmitAlertDialog(
             notSolvedNumbers: notSolvedNumbers,
             corrects: corrects,
             problems: _problems),
@@ -425,8 +424,8 @@ class _FullExamPageState extends State<FullExamPage> {
   }
 }
 
-class submitAlertDialog extends StatelessWidget {
-  const submitAlertDialog({
+class SubmitAlertDialog extends StatelessWidget {
+  const SubmitAlertDialog({
     super.key,
     required this.notSolvedNumbers,
     required this.corrects,

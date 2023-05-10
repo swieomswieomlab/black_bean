@@ -14,7 +14,7 @@ AppBar basicAppbar() {
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 80,
         ),
         TextButton(
@@ -24,7 +24,7 @@ AppBar basicAppbar() {
             style: Headline_H2(20, Colors.black),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 60,
         ),
         TextButton(

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, avoid_print
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,7 +10,7 @@ import '../model/problem.dart';
 import '../service/firebase_service.dart';
 
 class ProblemMake extends StatefulWidget {
-  const ProblemMake({Key? key});
+  const ProblemMake({super.key});
 
   @override
   State<ProblemMake> createState() => _ProblemMakeState();
@@ -20,7 +22,7 @@ class _ProblemMakeState extends State<ProblemMake> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
-        children: [
+        children: const [
           ProblemMakeWidget(),
         ],
       ),
@@ -29,7 +31,7 @@ class _ProblemMakeState extends State<ProblemMake> {
 }
 
 class ProblemMakeWidget extends StatefulWidget {
-  const ProblemMakeWidget({Key? key});
+  const ProblemMakeWidget({super.key});
 
   @override
   State<ProblemMakeWidget> createState() => _ProblemMakeWidgetState();
@@ -118,7 +120,7 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
               submitProblem(context);
             },
             child: const Text("Submit")),
-        Text(''),
+        const Text(''),
       ],
     );
   }
