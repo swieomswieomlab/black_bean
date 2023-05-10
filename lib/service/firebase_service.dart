@@ -2,17 +2,14 @@
 
 import 'dart:io';
 
-import 'package:black_bean/model/major_section_name.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../model/problem.dart';
+import '../model/major_section_name.dart';
 
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -61,16 +58,14 @@ class FirebaseService {
     String subject,
     Problem problem,
   ) async {
-    try {
-      await _firestore
-          .collection('degree')
-          .doc(degree)
-          .collection('subject')
-          .doc(subject)
-          .collection('problems')
-          .doc() // this will create a new document with an automatically generated ID
-          .set(problem.toMap());
-    } catch (e) {}
+    await _firestore
+        .collection('degree')
+        .doc(degree)
+        .collection('subject')
+        .doc(subject)
+        .collection('problems')
+        .doc() // this will create a new document with an automatically generated ID
+        .set(problem.toMap());
   }
 
   //문제 하나 불러오는 함수
