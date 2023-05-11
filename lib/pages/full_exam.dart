@@ -167,7 +167,8 @@ class _FullExamPageState extends State<FullExamPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          "이 UI가 바뀔 예정입니다.",
+          //TODO : remove constant
+          "2022년 1차 | 수학",
           style: Headline_H4(26, mainBlack),
         ),
       ),
