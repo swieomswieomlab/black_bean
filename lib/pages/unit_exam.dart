@@ -354,7 +354,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
         ),
         onPressed: () {
 
-          if(_selectedNumber != -1){
+          if(_selectedNumber != -1){ // 뭔가 선택했을 때
             setState(() {
             int answer = _problems[_numberState].answer;
 
@@ -385,7 +385,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
             }
             //if final number, route to grading page
             if (_numberState == finalNumber - 1) {
-              Navigator.pushNamed(context, '/gradingPage',
+              Navigator.pushNamed(context, '/unitExamGradingPage',
                   arguments: GradingArguments(corrects, _problems));
               _numberState = 0;
             }
@@ -397,18 +397,11 @@ class _UnitExamPageState extends State<UnitExamPage> {
           // when problems are finishied, route to grading page
           // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
         },
-        child: _numberState == finalNumber - 1
+        child: _numberState == finalNumber - 2 && isCorrect
             ? const Text('결과보기')
             : isCorrect
                 ? const Text('다음')
                 : const Text('채점하기'),
-
-        // !isCorrect
-        //     ? const Text('채점')
-        //     : _numberState == finalNumber - 1 ||
-        //             answerType != AnswerType.checkAnswer
-        //         ? const Text('결과보기')
-        //         : const Text('다음'),
       );
 
   void submit() {
