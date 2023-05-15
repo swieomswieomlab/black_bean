@@ -221,97 +221,66 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                   const EdgeInsets.symmetric(horizontal: 40),
                               width: 1200,
                               height: MediaQuery.of(context).size.height - 100,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              child: Column(
                                 children: [
-                                  // 이전 버튼 주석처리
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(top: 200.0),
-                                  //   child: Column(children: [
-                                  //     IconButton(
-                                  //         onPressed: () {
-                                  //           goPrevious();
-                                  //         },
-                                  //         icon:
-                                  //             const Icon(Icons.arrow_back_ios)),
-                                  //     const Text("이전"),
-                                  //   ]),
-                                  // ),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        // padding: EdgeInsets.only(left: 220),
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          //TODO: 단원명 불러오기
-                                          "${_problems[_numberState].mSection}단원|단원명",
-                                          style: Tiny_T1(16, mainSkyBlue),
-                                        ),
-                                      ),
-                                      FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: _problems[_numberState].problem,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                      const Spacer(),
-                                      // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
-                                      SizedBox(
-                                        width: 1200,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 220),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      //TODO: 단원명 불러오기
+                                      "${_problems[_numberState].mSection}단원|단원명",
+                                      style: Tiny_T1(16, mainSkyBlue),
+                                    ),
+                                  ),
+                                  FadeInImage.memoryNetwork(
+                                    placeholder: kTransparentImage,
+                                    image: _problems[_numberState].problem,
+                                    fit: BoxFit.fitWidth,
+                                  ),
+                                  const Spacer(),
+                                  // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
+                                  SizedBox(
+                                    width: 1200,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
 
+                                      children: [
+                                        const SizedBox(width: 280),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                           children: [
-                                            const SizedBox(width: 280),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                                number_button('1', 1),
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                                number_button('2', 2),
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                                number_button('3', 3),
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                                number_button('4', 4),
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                              ],
-                                            ),
-                                            // SizedBox(width: 132),
-                                            Visibility(
-                                                replacement: SizedBox(
-                                                  width: 132,
-                                                ),
-                                                visible: AnswerType.wrong ==
-                                                    answerType,
-                                                child: answerCheckButton()),
-                                            submitButton(),
+                                            SizedBox(
+                                                width: spaceBetweenNumbers),
+                                            number_button('1', 1),
+                                            SizedBox(
+                                                width: spaceBetweenNumbers),
+                                            number_button('2', 2),
+                                            SizedBox(
+                                                width: spaceBetweenNumbers),
+                                            number_button('3', 3),
+                                            SizedBox(
+                                                width: spaceBetweenNumbers),
+                                            number_button('4', 4),
+                                            SizedBox(
+                                                width: spaceBetweenNumbers),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                        // SizedBox(width: 132),
+                                        Visibility(
+                                            replacement: SizedBox(
+                                              width: 132,
+                                            ),
+                                            visible: AnswerType.wrong ==
+                                                answerType,
+                                            child: answerCheckButton()),
+                                        submitButton(),
+                                      ],
+                                    ),
                                   ),
-                                  //다음 버튼 주석처리
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(top: 200.0),
-                                  //   child: Column(children: [
-                                  //     IconButton(
-                                  //         onPressed: () {
-                                  //           goNext();
-                                  //         },
-                                  //         icon: const Icon(
-                                  //             Icons.arrow_forward_ios)),
-                                  //     const Text("다음"),
-                                  //   ]),
-                                  // ),
                                 ],
                               ),
                             ),
