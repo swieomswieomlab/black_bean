@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, avoid_print
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,7 +10,7 @@ import '../model/problem.dart';
 import '../service/firebase_service.dart';
 
 class ProblemMake extends StatefulWidget {
-  const ProblemMake({Key? key});
+  const ProblemMake({super.key});
 
   @override
   State<ProblemMake> createState() => _ProblemMakeState();
@@ -20,7 +22,7 @@ class _ProblemMakeState extends State<ProblemMake> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
-        children: [
+        children: const [
           ProblemMakeWidget(),
         ],
       ),
@@ -29,7 +31,7 @@ class _ProblemMakeState extends State<ProblemMake> {
 }
 
 class ProblemMakeWidget extends StatefulWidget {
-  const ProblemMakeWidget({Key? key});
+  const ProblemMakeWidget({super.key});
 
   @override
   State<ProblemMakeWidget> createState() => _ProblemMakeWidgetState();
@@ -37,7 +39,7 @@ class ProblemMakeWidget extends StatefulWidget {
 
 List<String> degree = ['High', 'Middle'];
 List<String> subject = ['Math', 'Korean'];
-List<String> year = ['2020-1','2020-2','2021-1','2021-2','2022-1', '2022-2', '2023-1'];
+List<String> year = ['2020-1','2020-2','2021-1','2021-2','2022-1', '2022-2', '2023-1','2099-1'];
 List<String> number = List.generate(22, (i) => (i + 1).toString());
 List<String> majorSection = List.generate(9, (i) => (i + 1).toString());
 List<String> interSection = List.generate(9, (i) => (i + 1).toString());
@@ -118,7 +120,7 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
               submitProblem(context);
             },
             child: const Text("Submit")),
-        Text(''),
+        const Text(''),
       ],
     );
   }

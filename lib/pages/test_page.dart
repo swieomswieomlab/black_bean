@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:black_bean/model/major_section_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -21,11 +22,32 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ElevatedButton(
-        onPressed: (() {
-          firebaseService.loadProblemFromDatabase('High', 'Math', '2022-1', 1);
-        }),
-        child: const Text("PRINT"),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: (() async {
+              firebaseService
+                  .loadProblemMajorSectionFromDatabase('High', 'Math', 1)
+                  .then((value) {
+                value.forEach((element) {
+                  print(element.toMap());
+                });
+              });
+            }),
+            child: const Text("loadProblemMajorSectionFromDatabase"),
+          ),
+          ElevatedButton(
+              onPressed: ((() async {
+                firebaseService
+                    .loadProblemSmallSectionFromDatabase('High', 'Math', 1, 1)
+                    .then((value) {
+                  value.forEach((element) {
+                    print(element.toMap());
+                  });
+                });
+              })),
+              child: const Text("loadProblemSmallSectionFromDatabase"))
+        ],
       ),
     );
   }
