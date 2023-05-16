@@ -167,7 +167,7 @@ class _FullExamPageState extends State<FullExamPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          "이 UI가 바뀔 예정입니다.",
+          "${yearToKorean(testYear)} | ${subjectToKorean(testSubject)}",
           style: Headline_H4(26, mainBlack),
         ),
       ),
@@ -234,13 +234,9 @@ class _FullExamPageState extends State<FullExamPage> {
                                   ),
                                   Column(
                                     children: [
-                                      Container(
-                                        // padding: EdgeInsets.only(left: 220),
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          "$mSectionNumber단원|${majorSectionNames[mSectionNumber - 1]}",
-                                          style: Tiny_T1(16, mainSkyBlue),
-                                        ),
+                                      Text(
+                                        "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
+                                        style: Tiny_T1(16, mainSkyBlue),
                                       ),
                                       FadeInImage.memoryNetwork(
                                         placeholder: kTransparentImage,
