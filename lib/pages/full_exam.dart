@@ -56,6 +56,7 @@ class _FullExamPageState extends State<FullExamPage> {
         majorSectionNames.add(element.name);
       }
     });
+    
   }
 
   @override
@@ -208,96 +209,89 @@ class _FullExamPageState extends State<FullExamPage> {
                       var mSectionNumber = _problems[_numberState].mSection;
                       return Expanded(
                         child: SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 40),
-                              width: 1200,
-                              height: MediaQuery.of(context).size.height - 100,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 200.0),
-                                    child: Column(children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            goPrevious();
-                                          },
-                                          icon:
-                                              const Icon(Icons.arrow_back_ios)),
-                                      const Text("이전"),
-                                    ]),
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
-                                        style: Tiny_T1(16, mainSkyBlue),
-                                      ),
-                                      FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: _problems[_numberState].problem,
-                                        fit: BoxFit.fitWidth,
-                                        fadeInDuration:
-                                            const Duration(milliseconds: 100),
-                                      ),
-                                      const Spacer(),
-                                      // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
-                                      SizedBox(
-                                        width: 1000,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
+                          scrollDirection: Axis.horizontal,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 40),
+                            width: 1200,
+                            height: MediaQuery.of(context).size.height - 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 200.0),
+                                  child: Column(children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          goPrevious();
+                                        },
+                                        icon: const Icon(Icons.arrow_back_ios)),
+                                    const Text("이전"),
+                                  ]),
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
+                                      style: Tiny_T1(16, mainSkyBlue),
+                                    ),
+                                    FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: _problems[_numberState].problem,
+                                      fit: BoxFit.fitWidth,
+                                      fadeInDuration:
+                                          const Duration(milliseconds: 100),
+                                    ),
+                                    const Spacer(),
+                                    // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
+                                    SizedBox(
+                                      width: 1000,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
 
-                                          children: [
-                                            const SizedBox(width: 140),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                                numberButton('1', 1),
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                                numberButton('2', 2),
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                                numberButton('3', 3),
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                                numberButton('4', 4),
-                                                SizedBox(
-                                                    width: spaceBetweenNumbers),
-                                              ],
-                                            ),
-                                            // SizedBox(width: 140),
-                                            submitButton(),
-                                          ],
-                                        ),
+                                        children: [
+                                          const SizedBox(width: 140),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                  width: spaceBetweenNumbers),
+                                              numberButton('1', 1),
+                                              SizedBox(
+                                                  width: spaceBetweenNumbers),
+                                              numberButton('2', 2),
+                                              SizedBox(
+                                                  width: spaceBetweenNumbers),
+                                              numberButton('3', 3),
+                                              SizedBox(
+                                                  width: spaceBetweenNumbers),
+                                              numberButton('4', 4),
+                                              SizedBox(
+                                                  width: spaceBetweenNumbers),
+                                            ],
+                                          ),
+                                          // SizedBox(width: 140),
+                                          submitButton(),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 200.0),
-                                    child: Column(children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            goNext();
-                                          },
-                                          icon: const Icon(
-                                              Icons.arrow_forward_ios)),
-                                      const Text("다음"),
-                                    ]),
-                                  ),
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 200.0),
+                                  child: Column(children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          goNext();
+                                        },
+                                        icon: const Icon(
+                                            Icons.arrow_forward_ios)),
+                                    const Text("다음"),
+                                  ]),
+                                ),
+                              ],
                             ),
                           ),
                         ),

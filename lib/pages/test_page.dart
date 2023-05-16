@@ -22,33 +22,10 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: (() async {
-              firebaseService
-                  .loadProblemMajorSectionFromDatabase('High', 'Math', 1)
-                  .then((value) {
-                value.forEach((element) {
-                  print(element.toMap());
-                });
-              });
-            }),
-            child: const Text("loadProblemMajorSectionFromDatabase"),
-          ),
-          ElevatedButton(
-              onPressed: ((() async {
-                firebaseService
-                    .loadProblemSmallSectionFromDatabase('High', 'Math', 1, 1)
-                    .then((value) {
-                  value.forEach((element) {
-                    print(element.toMap());
-                  });
-                });
-              })),
-              child: const Text("loadProblemSmallSectionFromDatabase"))
-        ],
-      ),
-    );
+        body: SizedBox(
+            width: 600,
+            child: SingleChildScrollView(
+                child: Image.network(
+                    "https://firebasestorage.googleapis.com/v0/b/black-bean-1f72d.appspot.com/o/images%2F2099-1_1.jpg?alt=media&token=836133bb-2db3-49ab-8795-d7af7b04246f"))));
   }
 }
