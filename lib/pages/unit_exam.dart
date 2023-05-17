@@ -212,77 +212,73 @@ class _UnitExamPageState extends State<UnitExamPage> {
                       _problems = snapshot.data!;
                       return Expanded(
                         child: SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 40),
-                              width: 1200,
-                              height: MediaQuery.of(context).size.height - 100,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 220),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      //TODO: 단원명 불러오기
-                                      "${_problems[_numberState].mSection}단원|단원명",
-                                      style: Tiny_T1(16, mainSkyBlue),
+                          scrollDirection: Axis.horizontal,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 40),
+                            width: 1200,
+                            height: MediaQuery.of(context).size.height - 100,
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.only(left: 220),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    //TODO: 단원명 불러오기
+                                    "${_problems[_numberState].mSection}단원|단원명",
+                                    style: Tiny_T1(16, mainSkyBlue),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height - 200,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: _problems[_numberState].problem,
+                                      fit: BoxFit.fitWidth,
                                     ),
                                   ),
-                                  FadeInImage.memoryNetwork(
-                                    placeholder: kTransparentImage,
-                                    image: _problems[_numberState].problem,
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                  const Spacer(),
-                                  // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
-                                  SizedBox(
-                                    width: 1200,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
+                                ),
+                                const Spacer(),
+                                // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
+                                SizedBox(
+                                  width: 1200,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
 
-                                      children: [
-                                        const SizedBox(width: 280),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                                width: spaceBetweenNumbers),
-                                            number_button('1', 1),
-                                            SizedBox(
-                                                width: spaceBetweenNumbers),
-                                            number_button('2', 2),
-                                            SizedBox(
-                                                width: spaceBetweenNumbers),
-                                            number_button('3', 3),
-                                            SizedBox(
-                                                width: spaceBetweenNumbers),
-                                            number_button('4', 4),
-                                            SizedBox(
-                                                width: spaceBetweenNumbers),
-                                          ],
-                                        ),
-                                        // SizedBox(width: 132),
-                                        Visibility(
-                                            replacement: SizedBox(
-                                              width: 132,
-                                            ),
-                                            visible: AnswerType.wrong ==
-                                                answerType,
-                                            child: answerCheckButton()),
-                                        submitButton(),
-                                      ],
-                                    ),
+                                    children: [
+                                      const SizedBox(width: 280),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(width: spaceBetweenNumbers),
+                                          number_button('1', 1),
+                                          SizedBox(width: spaceBetweenNumbers),
+                                          number_button('2', 2),
+                                          SizedBox(width: spaceBetweenNumbers),
+                                          number_button('3', 3),
+                                          SizedBox(width: spaceBetweenNumbers),
+                                          number_button('4', 4),
+                                          SizedBox(width: spaceBetweenNumbers),
+                                        ],
+                                      ),
+                                      // SizedBox(width: 132),
+                                      Visibility(
+                                          replacement: const SizedBox(
+                                            width: 132,
+                                          ),
+                                          visible:
+                                              AnswerType.wrong == answerType,
+                                          child: answerCheckButton()),
+                                      submitButton(),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -353,46 +349,45 @@ class _UnitExamPageState extends State<UnitExamPage> {
           ),
         ),
         onPressed: () {
-
-          if(_selectedNumber != -1){ // 뭔가 선택했을 때
+          if (_selectedNumber != -1) {
+            // 뭔가 선택했을 때
             setState(() {
-            int answer = _problems[_numberState].answer;
+              int answer = _problems[_numberState].answer;
 
-            if (isCorrect == false) {
-              if (answer == _selectedNumber) {
-                //정답 맞춘 경우 correct
-                corrects[_numberState] = 1; // correct
-                answerType = AnswerType.correct;
-                isCorrect = true;
+              if (isCorrect == false) {
+                if (answer == _selectedNumber) {
+                  //정답 맞춘 경우 correct
+                  corrects[_numberState] = 1; // correct
+                  answerType = AnswerType.correct;
+                  isCorrect = true;
+                } else {
+                  //정답 못 맞춘 경우 wrong
+                  corrects[_numberState] = 2; // wrong
+                  answerType = AnswerType.wrong;
+                }
               } else {
-                //정답 못 맞춘 경우 wrong
-                corrects[_numberState] = 2; // wrong
-                answerType = AnswerType.wrong;
+                //정답 맞춘 후 '다음' 버튼으로 바뀌고 다음 문제로 넘어가는 부분
+                answerType = AnswerType.basic;
+                isCorrect = false;
+                _numberState += 1;
+                _selectedNumber = -1;
               }
-            } else {
-              //정답 맞춘 후 '다음' 버튼으로 바뀌고 다음 문제로 넘어가는 부분
-              answerType = AnswerType.basic;
-              isCorrect = false;
-              _numberState += 1;
-              _selectedNumber = -1;
-            }
 
-            //print if problem is correct
-            if (corrects[_numberState] == 1) {
-              print("Correct!");
-            } else {
-              print("Wrong!");
-            }
-            //if final number, route to grading page
-            if (_numberState == finalNumber - 1) {
-              Navigator.pushNamed(context, '/unitExamGradingPage',
-                  arguments: GradingArguments(corrects, _problems));
-              _numberState = 0;
-            }
-          });
+              //print if problem is correct
+              if (corrects[_numberState] == 1) {
+                print("Correct!");
+              } else {
+                print("Wrong!");
+              }
+              //if final number, route to grading page
+              if (_numberState == finalNumber - 1) {
+                Navigator.pushNamed(context, '/unitExamGradingPage',
+                    arguments: GradingArguments(corrects, _problems));
+                _numberState = 0;
+              }
+            });
           }
           // number selected, check if it's correct
-          
 
           // when problems are finishied, route to grading page
           // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
