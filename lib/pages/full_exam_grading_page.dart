@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 
@@ -19,42 +17,56 @@ class _FullExamGradingPageState extends State<FullExamGradingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: basicAppbar(),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 800,
-              height: 200,
-              color: Colors.red,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 10,
+      body: SingleChildScrollView(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          // height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              //TODO: image here
+              Container(
+                width: 1200,
+                height: 370,
+                color: grey06,
+              ),
+              SizedBox(
+                width: 1200,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    problemBoxes(" 맞춘 문제", correctNumbers, grey00, maingreyblue),
+                    problemBoxes(
+                        " 틀린 문제", wrongNumbers, mainLightBlue, maingreyblue),
+                    const SizedBox(width: 50,),
+                    tipBox()
+                  ],
                 ),
-                problemBoxes("맞춘 문제", correctNumbers, grey00, maingreyblue),
-                problemBoxes("틀린 문제", wrongNumbers, mainLightBlue, maingreyblue),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget problemBoxes(String headlineText, List<int> tileNumbers, Color backgroundColor, Color borderColor) {
+  Widget problemBoxes(String headlineText, List<int> tileNumbers,
+      Color backgroundColor, Color borderColor) {
     const columnCount = 5;
     final rowCount = (tileNumbers.length / columnCount).ceil();
     return Container(
-      margin: EdgeInsets.all(16),
+      margin: const EdgeInsets.fromLTRB(16,16,32,16),
       width: 290,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(headlineText),
+          Text(
+            headlineText,
+            style: Button_Bt1(24, mainBlack),
+          ),
+          const SizedBox(
+            height: 22,
+          ),
           for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             Row(
               children: [
@@ -95,6 +107,49 @@ class _FullExamGradingPageState extends State<FullExamGradingPage> {
               ],
             ),
         ],
+      ),
+    );
+  }
+
+  Widget tipBox() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(12, 16, 12, 12),
+      width: 230,
+      height: 293,
+      decoration: BoxDecoration(
+          color: const Color(0xffFAFFFC),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: pointGreen)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24,28,18,28),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+          Text("TIP",style: Headline_H4(24, pointGreen),),
+          const SizedBox(height: 22,),
+          Text("틀린 문제를 다시 풀면\n훨씬 기억에 잘 남아요!",style: Body_Bd4(18, mainBlack),),
+          const SizedBox(height: 72,),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const SizedBox(width: 46,),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text("틀린 문제 \n다시 풀기 ",style: Tiny_T1(16, pointGreen),),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(color: pointGreen),
+                  backgroundColor: const Color(0xffE7FFF2),
+                  fixedSize: const Size(64, 64),
+                  shape: const CircleBorder(),
+                ),
+                child: const Icon(Icons.arrow_forward,color: pointGreen,size: 32,),
+              )
+            ],
+          )
+        ]),
       ),
     );
   }
