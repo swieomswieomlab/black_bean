@@ -26,12 +26,12 @@ class _FullExamGradingPageState extends State<FullExamGradingPage> {
             children: [
               //TODO: image here
               Container(
-                width: 1200,
-                height: 370,
+                width: 1040,
+                height: 274,
                 color: grey06,
               ),
               SizedBox(
-                width: 1200,
+                width: 1040,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -62,7 +62,7 @@ class _FullExamGradingPageState extends State<FullExamGradingPage> {
         children: [
           Text(
             headlineText,
-            style: Button_Bt1(24, mainBlack),
+            style: Button_Bt1(22, mainBlack),
           ),
           const SizedBox(
             height: 22,
@@ -85,13 +85,14 @@ class _FullExamGradingPageState extends State<FullExamGradingPage> {
                         ),
                       ),
                       child: SizedBox(
-                        width: 48,
-                        height: 48,
+                        width: 44,
+                        height: 44,
                         child: Center(
                           child: Text(
                             tileNumbers[rowIndex * columnCount + columnIndex]
                                 .toString(),
                             textAlign: TextAlign.center,
+                            style: Body_Bd4(18, mainBlack),
                           ),
                         ),
                       ),
@@ -113,26 +114,26 @@ class _FullExamGradingPageState extends State<FullExamGradingPage> {
 
   Widget tipBox() {
     return Container(
-      margin: EdgeInsets.fromLTRB(12, 16, 12, 12),
-      width: 230,
-      height: 293,
+      margin: const EdgeInsets.fromLTRB(10, 14, 10, 10),
+      width: 212,
+      height: 254,
       decoration: BoxDecoration(
           color: const Color(0xffFAFFFC),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: pointGreen)),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24,28,18,28),
+        padding: const EdgeInsets.fromLTRB(22,26,16,26),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
           Text("TIP",style: Headline_H4(24, pointGreen),),
-          const SizedBox(height: 22,),
-          Text("틀린 문제를 다시 풀면\n훨씬 기억에 잘 남아요!",style: Body_Bd4(18, mainBlack),),
-          const SizedBox(height: 72,),
+          const SizedBox(height: 16,),
+          Text("틀린 문제를 다시 풀면\n훨씬 기억에 잘 남아요!",style: Body_Bd4(16, mainBlack),),
+          const SizedBox(height: 60,),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const SizedBox(width: 46,),
+              const SizedBox(width: 40,),
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Text("틀린 문제 \n다시 풀기 ",style: Tiny_T1(16, pointGreen),),
@@ -142,10 +143,11 @@ class _FullExamGradingPageState extends State<FullExamGradingPage> {
                 style: ElevatedButton.styleFrom(
                   side: const BorderSide(color: pointGreen),
                   backgroundColor: const Color(0xffE7FFF2),
-                  fixedSize: const Size(64, 64),
+                  fixedSize: const Size(52, 52),
                   shape: const CircleBorder(),
+                  shadowColor: Colors.transparent
                 ),
-                child: const Icon(Icons.arrow_forward,color: pointGreen,size: 32,),
+                child: const Icon(Icons.arrow_forward,color: pointGreen,size: 26,),
               )
             ],
           )
