@@ -1,4 +1,5 @@
 import 'package:black_bean/pages/full_exam.dart';
+import 'package:black_bean/pages/full_exam_grading_page.dart';
 import 'package:black_bean/pages/login_page.dart';
 import 'package:black_bean/pages/problem_make.dart';
 import 'package:black_bean/pages/sign_up_page.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/fullExam',
+        initialRoute: '/fullExamGradingPage',
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
@@ -54,9 +55,7 @@ class MyApp extends StatelessWidget {
           '/loginPage': (context) => const LoginPage(),
           '/signinPage': (context) => SignUpPage(),
           '/fullExam': (context) => const FullExamPage(),
-          '/gradingPage': (context) => GradingPage(
-              gradingArguments: ModalRoute.of(context)!.settings.arguments
-                  as GradingArguments),
+          '/fullExamGradingPage' :(context) => FullExamGradingPage(),
           '/weaknessExam': (context) => WeaknessExamPage(),
           '/selectPage': (context) => SelectExamPage(),
           '/unitExam': (context) => UnitExamPage(),
