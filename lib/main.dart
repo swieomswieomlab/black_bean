@@ -3,7 +3,7 @@ import 'package:black_bean/pages/full_exam_grading_page.dart';
 import 'package:black_bean/pages/login_page.dart';
 import 'package:black_bean/pages/problem_make.dart';
 import 'package:black_bean/pages/sign_up_page.dart';
-import 'package:black_bean/pages/unit_exam_grading_page%20copy.dart';
+import 'package:black_bean/pages/unit_exam_grading_page.dart';
 import 'package:black_bean/pages/weakness_exam.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/fullExamGradingPage',
+        initialRoute: '/unitExam',
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
@@ -59,9 +59,7 @@ class MyApp extends StatelessWidget {
           '/weaknessExam': (context) => WeaknessExamPage(),
           '/selectPage': (context) => SelectExamPage(),
           '/unitExam': (context) => UnitExamPage(),
-          '/unitExamGradingPage': (context) => UnitExamGradingPage(
-              gradingArguments: ModalRoute.of(context)!.settings.arguments
-                  as GradingArguments),
+          '/unitExamGradingPage': (context) => UnitExamGradingPage(),
 
         },
       ),
