@@ -24,7 +24,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as GradingArguments;
     List<Problem> problems = args.problems;
-    List<int> correctNumbers = args.corrects;
+    List<int> correctNumbers = getCorrectNumber(problems.length, args.corrects);
     List<int> wrongNumbers = getWrongNumber(problems.length, correctNumbers);
     return Scaffold(
       appBar: basicAppbar(),
@@ -195,5 +195,15 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
       }
     }
     return wrongNumbers;
+  }
+
+  List<int> getCorrectNumber(int length, List<int> corrects) {
+    List<int> correctNumbers = [];
+    for (int index = 0; index < length; index++) {
+      if (corrects[index] == 1) {
+        correctNumbers.add(index + 1);
+      }
+    }
+    return correctNumbers;
   }
 }
