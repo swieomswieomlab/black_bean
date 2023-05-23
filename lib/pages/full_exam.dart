@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../textstyle.dart';
-import '../class/grading_arguments.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';

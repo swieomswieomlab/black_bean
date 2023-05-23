@@ -39,32 +39,30 @@ class MyApp extends StatelessWidget {
   build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(1512, 982),
-      builder: (context, child) {
-        return MaterialApp(
-          title: 'Black Bean Demo',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          initialRoute: '/fullExam',
-          routes: {
-            '/': (context) => const MyHomePage(),
-            '/problemMake': (context) => const ProblemMake(),
-            '/testPage': (context) => TestPage(),
-            // '/imageTestPage': (context) => HomePage(),
-            '/loginPage': (context) => const LoginPage(),
-            '/signinPage': (context) => SignUpPage(),
-            '/fullExam': (context) => const FullExamPage(),
-            '/fullExamGradingPage': (context) => FullExamGradingPage(),
-            '/weaknessExam': (context) => WeaknessExamPage(),
-            '/selectPage': (context) => SelectExamPage(),
-            '/unitExam': (context) => UnitExamPage(),
-            '/unitExamGradingPage': (context) => UnitExamGradingPage(
-                gradingArguments: ModalRoute.of(context)!.settings.arguments
-                    as GradingArguments),
-          },
-        );
-      },
+
+      builder: (context, child) => MaterialApp(
+        title: 'Black Bean Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: '/unitExam',
+        routes: {
+          '/': (context) => const MyHomePage(),
+          '/problemMake': (context) => const ProblemMake(),
+          '/testPage': (context) => TestPage(),
+          // '/imageTestPage': (context) => HomePage(),
+          '/loginPage': (context) => const LoginPage(),
+          '/signinPage': (context) => SignUpPage(),
+          '/fullExam': (context) => const FullExamPage(),
+          '/fullExamGradingPage' :(context) => FullExamGradingPage(),
+          '/weaknessExam': (context) => WeaknessExamPage(),
+          '/selectPage': (context) => SelectExamPage(),
+          '/unitExam': (context) => UnitExamPage(),
+          '/unitExamGradingPage': (context) => UnitExamGradingPage(),
+
+        },
+      ),
     );
   }
 }
