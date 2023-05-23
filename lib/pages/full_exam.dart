@@ -419,11 +419,10 @@ class SubmitAlertDialog extends StatelessWidget {
     required this.notSolvedNumbers,
     required this.corrects,
     required List<Problem> problems,
-  }) : _problems = problems;
+  });
 
   final List<int> notSolvedNumbers;
   final List<int> corrects;
-  final List<Problem> _problems;
 
   @override
   Widget build(BuildContext context) {
@@ -467,8 +466,7 @@ class SubmitAlertDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
-            Navigator.popAndPushNamed(context, '/fullExamGradingPage',
-                arguments: GradingArguments(corrects, _problems));
+            Navigator.popAndPushNamed(context, '/fullExamGradingPage');
           },
           style: ElevatedButton.styleFrom(
             shape:

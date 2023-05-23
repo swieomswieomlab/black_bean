@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unused_element
+// ignore_for_file: avoid_print, unused_element, unused_local_variable, deprecated_member_use
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -114,6 +114,7 @@ Future<void> _uploadImage(XFile pickedImage) async {
 final _storage = FirebaseStorage.instance;
 
 Future<void> uploadImageWeb(XFile pickedFile) async {
+  // ignore: unnecessary_null_comparison
   if (pickedFile != null) {
     final snapshot = await _storage
         .ref()

@@ -6,15 +6,11 @@ import 'pages/home_page.dart';
 import 'firebase_options.dart';
 import 'pages/select_exam_page.dart';
 import 'pages/test_page.dart';
-import 'class/grading_arguments.dart';
 import 'package:flutter/foundation.dart';
 import 'pages/full_exam.dart';
 import 'pages/full_exam_grading_page.dart';
-import 'pages/login_page.dart';
 import 'pages/problem_make.dart';
-import 'pages/sign_up_page.dart';
-import 'pages/unit_exam_grading_page%20copy.dart';
-import 'pages/weakness_exam.dart';
+import 'pages/unit_exam_grading_page.dart';
 
 import 'pages/unit_exam.dart';
 
@@ -50,16 +46,12 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
-          '/testPage': (context) => TestPage(),
-          // '/imageTestPage': (context) => HomePage(),
-          '/loginPage': (context) => const LoginPage(),
-          '/signinPage': (context) => SignUpPage(),
+          '/testPage': (context) => const TestPage(),
           '/fullExam': (context) => const FullExamPage(),
-          '/fullExamGradingPage' :(context) => FullExamGradingPage(),
-          '/weaknessExam': (context) => WeaknessExamPage(),
-          '/selectPage': (context) => SelectExamPage(),
-          '/unitExam': (context) => UnitExamPage(),
-          '/unitExamGradingPage': (context) => UnitExamGradingPage(),
+          '/fullExamGradingPage' :(context) => const FullExamGradingPage(),
+          '/selectPage': (context) => const SelectExamPage(),
+          '/unitExam': (context) => const UnitExamPage(),
+          '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
 
         },
       ),

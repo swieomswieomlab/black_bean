@@ -8,10 +8,10 @@ class UnitExamGradingPage extends StatefulWidget {
   const UnitExamGradingPage({Key? key}) : super(key: key);
 
   @override
-  _UnitExamGradingPageState createState() => _UnitExamGradingPageState();
+  UnitExamGradingPageState createState() => UnitExamGradingPageState();
 }
 
-class _UnitExamGradingPageState extends State<UnitExamGradingPage> {
+class UnitExamGradingPageState extends State<UnitExamGradingPage> {
   late List<Widget> textWidgets;
   String imgUrl = "";
 
@@ -66,10 +66,7 @@ class _UnitExamGradingPageState extends State<UnitExamGradingPage> {
                     Container(
                       width: 1044,
                       height: 554,
-                      // margin: EdgeInsets.symmetric(
-                      //   horizontal: 156,
-                      // ),
-                      color: Color(0xffF3F8FC),
+                      color: const Color(0xffF3F8FC),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -87,9 +84,9 @@ class _UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                       MaterialStateProperty.all<Color>(
                                           mainLightBlue),
                                   fixedSize:
-                                      MaterialStateProperty.all(Size(238, 64)),
+                                      MaterialStateProperty.all(const Size(238, 64)),
                                   side: MaterialStateProperty.all<BorderSide>(
-                                    BorderSide(color: mainSkyBlue),
+                                    const BorderSide(color: mainSkyBlue),
                                   ),
                                 ),
                                 onPressed: () {},
@@ -98,7 +95,7 @@ class _UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                   style: Button_Bt1(24, mainSkyBlue),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 24,
                               ),
                               ElevatedButton(
@@ -108,7 +105,7 @@ class _UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                       MaterialStateProperty.all<Color>(
                                           mainSkyBlue),
                                   fixedSize:
-                                      MaterialStateProperty.all(Size(238, 64)),
+                                      MaterialStateProperty.all(const Size(238, 64)),
                                 ),
                                 onPressed: () {},
                                 child: Text(
