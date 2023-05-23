@@ -466,10 +466,9 @@ class SubmitAlertDialog extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pop(context, 'OK');
-            // TODO : change Route
-            // Navigator.popAndPushNamed(context, '/gradingPage',
-            //     arguments: GradingArguments(corrects, _problems));
+            Navigator.pop(context);
+            Navigator.popAndPushNamed(context, '/fullExamGradingPage',
+                arguments: GradingArguments(corrects, _problems));
           },
           style: ElevatedButton.styleFrom(
             shape:
