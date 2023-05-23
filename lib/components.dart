@@ -36,11 +36,5 @@ AppBar basicAppbar() {
         ),
       ],
     ),
-    actions: [
-      TextButton(
-        onPressed: () {},
-        child: Text("마이페이지", style: Button_Bt2(20, Colors.black)),
-      )
-    ],
   );
 }
