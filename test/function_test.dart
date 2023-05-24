@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import '../lib/service/firebase_service.dart';
+import 'package:black_bean/service/firebase_service.dart';
 
 void main() {
   test('LoadProblemTest', () {
