@@ -177,6 +177,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                     ],
                                   ),
                                 ),
+                                SizedBox(height: 10,)
                               ],
                             ),
                           ),
@@ -202,6 +203,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
 
   ElevatedButton answerCheckButton() => ElevatedButton(
       style: ButtonStyle(
+        elevation: MaterialStateProperty.all(0),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
             return pointYellow;
@@ -225,6 +227,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
 
   ElevatedButton submitButton() => ElevatedButton(
         style: ButtonStyle(
+          elevation: MaterialStateProperty.all(0),
           backgroundColor: MaterialStateProperty.resolveWith<Color?>(
             (states) {
               if (_selectedNumber == -1) {
