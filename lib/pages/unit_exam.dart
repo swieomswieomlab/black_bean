@@ -278,6 +278,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                     ],
                                   ),
                                 ),
+                                SizedBox(height: 10,)
                               ],
                             ),
                           ),
@@ -303,6 +304,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
 
   ElevatedButton answerCheckButton() => ElevatedButton(
       style: ButtonStyle(
+        elevation: MaterialStateProperty.all(0),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
             return pointYellow;
@@ -326,6 +328,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
 
   ElevatedButton submitButton() => ElevatedButton(
         style: ButtonStyle(
+          elevation: MaterialStateProperty.all(0),
           backgroundColor: MaterialStateProperty.resolveWith<Color?>(
             (states) {
               if (_selectedNumber == -1) {
@@ -552,6 +555,7 @@ class submitAlertDialog extends StatelessWidget {
             Navigator.pop(context, 'Cancel');
           },
           style: ElevatedButton.styleFrom(
+            elevation: 0,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             backgroundColor: grey03,
@@ -569,6 +573,7 @@ class submitAlertDialog extends StatelessWidget {
                 arguments: GradingArguments(corrects, _problems));
           },
           style: ElevatedButton.styleFrom(
+            elevation: 0,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             backgroundColor: mainSkyBlue,
