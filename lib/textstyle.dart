@@ -32,7 +32,7 @@ const Color blue07 = Color(0xff6eb6ee);
 const Color blue06 = Color(0xffaacde7);
 const Color blue05 = Color(0xffc5e2f8);
 const Color blue04 = Color(0xffdcedfa);
-const Color blue03 = Color(0xffAACDE7);
+const Color blue03 = Color(0xffE4F3FE);
 const Color blue02 = Color(0xffeaf4fc);
 const Color blue01 = Color(0xfff3f8fc);
 
