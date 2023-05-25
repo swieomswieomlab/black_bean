@@ -92,7 +92,7 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                 onPressed: () {},
                                 child: Text(
                                   "다시풀기",
-                                  style: Button_Bt1(24, mainSkyBlue),
+                                  style: button1(mainSkyBlue),
                                 ),
                               ),
                               const SizedBox(
@@ -110,7 +110,7 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                 onPressed: () {},
                                 child: Text(
                                   "완료",
-                                  style: Button_Bt1(24, Colors.white),
+                                  style: button1(grey00),
                                 ),
                               ),
                             ],

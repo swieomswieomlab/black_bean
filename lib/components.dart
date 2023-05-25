@@ -21,7 +21,7 @@ AppBar basicAppbar() {
           onPressed: () {},
           child: Text(
             '연습문제',
-            style: Headline_H2(20, Colors.black),
+            style: button2(grey09),
           ),
         ),
         const SizedBox(
@@ -31,7 +31,7 @@ AppBar basicAppbar() {
           onPressed: () {},
           child: Text(
             '모의고사',
-            style: Headline_H2(20, Colors.black),
+            style: button2(grey09),
           ),
         ),
       ],

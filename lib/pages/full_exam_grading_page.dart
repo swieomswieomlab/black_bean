@@ -76,7 +76,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
         children: [
           Text(
             headlineText,
-            style: Button_Bt1(22, mainBlack),
+            style: title2(mainBlack),
           ),
           const SizedBox(
             height: 22,
@@ -106,7 +106,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
                             tileNumbers[rowIndex * columnCount + columnIndex]
                                 .toString(),
                             textAlign: TextAlign.center,
-                            style: Body_Bd4(18, mainBlack),
+                            style: body2(mainBlack),
                           ),
                         ),
                       ),
@@ -132,22 +132,22 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
       width: 212,
       height: 254,
       decoration: BoxDecoration(
-          color: const Color(0xffFAFFFC),
+          color: yellow03,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: pointGreen)),
+          border: Border.all(color: yellow05)),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(22, 26, 16, 26),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             "TIP",
-            style: Headline_H4(24, pointGreen),
+            style: body1(yellow05),
           ),
           const SizedBox(
             height: 16,
           ),
           Text(
             "틀린 문제를 다시 풀면\n훨씬 기억에 잘 남아요!",
-            style: Body_Bd4(16, mainBlack),
+            style: body4(mainBlack),
           ),
           const SizedBox(
             height: 60,
@@ -162,13 +162,13 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
                   "틀린 문제 \n다시 풀기 ",
-                  style: Tiny_T1(16, pointGreen),
+                  style: body3(yellow05),
                 ),
               ),
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                    side: const BorderSide(color: pointGreen),
+                    side: const BorderSide(color: yellow05),
                     backgroundColor: const Color(0xffE7FFF2),
                     fixedSize: const Size(52, 52),
                     shape: const CircleBorder(),

@@ -101,7 +101,7 @@ class _FullExamPageState extends State<FullExamPage> {
                     Expanded(
                       child: Text(
                         "문제 리모콘",
-                        style: Body_Bd1(20, Colors.black),
+                        style: title3(grey09),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -150,8 +150,8 @@ class _FullExamPageState extends State<FullExamPage> {
                               child: Text(
                                 "${index + 1}",
                                 style: index == _numberState
-                                    ? Body_Bd1(14, mainSkyBlue)
-                                    : Body_Bd1(14, grey06),
+                                    ? body5(mainSkyBlue)
+                                    : body5(grey06),
                                 softWrap: false,
                               ),
                             ),
@@ -168,7 +168,7 @@ class _FullExamPageState extends State<FullExamPage> {
         centerTitle: true,
         title: Text(
           "${yearToKorean(testYear)} | ${subjectToKorean(testSubject)}",
-          style: Headline_H4(26, mainBlack),
+          style: title3(mainBlack),
         ),
       ),
       backgroundColor: Colors.white,
@@ -231,7 +231,7 @@ class _FullExamPageState extends State<FullExamPage> {
                                   children: [
                                     Text(
                                       "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
-                                      style: Tiny_T1(16, mainSkyBlue),
+                                      style: body3(mainSkyBlue),
                                     ),
                                     FadeInImage.memoryNetwork(
                                       placeholder: kTransparentImage,
@@ -433,14 +433,14 @@ class SubmitAlertDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
       title: Text(
         notSolvedNumbers.isEmpty ? '시험지를 채점할까요?' : '아직 안 푼 문제가 있어요!',
-        style: Headline_H2(36, Colors.black),
+        style: title1(grey09),
         textAlign: TextAlign.center,
       ),
       content: Text(
         notSolvedNumbers.isEmpty
             ? '시험지를 제출하고 문제를 채점하시겠어요?\n문제를 채점한 후에는 다시 되돌릴 수 없어요.'
             : '${(notSolvedNumbers).join(', ')}번 문제를 아직 안 풀었어요.\n그대로 채점할까요? 다시 되돌릴 수 없어요.',
-        style: Body_Bd2(24, grey08),
+        style: body1(grey08),
         textAlign: TextAlign.center,
       ),
       actionsPadding: const EdgeInsets.only(
@@ -460,7 +460,7 @@ class SubmitAlertDialog extends StatelessWidget {
           ),
           child: Text(
             '돌아가기',
-            style: Button_Bt1(24, mainBlack),
+            style: button1(mainBlack),
           ),
         ),
         ElevatedButton(
@@ -476,7 +476,7 @@ class SubmitAlertDialog extends StatelessWidget {
           ),
           child: Text(
             '채점하기',
-            style: Button_Bt1(24, Colors.white),
+            style: button1(grey00),
           ),
         ),
       ],
