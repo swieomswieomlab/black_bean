@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           '/testPage': (context) => const TestPage(),
           '/fullExam': (context) => const FullExamPage(),
           '/fullExamGradingPage' :(context) => const FullExamGradingPage(),
-          '/selectPage': (context) => const SelectExamPage(),
+          '/selectFullExamPage': (context) => const SelectFullExamPage(),
           '/unitExam': (context) => const UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
 
