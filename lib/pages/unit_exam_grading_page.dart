@@ -57,15 +57,15 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
           child: SingleChildScrollView(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Container(
-                width: 1200,
+              child: SizedBox(
+                width: 1040,
                 // height: screenHeight,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      width: 1044,
-                      height: 554,
+                      width: 686,
+                      height: 500,
                       color: const Color(0xffF3F8FC),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

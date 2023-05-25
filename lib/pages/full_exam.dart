@@ -15,7 +15,7 @@ class FullExamPage extends StatefulWidget {
 
 class _FullExamPageState extends State<FullExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
-  final double spaceBetweenNumbers = 48;
+  final double spaceBetweenNumbers = 44;
   //0 for init, 1 for correct, 2 for wrong
   late List<int> _selectedNumbers;
 
@@ -63,8 +63,8 @@ class _FullExamPageState extends State<FullExamPage> {
     return Scaffold(
       floatingActionButton: remoteControl
           ? Container(
-              color: Colors.white,
-              margin: const EdgeInsets.only(bottom: 100),
+              color: grey00,
+              margin: const EdgeInsets.only(bottom: 100, right: 60),
               child: ClipOval(
                 child: SizedBox(
                   width: 56,
@@ -77,7 +77,7 @@ class _FullExamPageState extends State<FullExamPage> {
                     },
                     style: OutlinedButton.styleFrom(
                       shape: const CircleBorder(),
-                      side: const BorderSide(width: 2.0, color: Colors.blue),
+                      side: const BorderSide(width: 2.0, color: blue07),
                       minimumSize: const Size(56, 56),
                     ),
                     child: const Icon(Icons.add),
@@ -87,14 +87,15 @@ class _FullExamPageState extends State<FullExamPage> {
             )
           : Container(
               decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: const Color(0xffC5D9E9), width: 2),
+                color: grey00,
+                border: Border.all(color: blue04, width: 2),
                 borderRadius: BorderRadius.circular(8),
               ),
               margin: const EdgeInsets.only(bottom: 100),
               width: 280,
               height: 270,
               child: Column(children: [
+                const SizedBox(height: 24),
                 Row(
                   children: [
                     const SizedBox(width: 40),
@@ -117,6 +118,7 @@ class _FullExamPageState extends State<FullExamPage> {
                       },
                       alignment: Alignment.centerRight,
                     ),
+                    const SizedBox(width: 10,)
                   ],
                 ),
                 Expanded(
@@ -164,14 +166,14 @@ class _FullExamPageState extends State<FullExamPage> {
               ]),
             ),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: grey00,
         centerTitle: true,
         title: Text(
           "${yearToKorean(testYear)} | ${subjectToKorean(testSubject)}",
           style: title3(mainBlack),
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: grey00,
       body: Stack(
         children: [
           Positioned(
@@ -180,7 +182,7 @@ class _FullExamPageState extends State<FullExamPage> {
               height: 70,
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
-                // color: Colors.white,
+                // color: grey00,
                 border: Border(
                   top: BorderSide(
                     color: Colors.black,
@@ -216,44 +218,37 @@ class _FullExamPageState extends State<FullExamPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 200.0),
-                                  child: Column(children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          goPrevious();
-                                        },
-                                        icon: const Icon(Icons.arrow_back_ios)),
-                                    const Text("이전"),
-                                  ]),
-                                ),
                                 Column(
                                   children: [
-                                    Text(
-                                      "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
-                                      style: body3(mainSkyBlue),
+                                    SizedBox(
+                                      width: 490,
+                                      child: Text(
+                                        "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
+                                        style: body3(mainSkyBlue),
+                                      ),
                                     ),
-                                    FadeInImage.memoryNetwork(
-                                      placeholder: kTransparentImage,
-                                      image: _problems[_numberState].problem,
-                                      fit: BoxFit.fitWidth,
-                                      fadeInDuration:
-                                          const Duration(milliseconds: 100),
+                                    SizedBox(
+                                      width: 520,
+                                      child: FadeInImage.memoryNetwork(
+                                        placeholder: kTransparentImage,
+                                        image: _problems[_numberState].problem,
+                                        fit: BoxFit.fitWidth,
+                                        fadeInDuration:
+                                            const Duration(milliseconds: 100),
+                                      ),
                                     ),
                                     const Spacer(),
                                     // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
                                     SizedBox(
-                                      width: 1000,
+                                      width: 1200,
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.center,
                                         // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
 
                                         children: [
-                                          const SizedBox(width: 140),
+                                          const SizedBox(width: 320),
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               SizedBox(
                                                   width: spaceBetweenNumbers),
@@ -269,6 +264,8 @@ class _FullExamPageState extends State<FullExamPage> {
                                               numberButton('4', 4),
                                               SizedBox(
                                                   width: spaceBetweenNumbers),
+                                              const SizedBox(width: 200),
+
                                             ],
                                           ),
                                           // SizedBox(width: 140),
@@ -276,19 +273,8 @@ class _FullExamPageState extends State<FullExamPage> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 10),
                                   ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 200.0),
-                                  child: Column(children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          goNext();
-                                        },
-                                        icon: const Icon(
-                                            Icons.arrow_forward_ios)),
-                                    const Text("다음"),
-                                  ]),
                                 ),
                               ],
                             ),
@@ -316,15 +302,18 @@ class _FullExamPageState extends State<FullExamPage> {
   ElevatedButton submitButton() {
     return ElevatedButton(
       style: ButtonStyle(
+        backgroundColor: MaterialStateColor.resolveWith(
+            (states) => blue09),
+        elevation: MaterialStateProperty.all(0),
         fixedSize: MaterialStateProperty.all(const Size(140, 48)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(4.0),
           ),
         ),
       ),
       onPressed: submit,
-      child: const Text('채점'),
+      child: Text('채점', style: button2(grey00)),
     );
   }
 
@@ -362,14 +351,14 @@ class _FullExamPageState extends State<FullExamPage> {
             }
           },
         ),
-        fixedSize: MaterialStateProperty.all(const Size(44, 44)),
+        fixedSize: MaterialStateProperty.all(const Size(40, 40)),
         shape: MaterialStateProperty.all(const CircleBorder()),
       ),
       child: Text(
         number,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: isSelected ? Colors.white : Colors.black,
+          color: isSelected ? grey00 : Colors.black,
         ),
       ),
     );
