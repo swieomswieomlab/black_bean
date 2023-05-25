@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'pages/home_page.dart';
 import 'firebase_options.dart';
 import 'pages/select_full_exam_page.dart';
+import 'pages/select_unit_exam_page.dart';
 import 'pages/test_page.dart';
 import 'package:flutter/foundation.dart';
 import 'pages/full_exam.dart';
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/selectFullExamPage',
+        initialRoute: '/selectUnitExamPage',
+
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
@@ -50,6 +52,7 @@ class MyApp extends StatelessWidget {
           '/fullExam': (context) => const FullExamPage(),
           '/fullExamGradingPage' :(context) => const FullExamGradingPage(),
           '/selectFullExamPage': (context) => const SelectFullExamPage(),
+          '/selectUnitExamPage': (context) => const SelectUnitExamPage(),
           '/unitExam': (context) => const UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
 

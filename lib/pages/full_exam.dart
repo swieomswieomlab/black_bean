@@ -55,7 +55,6 @@ class _FullExamPageState extends State<FullExamPage> {
         majorSectionNames.add(element.name);
       }
     });
-    
   }
 
   @override
@@ -118,7 +117,9 @@ class _FullExamPageState extends State<FullExamPage> {
                       },
                       alignment: Alignment.centerRight,
                     ),
-                    const SizedBox(width: 10,)
+                    const SizedBox(
+                      width: 10,
+                    )
                   ],
                 ),
                 Expanded(
@@ -265,7 +266,6 @@ class _FullExamPageState extends State<FullExamPage> {
                                               SizedBox(
                                                   width: spaceBetweenNumbers),
                                               const SizedBox(width: 200),
-
                                             ],
                                           ),
                                           // SizedBox(width: 140),
@@ -302,8 +302,7 @@ class _FullExamPageState extends State<FullExamPage> {
   ElevatedButton submitButton() {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateColor.resolveWith(
-            (states) => blue09),
+        backgroundColor: MaterialStateColor.resolveWith((states) => blue09),
         elevation: MaterialStateProperty.all(0),
         fixedSize: MaterialStateProperty.all(const Size(140, 48)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(

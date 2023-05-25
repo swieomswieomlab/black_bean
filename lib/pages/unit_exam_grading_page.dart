@@ -83,8 +83,8 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
                                           mainLightBlue),
-                                  fixedSize:
-                                      MaterialStateProperty.all(const Size(238, 64)),
+                                  fixedSize: MaterialStateProperty.all(
+                                      const Size(238, 64)),
                                   side: MaterialStateProperty.all<BorderSide>(
                                     const BorderSide(color: mainSkyBlue),
                                   ),
@@ -104,8 +104,8 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
                                           mainSkyBlue),
-                                  fixedSize:
-                                      MaterialStateProperty.all(const Size(238, 64)),
+                                  fixedSize: MaterialStateProperty.all(
+                                      const Size(238, 64)),
                                 ),
                                 onPressed: () {},
                                 child: Text(
