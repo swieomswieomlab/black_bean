@@ -60,7 +60,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
         centerTitle: true,
         title: Text(
           "Exam index here | Subject here",
-          style: Headline_H4(26, mainBlack),
+          style: title3(mainBlack),
         ),
       ),
       backgroundColor: Colors.white,
@@ -124,7 +124,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                   child: Text(
                                     //TODO: 단원명 불러오기
                                     "${_problems[_numberState].mSection}단원|단원명",
-                                    style: Tiny_T1(16, mainSkyBlue),
+                                    style: body3(mainSkyBlue),
                                   ),
                                 ),
                                 SizedBox(
@@ -335,7 +335,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
             }
           },
         ),
-        fixedSize: MaterialStateProperty.all(const Size(44, 44)),
+        fixedSize: MaterialStateProperty.all(const Size(40, 40)),
         shape: MaterialStateProperty.all(const CircleBorder()),
       ),
       child: Text(

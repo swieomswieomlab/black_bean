@@ -102,7 +102,7 @@ class GradingPageState extends State<GradingPage> {
                           ),
                           Text(
                             "합격까지 한 문제! 너무 잘 하고 있어요 :)",
-                            style: Headline_H4(24, grey07),
+                            style: body4(grey07),
                           ),
                         ],
                       ),
@@ -122,7 +122,7 @@ class GradingPageState extends State<GradingPage> {
                               children: [
                                 Text(
                                   "문항 별 채점 결과",
-                                  style: Headline_H4(24, Colors.black),
+                                  style: body4(Colors.black),
                                 ),
                                 const SizedBox(
                                   height: 20,
@@ -166,7 +166,7 @@ class GradingPageState extends State<GradingPage> {
                               children: [
                                 Text(
                                   "틀린 문제 다시 풀기",
-                                  style: Headline_H4(24, Colors.black),
+                                  style: body4(Colors.black),
                                 ),
                                 const SizedBox(
                                   height: 20,
@@ -198,14 +198,14 @@ class GradingPageState extends State<GradingPage> {
                                     child: correctMessageState == -1
                                         ? Text("CMS 0",
                                             style:
-                                                Headline_H4(18, Colors.black))
+                                                body4( Colors.black))
                                         : correctMessageState == 1
                                             ? Text("CMS 1",
-                                                style: Headline_H4(
-                                                    18, Colors.black))
+                                                style: body4(
+                                                     Colors.black))
                                             : Text("\u{270F} 다시 한번 풀어보세요",
-                                                style: Headline_H4(
-                                                    18, Colors.black)),
+                                                style: body4(
+                                                     Colors.black)),
                                   ),
                                 ),
                                 const SizedBox(
