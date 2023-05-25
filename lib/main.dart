@@ -42,14 +42,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/selectPage',
+        initialRoute: '/selectFullExamPage',
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
           '/testPage': (context) => const TestPage(),
           '/fullExam': (context) => const FullExamPage(),
           '/fullExamGradingPage' :(context) => const FullExamGradingPage(),
-          '/selectPage': (context) => const SelectExamPage(),
+          '/selectFullExamPage': (context) => const SelectFullExamPage(),
           '/unitExam': (context) => const UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
 
