@@ -2,6 +2,8 @@ import 'package:black_bean/components.dart';
 import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 
+import '../service/firebase_service.dart';
+
 class SelectUnitExamPage extends StatefulWidget {
   const SelectUnitExamPage({super.key});
 
@@ -10,14 +12,16 @@ class SelectUnitExamPage extends StatefulWidget {
 }
 
 class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
+  final FirebaseService _firebaseService = FirebaseService();
   //과목 명 목록 영어, 이미지 이름 찾을 때 씀
-  List<String> subject = [
-    "korean",
-    "math",
-    "english",
-    "society",
-    "science",
-    "history"
+  List<String> degreeList = ['High', 'Middle'];
+  List<String> subjectList = [
+    "Korean",
+    "Math",
+    "English",
+    "Society",
+    "Science",
+    "History"
   ];
   //과목 목록 한국어
   List<String> subjectKor = ["국어", "수학", "영어", "사회", "과학", "한국사"];
@@ -27,8 +31,13 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
   int selectedNum = -1;
   String selectedYear = '';
   String selectedRound = '';
-  List<String> unitList = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  List<String> unitList = [];
   int selectedUnitNum = -1;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,33 +103,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                       "Start",
                       style: button2(selected ? blue09 : grey02),
                     ),
-                    OutlinedButton(
-                      onPressed: () {
-                        if (selectedNum != -1) {
-                          examStartDialog(context);
-                        }
-                      },
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              selectedNum == -1 ? grey02 : blue09),
-                          side: MaterialStateProperty.all<BorderSide>(
-                            const BorderSide(color: Colors.transparent),
-                          ),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                            const CircleBorder(),
-                          ),
-                          minimumSize: MaterialStateProperty.all<Size>(
-                            const Size(96, 96),
-                          ),
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                              Colors.white
-                              // selectedNum == -1 ? Colors.grey : Colors.black
-                              )),
-                      child: const Icon(
-                        Icons.arrow_forward,
-                        size: 44,
-                      ),
-                    )
+                    startButton(context)
                   ],
                 )
               ],
@@ -131,6 +114,36 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
     );
   }
 
+  OutlinedButton startButton(BuildContext context) {
+    return OutlinedButton(
+                    onPressed: () {
+                      if (selectedNum != -1 && selectedUnitNum != -1) {
+                        examStartDialog(context);
+                      }
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            selectedNum == -1 ? grey02 : blue09),
+                        side: MaterialStateProperty.all<BorderSide>(
+                          const BorderSide(color: Colors.transparent),
+                        ),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          const CircleBorder(),
+                        ),
+                        minimumSize: MaterialStateProperty.all<Size>(
+                          const Size(96, 96),
+                        ),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            Colors.white
+                            // selectedNum == -1 ? Colors.grey : Colors.black
+                            )),
+                    child: const Icon(
+                      Icons.arrow_forward,
+                      size: 44,
+                    ),
+                  );
+  }
+
   SizedBox selectSubjectSection() {
     return SizedBox(
       height: 130,
@@ -139,62 +152,85 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
         spacing: 12,
         runSpacing: 16,
         children: List.generate(
-            6,
-            (index) => ElevatedButton(
-                  style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: containedNum.contains(index)
-                                ? selectedNum == index
-                                    ? blue09
-                                    : blue03
-                                : grey01,
-                            width: 2),
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                    ),
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
-                      if (states.contains(MaterialState.hovered)) {
-                        if (selectedNum == index) {
-                          return blue09;
-                        } else if (containedNum.contains(index)) {
-                          return greyBlue;
-                        } else {
-                          return grey01;
-                        }
-                        // Set the hover color here
-                      } else {
-                        return containedNum.contains(index)
-                            ? selectedNum == index
-                                ? blue09
-                                : mainLightBlue
-                            : grey01;
-                      }
-                    }),
-                    fixedSize:
-                        MaterialStateProperty.all<Size>(const Size(110, 44)),
+          6,
+          (index) => ElevatedButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: containedNum.contains(index)
+                        ? selectedNum == index
+                            ? blue09
+                            : blue03
+                        : grey01,
+                    width: 2,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      if (containedNum.contains(index)) {
-                        selected = true;
-                        selectedNum = index;
-                      }
-                    });
-                  },
-                  child: Text(
-                    subjectKor[index],
-                    style: button2(index == selectedNum
-                        ? grey00
-                        : containedNum.contains(index)
-                            ? grey08
-                            : grey04),
-                  ),
-                )),
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+              ),
+              backgroundColor:
+                  MaterialStateColor.resolveWith((states) => getColor(index)),
+              fixedSize: MaterialStateProperty.all<Size>(const Size(110, 44)),
+            ),
+            onPressed: () async {
+              if (containedNum.contains(index)) {
+                setState(() {
+                  selected = true;
+                  selectedNum = index;
+                  selectedUnitNum = -1;
+                  unitList.clear();
+                });
+
+                // Load the unit list from Firebase
+                unitList = await _firebaseService
+                    .loadMajorSectionNameFromDatabase(
+                  'High',
+                  subjectList[index],
+                )
+                    .then((value) {
+                  List<String> tmp = [];
+                  int ind = 1;
+                  for (var element in value) {
+                    tmp.add("$ind단원 ${element.name}");
+                    ind += 1;
+                  }
+                  return tmp;
+                });
+
+                setState(() {
+                  // Update the state to reflect the loaded unit list
+                });
+              }
+            },
+            child: Text(
+              subjectKor[index],
+              style: button2(getButtonTextStyle(index)),
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  Color getColor(int index) {
+    if (selectedNum == index) {
+      return blue09;
+    } else if (containedNum.contains(index)) {
+      return greyBlue;
+    } else {
+      return grey01;
+    }
+  }
+
+  Color getButtonTextStyle(int index) {
+    if (index == selectedNum) {
+      return grey00;
+    } else if (containedNum.contains(index)) {
+      return grey08;
+    } else {
+      return grey04;
+    }
   }
 
   Visibility selectUnitSection() {
@@ -294,7 +330,9 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                     elevation: MaterialStateProperty.all(0),
                     backgroundColor: MaterialStateProperty.all(mainSkyBlue),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO: Navigate
+                  },
                   child: Text(
                     "시작하기",
                     style: button1(grey00),

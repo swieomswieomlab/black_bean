@@ -282,7 +282,7 @@ class FirebaseService {
     return problems.sublist(0, 2);
   }
 
-  //단원명 불러오기
+  //대단원명 불러오기
   Future<List<MajorSectionName>> loadMajorSectionNameFromDatabase(
     String degree,
     String subject,
