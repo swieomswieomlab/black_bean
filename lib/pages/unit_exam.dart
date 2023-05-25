@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../model/unit_exam_arguments.dart';
 import '../textstyle.dart';
 import '../class/grading_arguments.dart';
 import '../model/problem.dart';
@@ -11,7 +12,8 @@ import '../service/firebase_service.dart';
 enum AnswerType { basic, wrong, correct, checkAnswer }
 
 class UnitExamPage extends StatefulWidget {
-  const UnitExamPage({Key? key}) : super(key: key);
+  const UnitExamPage({Key? key, required this.arguments}) : super(key: key);
+  final UnitExamArguments arguments;
 
   @override
   State<UnitExamPage> createState() => _UnitExamPageState();
@@ -34,17 +36,14 @@ class _UnitExamPageState extends State<UnitExamPage> {
 
   List<int> corrects = [];
 
-  //TODO: REMOVE; TESTING ARGUMENTS
-  String testDegree = 'High';
-  String testSubject = 'Math';
-  int testUnit = 1;
-
   @override
   void initState() {
     super.initState();
-
+    var args = widget.arguments;
+    print(args.degree + args.subject + args.unit.toString());
     _loadProblemsFuture = _firebaseService
-        .loadProblemMajorSectionFromDatabase(testDegree, testSubject, testUnit)
+        .loadProblemMajorSectionFromDatabase(
+            args.degree, args.subject, args.unit)
         .then((loadedProblems) {
       finalNumber = loadedProblems.length;
       corrects = List.generate(finalNumber, (index) => 0);

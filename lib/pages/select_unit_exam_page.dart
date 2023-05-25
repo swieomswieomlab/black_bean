@@ -1,4 +1,5 @@
 import 'package:black_bean/components.dart';
+import 'package:black_bean/model/unit_exam_arguments.dart';
 import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 
@@ -116,32 +117,31 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
 
   OutlinedButton startButton(BuildContext context) {
     return OutlinedButton(
-                    onPressed: () {
-                      if (selectedNum != -1 && selectedUnitNum != -1) {
-                        examStartDialog(context);
-                      }
-                    },
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            selectedNum == -1 ? grey02 : blue09),
-                        side: MaterialStateProperty.all<BorderSide>(
-                          const BorderSide(color: Colors.transparent),
-                        ),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          const CircleBorder(),
-                        ),
-                        minimumSize: MaterialStateProperty.all<Size>(
-                          const Size(96, 96),
-                        ),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white
-                            // selectedNum == -1 ? Colors.grey : Colors.black
-                            )),
-                    child: const Icon(
-                      Icons.arrow_forward,
-                      size: 44,
-                    ),
-                  );
+      onPressed: () {
+        if (selectedNum != -1 && selectedUnitNum != -1) {
+          examStartDialog(context);
+        }
+      },
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(
+              selectedNum == -1 ? grey02 : blue09),
+          side: MaterialStateProperty.all<BorderSide>(
+            const BorderSide(color: Colors.transparent),
+          ),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            const CircleBorder(),
+          ),
+          minimumSize: MaterialStateProperty.all<Size>(
+            const Size(96, 96),
+          ),
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.white
+              // selectedNum == -1 ? Colors.grey : Colors.black
+              )),
+      child: const Icon(
+        Icons.arrow_forward,
+        size: 44,
+      ),
+    );
   }
 
   SizedBox selectSubjectSection() {
@@ -332,6 +332,10 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                   ),
                   onPressed: () {
                     //TODO: Navigate
+                    Navigator.pop(context);
+                    Navigator.popAndPushNamed(context, '/unitExam',
+                        arguments: UnitExamArguments(
+                            'High', subjectList[selectedNum], selectedUnitNum+1));
                   },
                   child: Text(
                     "시작하기",
