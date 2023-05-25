@@ -44,7 +44,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
     super.initState();
 
     _loadProblemsFuture = _firebaseService
-        .loadProblemMajorSectionFromDatabase(testDegree,testSubject,testUnit)
+        .loadProblemMajorSectionFromDatabase(testDegree, testSubject, testUnit)
         .then((loadedProblems) {
       finalNumber = loadedProblems.length;
       corrects = List.generate(finalNumber, (index) => 0);
@@ -177,7 +177,9 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 10,)
+                                const SizedBox(
+                                  height: 10,
+                                )
                               ],
                             ),
                           ),
@@ -299,10 +301,10 @@ class _UnitExamPageState extends State<UnitExamPage> {
 
     return OutlinedButton(
       onPressed: () {
-        if(answerType != AnswerType.checkAnswer){
-        setState(() {
-          _selectedNumber = isSelected ? -1 : value;
-        });
+        if (answerType != AnswerType.checkAnswer) {
+          setState(() {
+            _selectedNumber = isSelected ? -1 : value;
+          });
         }
       },
       style: ButtonStyle(

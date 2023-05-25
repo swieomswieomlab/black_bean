@@ -130,7 +130,8 @@ class GradingPageState extends State<GradingPage> {
                                 SizedBox(
                                   width: 366,
                                   child: GridView(
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -174,8 +175,8 @@ class GradingPageState extends State<GradingPage> {
                                 SizedBox(
                                   width: 580,
                                   child: _selectedNumberProblem != -1 &&
-                                          corrects[_selectedNumberProblem -
-                                                  1] ==
+                                          corrects[
+                                                  _selectedNumberProblem - 1] ==
                                               2
                                       ? Image.network(
                                           problems[_selectedNumberProblem - 1]
@@ -197,15 +198,12 @@ class GradingPageState extends State<GradingPage> {
                                     color: const Color(0xFFFFF5DA),
                                     child: correctMessageState == -1
                                         ? Text("CMS 0",
-                                            style:
-                                                body4( Colors.black))
+                                            style: body4(Colors.black))
                                         : correctMessageState == 1
                                             ? Text("CMS 1",
-                                                style: body4(
-                                                     Colors.black))
+                                                style: body4(Colors.black))
                                             : Text("\u{270F} 다시 한번 풀어보세요",
-                                                style: body4(
-                                                     Colors.black)),
+                                                style: body4(Colors.black)),
                                   ),
                                 ),
                                 const SizedBox(
@@ -218,14 +216,14 @@ class GradingPageState extends State<GradingPage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            numberButton('1', 1,
-                                                _selectedNumberProblem),
-                                            numberButton('2', 2,
-                                                _selectedNumberProblem),
-                                            numberButton('3', 3,
-                                                _selectedNumberProblem),
-                                            numberButton('4', 4,
-                                                _selectedNumberProblem),
+                                            numberButton(
+                                                '1', 1, _selectedNumberProblem),
+                                            numberButton(
+                                                '2', 2, _selectedNumberProblem),
+                                            numberButton(
+                                                '3', 3, _selectedNumberProblem),
+                                            numberButton(
+                                                '4', 4, _selectedNumberProblem),
                                           ],
                                         ),
                                       )

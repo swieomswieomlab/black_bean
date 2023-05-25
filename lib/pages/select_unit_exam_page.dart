@@ -27,7 +27,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
   int selectedNum = -1;
   String selectedYear = '';
   String selectedRound = '';
-  List<String> unitList = ["1","2","3","4","5","6","7","8"];
+  List<String> unitList = ["1", "2", "3", "4", "5", "6", "7", "8"];
   int selectedUnitNum = -1;
 
   @override
@@ -64,18 +64,18 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                         children: [
                           selectSubjectSection(),
                           Container(
-                        // margin: const EdgeInsets.only(bottom: 40),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: mainLightBlue,
-                        ),
-                        child: Text(
-                          "\u{23F3}다른 과목들도 준비중이에요! 조금만 기다려주세요 :)",
-                          style: body3(grey07),
-                        ),
-                      ),
+                            // margin: const EdgeInsets.only(bottom: 40),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: mainLightBlue,
+                            ),
+                            child: Text(
+                              "\u{23F3}다른 과목들도 준비중이에요! 조금만 기다려주세요 :)",
+                              style: body3(grey07),
+                            ),
+                          ),
                         ],
                       ),
                       //년도 드랍다운 버튼
@@ -133,122 +133,109 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
 
   SizedBox selectSubjectSection() {
     return SizedBox(
-                    height: 130,
-                    width: 400,
-                    child: Wrap(
-                      spacing: 12,
-                      runSpacing: 16,
-                      children: List.generate(
-                          6,
-                          (index) => ElevatedButton(
-                                style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(0),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: containedNum.contains(index)
-                                              ? selectedNum == index
-                                                  ? blue09
-                                                  : blue03
-                                              : grey01,
-                                          width: 2),
-                                      borderRadius:
-                                          BorderRadius.circular(4.0),
-                                    ),
-                                  ),
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith(
-                                          (states) {
-                                    if (states
-                                        .contains(MaterialState.hovered)) {
-                                      if (selectedNum == index) {
-                                        return blue09;
-                                      } else if (containedNum
-                                          .contains(index)) {
-                                        return greyBlue;
-                                      } else {
-                                        return grey01;
-                                      }
-                                      // Set the hover color here
-                                    } else {
-                                      return containedNum.contains(index)
-                                          ? selectedNum == index
-                                              ? blue09
-                                              : mainLightBlue
-                                          : grey01;
-                                    }
-                                  }),
-                                  fixedSize: MaterialStateProperty.all<Size>(
-                                      const Size(110, 44)),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    if (containedNum.contains(index)) {
-                                      selected = true;
-                                      selectedNum = index;
-                                    }
-                                  });
-                                },
-                                child: Text(
-                                  subjectKor[index],
-                                  style: button2(index == selectedNum
-                                      ? grey00
-                                      : containedNum.contains(index)
-                                          ? grey08
-                                          : grey04),
-                                ),
-                              )),
+      height: 130,
+      width: 400,
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 16,
+        children: List.generate(
+            6,
+            (index) => ElevatedButton(
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: containedNum.contains(index)
+                                ? selectedNum == index
+                                    ? blue09
+                                    : blue03
+                                : grey01,
+                            width: 2),
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
                     ),
-                  );
+                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                      if (states.contains(MaterialState.hovered)) {
+                        if (selectedNum == index) {
+                          return blue09;
+                        } else if (containedNum.contains(index)) {
+                          return greyBlue;
+                        } else {
+                          return grey01;
+                        }
+                        // Set the hover color here
+                      } else {
+                        return containedNum.contains(index)
+                            ? selectedNum == index
+                                ? blue09
+                                : mainLightBlue
+                            : grey01;
+                      }
+                    }),
+                    fixedSize:
+                        MaterialStateProperty.all<Size>(const Size(110, 44)),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (containedNum.contains(index)) {
+                        selected = true;
+                        selectedNum = index;
+                      }
+                    });
+                  },
+                  child: Text(
+                    subjectKor[index],
+                    style: button2(index == selectedNum
+                        ? grey00
+                        : containedNum.contains(index)
+                            ? grey08
+                            : grey04),
+                  ),
+                )),
+      ),
+    );
   }
 
   Visibility selectUnitSection() {
     return Visibility(
-                    visible: selected,
-                    child: SizedBox(
-                      height: 200,
-                      width: 400,
-                      child: Wrap(
-                        spacing: 12,
-                        runSpacing: 16,
-                        children: List.generate(
-                            unitList.length,
-                            (index) => ElevatedButton(
-                                  style: ButtonStyle(
-                                    elevation: MaterialStateProperty.all(0),
-                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      visible: selected,
+      child: SizedBox(
+        height: 200,
+        width: 400,
+        child: Wrap(
+          spacing: 12,
+          runSpacing: 16,
+          children: List.generate(
+              unitList.length,
+              (index) => ElevatedButton(
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           side: BorderSide(
                               color: selectedUnitNum == index ? blue07 : blue05,
                               width: 2),
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
-                                      ),
-                                    ),
-                                    backgroundColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) {
-                                      if (states
-                                          .contains(MaterialState.hovered)) {
-                                        if (selectedUnitNum == index) {
-                                          return blue03;
-                                        } else {
-                                          return blue01;
-                                        }
-                                        // Set the hover color here
-                                      } else {
-                                        return 
-                                             selectedUnitNum == index
-                                                ? blue03
-                                                : grey00;
-                                      }
-                                    }),
-                                    fixedSize: MaterialStateProperty.all<Size>(
-                                        const Size(176, 36)),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateColor.resolveWith((states) {
+                        if (states.contains(MaterialState.hovered)) {
+                          if (selectedUnitNum == index) {
+                            return blue03;
+                          } else {
+                            return blue01;
+                          }
+                          // Set the hover color here
+                        } else {
+                          return selectedUnitNum == index ? blue03 : grey00;
+                        }
+                      }),
+                      fixedSize:
+                          MaterialStateProperty.all<Size>(const Size(176, 36)),
+                    ),
+                    onPressed: () {
+                      setState(() {
                         selectedUnitNum = index;
                       });
                     },
@@ -259,8 +246,8 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                     ),
                   )),
         ),
-                    ),
-                  );
+      ),
+    );
   }
 
   Future<dynamic> examStartDialog(BuildContext context) {
