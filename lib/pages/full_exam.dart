@@ -24,7 +24,7 @@ class _FullExamPageState extends State<FullExamPage> {
   List<String> majorSectionNames = [];
   int _selectedNumber = -1;
   int _numberState = 0;
-  int finalNumber = 99;
+  late int finalNumber = 99;
   bool remoteControl = true;
 
   List<int> corrects = [];
