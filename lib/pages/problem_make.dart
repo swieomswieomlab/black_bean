@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -38,9 +39,9 @@ class ProblemMakeWidget extends StatefulWidget {
 }
 
 List<String> degree = ['High', 'Middle'];
-List<String> subject = ['Math', 'Korean'];
+List<String> subject = ['Math', 'Korean','English','Social','Science','History','Ethics'];
 List<String> year = ['2020-1','2020-2','2021-1','2021-2','2022-1', '2022-2', '2023-1','2099-1'];
-List<String> number = List.generate(22, (i) => (i + 1).toString());
+List<String> number = List.generate(26, (i) => (i + 1).toString());
 List<String> majorSection = List.generate(9, (i) => (i + 1).toString());
 List<String> interSection = List.generate(9, (i) => (i + 1).toString());
 List<String> subSection = List.generate(9, (i) => (i + 1).toString());
@@ -119,8 +120,14 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
             onPressed: () {
               submitProblem(context);
             },
-            child: const Text("Submit")),
-        const Text(''),
+            child: Text("Submit",style: Headline_H0(32, mainBlack),),
+            ),
+        Padding(
+          padding: EdgeInsets.all(12.0),
+          child: Container(
+            decoration: BoxDecoration(border: Border.all(color: Colors.black87)),
+            child: Text('중단원이 없는 경우는 1로 해주세요.'),),
+        ),
       ],
     );
   }
