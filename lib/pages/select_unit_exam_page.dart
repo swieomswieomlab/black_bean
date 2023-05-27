@@ -331,9 +331,8 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                     backgroundColor: MaterialStateProperty.all(mainSkyBlue),
                   ),
                   onPressed: () {
-                    //TODO: Navigate
                     Navigator.pop(context);
-                    Navigator.popAndPushNamed(context, '/unitExam',
+                    Navigator.pushNamed(context, '/unitExam',
                         arguments: UnitExamArguments(
                             'High', subjectList[selectedNum], selectedUnitNum+1));
                   },
