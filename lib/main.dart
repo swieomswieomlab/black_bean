@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
           // '/unitExam': (context) => UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
         },
+        // ignore: body_might_complete_normally_nullable
         onGenerateRoute: ((settings) {
           if (settings.name == '/unitExam') {
             final args = settings.arguments as UnitExamArguments;

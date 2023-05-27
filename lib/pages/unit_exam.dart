@@ -1,3 +1,4 @@
+import 'package:black_bean/pages/problem_make.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -134,7 +135,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                   children: [
                     Center(
                         child: Text(
-                      "${_numberState+1}/${_problems.length}문제",
+                      "${_numberState + 1}/${_problems.length}문제",
                       style: body2(blue09),
                     )),
                     const SizedBox(
@@ -354,11 +355,13 @@ class _UnitExamPageState extends State<UnitExamPage> {
           // when problems are finishied, route to grading page
           // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
         },
-        child: _numberState == finalNumber - 2 && isCorrect
+        child: _numberState == finalNumber - 1 && isCorrect
             ? const Text('완료')
             : isCorrect
                 ? const Text('다음')
-                : const Text('채점하기'),
+                : answerType == AnswerType.wrong
+                    ? const Text('다시 풀기')
+                    : const Text('채점하기'),
       );
 
   OutlinedButton numberButton(String number, int value) {
