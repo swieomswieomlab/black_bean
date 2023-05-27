@@ -203,10 +203,26 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                       MediaQuery.of(context).size.height - 200,
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
-                                    child: FadeInImage.memoryNetwork(
-                                      placeholder: kTransparentImage,
-                                      image: _problems[_numberState].problem,
-                                      fit: BoxFit.fitWidth,
+                                    child: Image.network(
+                                      _problems[_numberState].problem,
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),

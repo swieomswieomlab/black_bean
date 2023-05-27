@@ -16,7 +16,7 @@ class FullExamPage extends StatefulWidget {
 class _FullExamPageState extends State<FullExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
   final double spaceBetweenNumbers = 44;
-  //0 for init, 1 for correct, 2 for wrong
+
   late List<int> _selectedNumbers;
 
   late Future<List<Problem>> _loadProblemsFuture;
@@ -29,7 +29,6 @@ class _FullExamPageState extends State<FullExamPage> {
 
   List<int> corrects = [];
 
-  //TODO: REMOVE; TESTING ARGUMENTS
   String testDegree = 'High';
   String testSubject = 'Math';
   String testYear = '2099-1';
@@ -132,8 +131,6 @@ class _FullExamPageState extends State<FullExamPage> {
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
-                      // spacing: 10,
-                      // runSpacing: 10,
                       children: List.generate(finalNumber, (index) {
                         return Container(
                           width: 38,
@@ -183,7 +180,6 @@ class _FullExamPageState extends State<FullExamPage> {
               height: 70,
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
-                // color: grey00,
                 border: Border(
                   top: BorderSide(
                     color: Colors.black,
@@ -198,12 +194,11 @@ class _FullExamPageState extends State<FullExamPage> {
             child: Column(
               children: [
                 const SizedBox(height: 36),
-                //exam image
                 FutureBuilder<List<Problem>>(
                   future: _loadProblemsFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator(); // show progress indicator while loading
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
@@ -215,7 +210,6 @@ class _FullExamPageState extends State<FullExamPage> {
                           child: Container(
                             margin: const EdgeInsets.symmetric(horizontal: 40),
                             width: 1200,
-                            height: MediaQuery.of(context).size.height - 100,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -228,52 +222,31 @@ class _FullExamPageState extends State<FullExamPage> {
                                         style: body3(mainSkyBlue),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 520,
-                                      child: FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: _problems[_numberState].problem,
-                                        fit: BoxFit.fitWidth,
-                                        fadeInDuration:
-                                            const Duration(milliseconds: 100),
+                                    SingleChildScrollView(
+                                      child: SizedBox(
+                                        child: Image.network(
+                                          _problems[_numberState].problem,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ),
-                                    const Spacer(),
-                                    // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
-                                    SizedBox(
-                                      width: 1200,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
-
-                                        children: [
-                                          const SizedBox(width: 320),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                  width: spaceBetweenNumbers),
-                                              numberButton('1', 1),
-                                              SizedBox(
-                                                  width: spaceBetweenNumbers),
-                                              numberButton('2', 2),
-                                              SizedBox(
-                                                  width: spaceBetweenNumbers),
-                                              numberButton('3', 3),
-                                              SizedBox(
-                                                  width: spaceBetweenNumbers),
-                                              numberButton('4', 4),
-                                              SizedBox(
-                                                  width: spaceBetweenNumbers),
-                                              const SizedBox(width: 200),
-                                            ],
-                                          ),
-                                          // SizedBox(width: 140),
-                                          submitButton(),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
                                   ],
                                 ),
                               ],
@@ -284,7 +257,38 @@ class _FullExamPageState extends State<FullExamPage> {
                     }
                   },
                 ),
-                // Expanded(child: Container()),
+                const Spacer(),
+                SizedBox(
+                  width: 1200,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 320),
+                      Row(
+                        children: [
+                          SizedBox(width: spaceBetweenNumbers),
+                          numberButton('1', 1),
+                          SizedBox(width: spaceBetweenNumbers),
+                          numberButton('2', 2),
+                          SizedBox(width: spaceBetweenNumbers),
+                          numberButton('3', 3),
+                          SizedBox(width: spaceBetweenNumbers),
+                          numberButton('4', 4),
+                          SizedBox(width: spaceBetweenNumbers),
+                          const SizedBox(width: 110),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: nextButton(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: submitButton(),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -297,6 +301,23 @@ class _FullExamPageState extends State<FullExamPage> {
     return setState(() {
       _numberState = index;
     });
+  }
+
+  ElevatedButton nextButton() {
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateColor.resolveWith((states) => blue09),
+        elevation: MaterialStateProperty.all(0),
+        fixedSize: MaterialStateProperty.all(const Size(140, 48)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+      ),
+      onPressed: submit,
+      child: Text('다음', style: button2(grey00)),
+    );
   }
 
   ElevatedButton submitButton() {
@@ -417,7 +438,6 @@ class SubmitAlertDialog extends StatelessWidget {
     return AlertDialog(
       titlePadding: const EdgeInsets.only(
           top: 60.0, left: 94.0, right: 94.0, bottom: 0.0),
-      // insetPadding: EdgeInsets.symmetric(horizontal: 200.0, vertical: 100.0),
       contentPadding: const EdgeInsets.fromLTRB(32.0, 20.0, 32.0, 58.0),
       title: Text(
         notSolvedNumbers.isEmpty ? '시험지를 채점할까요?' : '아직 안 푼 문제가 있어요!',
