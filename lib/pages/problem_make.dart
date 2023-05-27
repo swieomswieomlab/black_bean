@@ -89,10 +89,16 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
               _pickImage();
             }),
             child: const Text("Upload Image")),
-        Center(
-            child: imgUrl.isNotEmpty
-              ? Image.network(imgUrl)
-              : const Text("No image selected"),
+        SingleChildScrollView(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width - 200,
+            height: MediaQuery.of(context).size.height - 240,
+            child: Center(
+                child: imgUrl.isNotEmpty
+                  ? Image.network(imgUrl)
+                  : const Text("No image selected"),
+            ),
+          ),
         ),
         Center(
           child: Row(
@@ -123,10 +129,10 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
             child: Text("Submit",style: Headline_H0(32, mainBlack),),
             ),
         Padding(
-          padding: EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(12.0),
           child: Container(
             decoration: BoxDecoration(border: Border.all(color: Colors.black87)),
-            child: Text('중단원이 없는 경우는 1로 해주세요.'),),
+            child: const Text('중단원이 없는 경우는 1로 해주세요.'),),
         ),
       ],
     );
