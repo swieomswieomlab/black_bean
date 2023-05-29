@@ -1,3 +1,4 @@
+import 'package:black_bean/model/unit_exam_arguments.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,7 +37,6 @@ class MyApp extends StatelessWidget {
   build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(1512, 982),
-
       builder: (context, child) => MaterialApp(
         title: 'Black Bean Demo',
         debugShowCheckedModeBanner: false,
@@ -50,13 +50,21 @@ class MyApp extends StatelessWidget {
           '/problemMake': (context) => const ProblemMake(),
           '/testPage': (context) => const TestPage(),
           '/fullExam': (context) => const FullExamPage(),
-          '/fullExamGradingPage' :(context) => const FullExamGradingPage(),
+          '/fullExamGradingPage': (context) => const FullExamGradingPage(),
           '/selectFullExamPage': (context) => const SelectFullExamPage(),
           '/selectUnitExamPage': (context) => const SelectUnitExamPage(),
-          '/unitExam': (context) => const UnitExamPage(),
+          // '/unitExam': (context) => UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
-
         },
+        // ignore: body_might_complete_normally_nullable
+        onGenerateRoute: ((settings) {
+          if (settings.name == '/unitExam') {
+            final args = settings.arguments as UnitExamArguments;
+            return MaterialPageRoute(builder: (context) {
+              return UnitExamPage(arguments: args,);
+            });
+          }
+        }),
       ),
     );
   }

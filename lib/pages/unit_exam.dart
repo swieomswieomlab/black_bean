@@ -1,6 +1,8 @@
+import 'package:black_bean/pages/problem_make.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../model/unit_exam_arguments.dart';
 import '../textstyle.dart';
 import '../class/grading_arguments.dart';
 import '../model/problem.dart';
@@ -11,7 +13,8 @@ import '../service/firebase_service.dart';
 enum AnswerType { basic, wrong, correct, checkAnswer }
 
 class UnitExamPage extends StatefulWidget {
-  const UnitExamPage({Key? key}) : super(key: key);
+  const UnitExamPage({Key? key, required this.arguments}) : super(key: key);
+  final UnitExamArguments arguments;
 
   @override
   State<UnitExamPage> createState() => _UnitExamPageState();
@@ -34,82 +37,151 @@ class _UnitExamPageState extends State<UnitExamPage> {
 
   List<int> corrects = [];
 
-  //TODO: REMOVE; TESTING ARGUMENTS
-  String testDegree = 'High';
-  String testSubject = 'Math';
-  int testUnit = 1;
+  List<String> majorSectionNames = [];
 
   @override
   void initState() {
     super.initState();
+    var args = widget.arguments;
+    loadProblems(args);
+  }
 
+  void loadProblems(UnitExamArguments args) async {
     _loadProblemsFuture = _firebaseService
-        .loadProblemMajorSectionFromDatabase(testDegree, testSubject, testUnit)
-        .then((loadedProblems) {
+        .loadProblemMajorSectionFromDatabase(
+            args.degree, args.subject, args.unit)
+        .then((loadedProblems) async {
       finalNumber = loadedProblems.length;
       corrects = List.generate(finalNumber, (index) => 0);
+      await loadMajorSectionNames(args);
       return loadedProblems;
+    });
+  }
+
+  Future<void> loadMajorSectionNames(UnitExamArguments args) async {
+    return _firebaseService
+        .loadMajorSectionNameFromDatabase(args.degree, args.subject)
+        .then((loadedNames) {
+      loadedNames.sort((a, b) => a.sectionNumber.compareTo(b.sectionNumber));
+      for (var element in loadedNames) {
+        majorSectionNames.add(element.name);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          "Exam index here | Subject here",
-          style: title3(mainBlack),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Positioned(
-            bottom: 0,
-            child: Container(
-              height: 70,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: answerType == AnswerType.basic
-                    ? Colors.white
-                    : answerType == AnswerType.correct
-                        ? const Color(0xffF3FFF8)
-                        : answerType == AnswerType.checkAnswer
-                            ? const Color(0xffFDF7E3)
-                            : const Color(0xffFEF5F5),
-                border: Border(
-                  top: BorderSide(
-                    color: answerType == AnswerType.basic
-                        ? grey04
-                        : answerType == AnswerType.correct
-                            ? pointGreen
-                            : answerType == AnswerType.checkAnswer
-                                ? pointYellow
-                                : pointRed,
-                    width: 1.0,
-                  ),
+    return FutureBuilder<List<Problem>>(
+      future: _loadProblemsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: Text(
+                "Loading...",
+                style: title3(mainBlack),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            body: const Center(
+              child:
+                  CircularProgressIndicator(), // show progress indicator while loading
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: Text(
+                "Error",
+                style: title3(mainBlack),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else {
+          _problems = snapshot.data!;
+          var mSectionNumber = _problems[_numberState].mSection;
+          return Scaffold(
+            appBar: AppBar(
+              leadingWidth: 120,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  size: 15,
+                  color: mainBlack,
                 ),
               ),
-              padding: const EdgeInsets.only(bottom: 20, top: 20),
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: Text(
+                "$mSectionNumber단원| ${majorSectionNames[mSectionNumber - 1]}",
+                style: title3(mainBlack),
+              ),
+              actions: <Widget>[
+                const SizedBox(
+                  height: 29,
+                ),
+                Row(
+                  children: [
+                    Center(
+                        child: Text(
+                      "${_numberState + 1}/${_problems.length}문제",
+                      style: body2(blue09),
+                    )),
+                    const SizedBox(
+                      width: 120,
+                    )
+                  ],
+                )
+              ],
             ),
-          ),
-          Center(
-            child: Column(
+            backgroundColor: Colors.white,
+            body: Stack(
               children: [
-                const SizedBox(height: 36),
-                //exam image
-                FutureBuilder<List<Problem>>(
-                  future: _loadProblemsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator(); // show progress indicator while loading
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      _problems = snapshot.data!;
-                      return Expanded(
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    height: 70,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: answerType == AnswerType.basic
+                          ? Colors.white
+                          : answerType == AnswerType.correct
+                              ? const Color(0xffF3FFF8)
+                              : answerType == AnswerType.checkAnswer
+                                  ? const Color(0xffFDF7E3)
+                                  : const Color(0xffFEF5F5),
+                      border: Border(
+                        top: BorderSide(
+                          color: answerType == AnswerType.basic
+                              ? grey04
+                              : answerType == AnswerType.correct
+                                  ? pointGreen
+                                  : answerType == AnswerType.checkAnswer
+                                      ? pointYellow
+                                      : pointRed,
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(bottom: 20, top: 20),
+                  ),
+                ),
+                Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 36),
+                      Expanded(
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Container(
@@ -122,8 +194,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                   padding: const EdgeInsets.only(left: 220),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    //TODO: 단원명 불러오기
-                                    "${_problems[_numberState].mSection}단원|단원명",
+                                    yearToKorean(_problems[_numberState].year),
                                     style: body3(mainSkyBlue),
                                   ),
                                 ),
@@ -140,14 +211,11 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                   ),
                                 ),
                                 const Spacer(),
-                                // SizedBox(height: 100), //답안에 가리는 부분 없애기 위한 공백
                                 SizedBox(
                                   width: 1200,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
-                                    // crossAxisAlignment: CrossAxisAlignment.end, // Align buttons to the bottom
-
                                     children: [
                                       const SizedBox(width: 280),
                                       Row(
@@ -165,7 +233,6 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                           SizedBox(width: spaceBetweenNumbers),
                                         ],
                                       ),
-                                      // SizedBox(width: 132),
                                       Visibility(
                                           replacement: const SizedBox(
                                             width: 132,
@@ -184,16 +251,15 @@ class _UnitExamPageState extends State<UnitExamPage> {
                             ),
                           ),
                         ),
-                      );
-                    }
-                  },
+                      ),
+                    ],
+                  ),
                 ),
-                // Expanded(child: Container()),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        }
+      },
     );
   }
 
@@ -277,7 +343,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                 _selectedNumber = -1;
               }
               //if final number, route to grading page
-              if (_numberState == finalNumber - 1) {
+              if (_numberState == finalNumber) {
                 Navigator.pushNamed(context, '/unitExamGradingPage',
                     arguments: GradingArguments(corrects, _problems));
                 _numberState = 0;
@@ -289,11 +355,13 @@ class _UnitExamPageState extends State<UnitExamPage> {
           // when problems are finishied, route to grading page
           // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
         },
-        child: _numberState == finalNumber - 2 && isCorrect
+        child: _numberState == finalNumber - 1 && isCorrect
             ? const Text('완료')
             : isCorrect
                 ? const Text('다음')
-                : const Text('채점하기'),
+                : answerType == AnswerType.wrong
+                    ? const Text('다시 풀기')
+                    : const Text('채점하기'),
       );
 
   OutlinedButton numberButton(String number, int value) {

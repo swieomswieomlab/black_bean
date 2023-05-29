@@ -26,30 +26,6 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
 
   @override
   Widget build(BuildContext context) {
-    // textWidgets =
-    //     List.generate(problems.length, (index) => problems[index].number)
-    //         .map<Widget>((int number) {
-    //   return InkWell(
-    //     child: Container(
-    //       color: number == _selectedNumberProblem ? Colors.blue : mainLightBlue,
-    //       child: Column(
-    //         children: [
-    //           Text(number.toString()),
-    //           corrects[number - 1] == 2
-    //               ? const Text("\u{274c}")
-    //               : const Text("\u{2b55}"),
-    //         ],
-    //       ),
-    //     ),
-    //     onTap: () {
-    //       setState(() {
-    //         _selectedNumberProblem = number;
-    //         correctMessageState = -1;
-    //       });
-    //     },
-    //   );
-    // }).toList();
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: basicAppbar(),
@@ -89,7 +65,11 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                     const BorderSide(color: mainSkyBlue),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.popAndPushNamed(
+                                      context, '/selectUnitExamPage');
+                                },
                                 child: Text(
                                   "다시풀기",
                                   style: button1(mainSkyBlue),
@@ -107,7 +87,10 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
                                   fixedSize: MaterialStateProperty.all(
                                       const Size(238, 64)),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.popAndPushNamed(context, '/');
+                                },
                                 child: Text(
                                   "완료",
                                   style: button1(grey00),
