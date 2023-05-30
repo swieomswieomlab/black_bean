@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,13 +14,45 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   FirebaseService firebaseService = FirebaseService();
+
+  bool selected = true;
+  @override
+  void initState() {
+    delay();
+    super.initState();
+  }
+
+  void delay() async {
+    Future.delayed(Duration(seconds: 0)).then((value) {
+      setState(() {
+        selected = false;
+      });
+    }).then((value) {
+      Future.delayed(Duration(seconds: 2)).then((value) {
+      setState(() {
+        selected = true;
+      });
+    });
+    });
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SizedBox(
-            width: 600,
-            child: SingleChildScrollView(
-                child: Image.network(
-                    "https://firebasestorage.googleapis.com/v0/b/black-bean-1f72d.appspot.com/o/images%2F2099-1_1.jpg?alt=media&token=836133bb-2db3-49ab-8795-d7af7b04246f"))));
+        body: Stack(
+      children: [
+        Positioned(
+          bottom: 0,
+          left: 0,
+          child: AnimatedOpacity(
+            duration: const Duration(seconds: 1),
+            opacity: selected ? 0 : 1,
+            child: const FlutterLogo(size: 75),
+          ),
+        ),
+        Center(child: Text("Flutter App")),
+      ],
+    ));
   }
 }
