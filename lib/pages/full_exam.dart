@@ -163,13 +163,19 @@ class _FullExamPageState extends State<FullExamPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(width: 350,),
+                      const SizedBox(
+                        width: 350,
+                      ),
                       answerButtons(),
-                      const SizedBox(width: 100,),
+                      const SizedBox(
+                        width: 100,
+                      ),
                       _numberState == finalNumber - 1
-                      ? const SizedBox(width: 120)
-                      : nextButton(),
-                      const SizedBox(width: 10,),
+                          ? const SizedBox(width: 120)
+                          : nextButton(),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       submitButton(),
                     ],
                   ),

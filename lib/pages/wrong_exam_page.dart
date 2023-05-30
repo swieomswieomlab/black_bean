@@ -564,7 +564,8 @@ class _WrongExamPageState extends State<WrongExamPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 92, right: 80, top: 20),
+                      padding:
+                          const EdgeInsets.only(left: 92, right: 80, top: 20),
                       child: Text(
                         "1단원|직선의 방정식",
                         style: body3(yellow06),
@@ -604,7 +605,9 @@ class _WrongExamPageState extends State<WrongExamPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SizedBox(width: 140,),
+                        SizedBox(
+                          width: 140,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -617,7 +620,9 @@ class _WrongExamPageState extends State<WrongExamPage> {
                             numberButton2('4', 4),
                           ],
                         ),
-                        SizedBox(width: 50,),
+                        SizedBox(
+                          width: 50,
+                        ),
                         ElevatedButton(
                           style: ButtonStyle(
                             elevation: MaterialStateProperty.all(0),
@@ -628,8 +633,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
                                   return grey02;
                                 } else if (answerType2 == AnswerType.basic) {
                                   return yellow04;
-                                } else if (answerType2 ==
-                                    AnswerType.correct) {
+                                } else if (answerType2 == AnswerType.correct) {
                                   return pointGreen;
                                 } else {
                                   return pointRed;
@@ -683,12 +687,11 @@ class _WrongExamPageState extends State<WrongExamPage> {
                             // when problems are finishied, route to grading page
                             // print("_numberState2: "+_numberState2.toString()+" finalNumber: "+finalNumber.toString());
                           },
-                          child:
-                              numberState2 == finalNumber2 - 1 && isCorrect2
-                                  ? const Text('완료')
-                                  : answerType != AnswerType.basic
-                                      ? const Text('다음')
-                                      : const Text('채점하기'),
+                          child: numberState2 == finalNumber2 - 1 && isCorrect2
+                              ? const Text('완료')
+                              : answerType != AnswerType.basic
+                                  ? const Text('다음')
+                                  : const Text('채점하기'),
                         )
                       ],
                     ),
