@@ -15,6 +15,7 @@ import 'pages/problem_make.dart';
 import 'pages/unit_exam_grading_page.dart';
 
 import 'pages/unit_exam.dart';
+import 'pages/wrong_exam_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +44,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/fullExam',
+        initialRoute: '/wrongExam',
+
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
@@ -54,6 +56,7 @@ class MyApp extends StatelessWidget {
           '/selectUnitExamPage': (context) => const SelectUnitExamPage(),
           // '/unitExam': (context) => UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
+          '/wrongExam': (context) => const WrongExamPage(),
         },
         // ignore: body_might_complete_normally_nullable
         onGenerateRoute: ((settings) {
