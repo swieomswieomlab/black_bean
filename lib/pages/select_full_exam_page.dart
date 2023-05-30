@@ -1,4 +1,5 @@
 import 'package:black_bean/components.dart';
+import 'package:black_bean/model/full_exam_arguments.dart';
 import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 
@@ -10,20 +11,21 @@ class SelectFullExamPage extends StatefulWidget {
 }
 
 class _SelectFullExamPageState extends State<SelectFullExamPage> {
-  //과목 명 목록 영어, 이미지 이름 찾을 때 씀
   List<String> subject = [
-    "korean",
-    "math",
-    "english",
-    "society",
-    "science",
-    "history"
+    "Korean",
+    "Math",
+    "English",
+    "Society",
+    "Science",
+    "History"
   ];
-  //과목 목록 한국어
+
   List<String> subjectKor = ["국어", "수학", "영어", "사회", "과학", "한국사"];
-  //구현된 과목 번호
+
   List<int> containedNum = [1];
-  bool selected = false;
+  bool isSelectedSubject = false;
+  bool isSelectedYear = false;
+  bool isSelectedRound = false;
   int selectedNum = -1;
   String selectedYear = '';
   String selectedRound = '';
@@ -46,163 +48,13 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                 const SizedBox(
                   height: 24,
                 ),
-                //TODO: 연습문제 설명 글 추후에 수정 필요
+                //TODO: 연습문제 설명 적기
                 Text("연습문제에 대한 설명 글입니다.", style: body2(grey07)),
                 Text("연습문제에 대한 설명 글입니다.", style: body2(grey07)),
                 const SizedBox(
                   height: 62,
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 130,
-                      width: 400,
-                      child: Wrap(
-                        spacing: 12,
-                        runSpacing: 16,
-                        children: List.generate(
-                            6,
-                            (index) => ElevatedButton(
-                                  style: ButtonStyle(
-                                    elevation: MaterialStateProperty.all(0),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: containedNum.contains(index)
-                                                ? selectedNum == index
-                                                    ? blue09
-                                                    : blue03
-                                                : grey01,
-                                            width: 2),
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
-                                      ),
-                                    ),
-                                    backgroundColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) {
-                                      if (states
-                                          .contains(MaterialState.hovered)) {
-                                        if (selectedNum == index) {
-                                          return blue09;
-                                        } else if (containedNum
-                                            .contains(index)) {
-                                          return greyBlue;
-                                        } else {
-                                          return grey01;
-                                        }
-                                        // Set the hover color here
-                                      } else {
-                                        return containedNum.contains(index)
-                                            ? selectedNum == index
-                                                ? blue09
-                                                : mainLightBlue
-                                            : grey01;
-                                      }
-                                    }),
-                                    fixedSize: MaterialStateProperty.all<Size>(
-                                        const Size(110, 44)),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      if (containedNum.contains(index)) {
-                                        selected = true;
-                                        selectedNum = index;
-                                      }
-                                    });
-                                  },
-                                  child: Text(
-                                    subjectKor[index],
-                                    style: button2(index == selectedNum
-                                        ? grey00
-                                        : containedNum.contains(index)
-                                            ? grey08
-                                            : grey04),
-                                  ),
-                                )),
-                      ),
-                    ),
-                    //년도 드랍다운 버튼
-                    const SizedBox(
-                      width: 89,
-                    ),
-                    Container(
-                      width: 180,
-                      height: 38,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: grey05),
-                      ),
-                      child: DropdownButton<String>(
-                        alignment: AlignmentDirectional.center,
-                        value: selectedYear,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedYear = newValue!;
-                          });
-                        },
-                        items: <String>[
-                          '',
-                          '2021',
-                          '2022',
-                          '2023'
-                        ] //TODO: 여기에 해당 과목 문제 있는 연도 리스트
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              "  $value년도",
-                              style: body2(
-                                  selectedYear == value ? mainBlack : grey05),
-                            ), //value에 년도 추가되어서 출력
-                          );
-                        }).toList(),
-                        isExpanded: true,
-                        underline: Container(),
-                        dropdownColor: Colors.white,
-                        elevation: 0,
-                      ),
-                    ),
-                    const SizedBox(width: 24),
-                    //차수 드랍다운 버튼
-                    Container(
-                      width: 180,
-                      height: 38,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: grey05),
-                      ),
-                      child: DropdownButton<String>(
-                        alignment: AlignmentDirectional.center,
-                        value: selectedRound,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedRound = newValue!;
-                          });
-                        },
-                        items: <String>[
-                          '',
-                          '1',
-                          '2',
-                        ] //TODO: 여기에 해당 과목 문제 있는 연도 리스트
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value == "" ? "  차수" : "  $value차",
-                              style: body2(
-                                  selectedRound == value ? mainBlack : grey05),
-                            ), //value에 년도 추가되어서 출력
-                          );
-                        }).toList(),
-                        isExpanded: true,
-                        underline: Container(),
-                        dropdownColor: Colors.white,
-                        elevation: 0,
-                      ),
-                    ),
-                  ],
-                ),
+                subjectAndYearSelect(),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -222,17 +74,15 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                     const Spacer(),
                     Text(
                       "Start",
-                      style: button2(selected ? blue09 : grey02),
+                      style: button2(canRoute ? blue09 : grey02),
                     ),
                     OutlinedButton(
                       onPressed: () {
-                        if (selectedNum != -1) {
-                          examStartDialog(context);
-                        }
+                        if (canRoute) examStartDialog(context);
                       },
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              selectedNum == -1 ? grey02 : blue09),
+                              canRoute ? blue09 : grey02),
                           side: MaterialStateProperty.all<BorderSide>(
                             const BorderSide(color: Colors.transparent),
                           ),
@@ -242,10 +92,8 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                           minimumSize: MaterialStateProperty.all<Size>(
                             const Size(96, 96),
                           ),
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                              Colors.white
-                              // selectedNum == -1 ? Colors.grey : Colors.black
-                              )),
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white)),
                       child: const Icon(
                         Icons.arrow_forward,
                         size: 44,
@@ -257,6 +105,165 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
             ),
           ),
         )),
+      ),
+    );
+  }
+
+  bool get canRoute => isSelectedSubject && isSelectedYear && isSelectedRound;
+
+  Row subjectAndYearSelect() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        subjectSelect(),
+        const SizedBox(width: 89),
+        yearSelect(),
+        const SizedBox(width: 24),
+        roundSelect(),
+      ],
+    );
+  }
+
+  Container roundSelect() {
+    return Container(
+      width: 180,
+      height: 38,
+      decoration: BoxDecoration(
+        border: Border.all(color: grey05),
+      ),
+      child: DropdownButton<String>(
+        alignment: AlignmentDirectional.center,
+        value: selectedRound,
+        onChanged: (String? newValue) {
+          setState(() {
+            selectedRound = newValue!;
+            if (selectedRound == '') {
+              isSelectedRound = false;
+            } else {
+              isSelectedRound = true;
+            }
+          });
+        },
+        items: <String>[
+          '',
+          '1',
+          '2',
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value == "" ? "  차수" : "  $value차",
+              style: body2(selectedRound == value ? mainBlack : grey05),
+            ),
+          );
+        }).toList(),
+        isExpanded: true,
+        underline: Container(),
+        dropdownColor: Colors.white,
+        elevation: 0,
+      ),
+    );
+  }
+
+  Container yearSelect() {
+    return Container(
+      width: 180,
+      height: 38,
+      decoration: BoxDecoration(
+        border: Border.all(color: grey05),
+      ),
+      child: DropdownButton<String>(
+        alignment: AlignmentDirectional.center,
+        value: selectedYear,
+        onChanged: (String? newValue) {
+          setState(() {
+            selectedYear = newValue!;
+            if (selectedYear == '') {
+              isSelectedYear = false;
+            } else {
+              isSelectedYear = true;
+            }
+          });
+        },
+        items: <String>['', '2021', '2022', '2023']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              "  $value년도",
+              style: body2(selectedYear == value ? mainBlack : grey05),
+            ),
+          );
+        }).toList(),
+        isExpanded: true,
+        underline: Container(),
+        dropdownColor: Colors.white,
+        elevation: 0,
+      ),
+    );
+  }
+
+  SizedBox subjectSelect() {
+    return SizedBox(
+      height: 130,
+      width: 400,
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 16,
+        children: List.generate(
+            6,
+            (index) => ElevatedButton(
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: containedNum.contains(index)
+                                ? selectedNum == index
+                                    ? blue09
+                                    : blue03
+                                : grey01,
+                            width: 2),
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                      if (states.contains(MaterialState.hovered)) {
+                        if (selectedNum == index) {
+                          return blue09;
+                        } else if (containedNum.contains(index)) {
+                          return greyBlue;
+                        } else {
+                          return grey01;
+                        }
+                      } else {
+                        return containedNum.contains(index)
+                            ? selectedNum == index
+                                ? blue09
+                                : mainLightBlue
+                            : grey01;
+                      }
+                    }),
+                    fixedSize:
+                        MaterialStateProperty.all<Size>(const Size(110, 44)),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (containedNum.contains(index)) {
+                        isSelectedSubject = true;
+                        selectedNum = index;
+                      }
+                    });
+                  },
+                  child: Text(
+                    subjectKor[index],
+                    style: button2(index == selectedNum
+                        ? grey00
+                        : containedNum.contains(index)
+                            ? grey08
+                            : grey04),
+                  ),
+                )),
       ),
     );
   }
@@ -305,7 +312,7 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                     elevation: MaterialStateProperty.all(0),
                     backgroundColor: MaterialStateProperty.all(mainSkyBlue),
                   ),
-                  onPressed: () {},
+                  onPressed: routeFullExam,
                   child: Text(
                     "시작하기",
                     style: button1(grey00),
@@ -314,5 +321,12 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
               ],
               actionsAlignment: MainAxisAlignment.center,
             ));
+  }
+
+  void routeFullExam() {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, '/fullExam',
+        arguments: FullExamArguments(
+            'High', "$selectedYear-$selectedRound", subject[selectedNum]));
   }
 }
