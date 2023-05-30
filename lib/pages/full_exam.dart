@@ -158,20 +158,19 @@ class _FullExamPageState extends State<FullExamPage> {
                 const Spacer(),
                 SizedBox(
                   width: 1200,
+                  height: 55,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(width: 350,),
                       answerButtons(),
-                      Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: _numberState == finalNumber - 1
-                        ? const SizedBox(width: 140)
-                        : nextButton(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: submitButton(),
-                      ),
+                      const SizedBox(width: 100,),
+                      _numberState == finalNumber - 1
+                      ? const SizedBox(width: 120)
+                      : nextButton(),
+                      const SizedBox(width: 10,),
+                      submitButton(),
                     ],
                   ),
                 ),
@@ -317,7 +316,7 @@ class _FullExamPageState extends State<FullExamPage> {
             ? MaterialStateColor.resolveWith((states) => grey02)
             : MaterialStateColor.resolveWith((states) => blue02),
         elevation: MaterialStateProperty.all(0),
-        fixedSize: MaterialStateProperty.all(const Size(140, 48)),
+        fixedSize: MaterialStateProperty.all(const Size(120, 44)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.0),
@@ -337,7 +336,7 @@ class _FullExamPageState extends State<FullExamPage> {
       style: ButtonStyle(
         backgroundColor: MaterialStateColor.resolveWith((states) => blue09),
         elevation: MaterialStateProperty.all(0),
-        fixedSize: MaterialStateProperty.all(const Size(140, 48)),
+        fixedSize: MaterialStateProperty.all(const Size(120, 44)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4.0),
