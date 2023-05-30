@@ -1,5 +1,5 @@
+import 'package:black_bean/class/grading_arguments.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 import '../textstyle.dart';
 import '../model/problem.dart';
@@ -20,7 +20,7 @@ class _FullExamPageState extends State<FullExamPage> {
   late List<int> _selectedNumbers;
 
   late Future<List<Problem>> _loadProblemsFuture;
-  late List<Problem> _problems;
+  late List<Problem> problems;
   List<String> majorSectionNames = [];
   int _selectedNumber = -1;
   int _numberState = 0;
@@ -59,110 +59,7 @@ class _FullExamPageState extends State<FullExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: remoteControl
-          ? Container(
-              color: grey00,
-              margin: const EdgeInsets.only(bottom: 100, right: 60),
-              child: ClipOval(
-                child: SizedBox(
-                  width: 56,
-                  height: 56,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        remoteControl = !remoteControl;
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      side: const BorderSide(width: 2.0, color: blue07),
-                      minimumSize: const Size(56, 56),
-                    ),
-                    child: const Icon(Icons.add),
-                  ),
-                ),
-              ),
-            )
-          : Container(
-              decoration: BoxDecoration(
-                color: grey00,
-                border: Border.all(color: blue04, width: 2),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              margin: const EdgeInsets.only(bottom: 100),
-              width: 280,
-              height: 270,
-              child: Column(children: [
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    const SizedBox(width: 40),
-                    Expanded(
-                      child: Text(
-                        "문제 리모콘",
-                        style: title3(grey09),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      hoverColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onPressed: () {
-                        setState(() {
-                          remoteControl = !remoteControl;
-                        });
-                      },
-                      alignment: Alignment.centerRight,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    )
-                  ],
-                ),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    child: GridView(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      children: List.generate(finalNumber, (index) {
-                        return Container(
-                          width: 38,
-                          height: 38,
-                          decoration: BoxDecoration(
-                            color: grey01,
-                            shape: BoxShape.circle,
-                            border: index == _numberState
-                                ? Border.all(color: mainSkyBlue, width: 2.0)
-                                : const Border(),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              onRCTap(index);
-                            },
-                            child: Center(
-                              child: Text(
-                                "${index + 1}",
-                                style: index == _numberState
-                                    ? body5(mainSkyBlue)
-                                    : body5(grey06),
-                                softWrap: false,
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                )
-              ]),
-            ),
+      floatingActionButton: remoteControl ? remoteButton() : remoteController(),
       appBar: AppBar(
         backgroundColor: grey00,
         centerTitle: true,
@@ -202,8 +99,8 @@ class _FullExamPageState extends State<FullExamPage> {
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
-                      _problems = snapshot.data!;
-                      var mSectionNumber = _problems[_numberState].mSection;
+                      problems = snapshot.data!;
+                      var mSectionNumber = problems[_numberState].mSection;
                       return Expanded(
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
@@ -216,16 +113,17 @@ class _FullExamPageState extends State<FullExamPage> {
                                 Column(
                                   children: [
                                     SizedBox(
-                                      width: 490,
+                                      width: 720,
                                       child: Text(
                                         "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
                                         style: body3(mainSkyBlue),
+                                        textAlign: TextAlign.start,
                                       ),
                                     ),
                                     SingleChildScrollView(
                                       child: SizedBox(
                                         child: Image.network(
-                                          _problems[_numberState].problem,
+                                          problems[_numberState].problem,
                                           loadingBuilder: (context, child,
                                               loadingProgress) {
                                             if (loadingProgress == null) {
@@ -261,29 +159,17 @@ class _FullExamPageState extends State<FullExamPage> {
                 SizedBox(
                   width: 1200,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const SizedBox(width: 320),
-                      Row(
-                        children: [
-                          SizedBox(width: spaceBetweenNumbers),
-                          numberButton('1', 1),
-                          SizedBox(width: spaceBetweenNumbers),
-                          numberButton('2', 2),
-                          SizedBox(width: spaceBetweenNumbers),
-                          numberButton('3', 3),
-                          SizedBox(width: spaceBetweenNumbers),
-                          numberButton('4', 4),
-                          SizedBox(width: spaceBetweenNumbers),
-                          const SizedBox(width: 110),
-                        ],
+                      answerButtons(),
+                      Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: _numberState == finalNumber - 1
+                        ? const SizedBox(width: 140)
+                        : nextButton(),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: nextButton(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        padding: const EdgeInsets.all(6),
                         child: submitButton(),
                       ),
                     ],
@@ -297,6 +183,127 @@ class _FullExamPageState extends State<FullExamPage> {
     );
   }
 
+  Container remoteController() {
+    return Container(
+      decoration: BoxDecoration(
+        color: grey00,
+        border: Border.all(color: blue04, width: 2),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      margin: const EdgeInsets.only(bottom: 100),
+      width: 280,
+      height: 270,
+      child: Column(children: [
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            const SizedBox(width: 40),
+            Expanded(
+              child: Text(
+                "문제 리모콘",
+                style: title3(grey09),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.clear),
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () {
+                setState(() {
+                  remoteControl = !remoteControl;
+                });
+              },
+              alignment: Alignment.centerRight,
+            ),
+            const SizedBox(
+              width: 10,
+            )
+          ],
+        ),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: GridView(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              children: List.generate(finalNumber, (index) {
+                return Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: grey01,
+                    shape: BoxShape.circle,
+                    border: index == _numberState
+                        ? Border.all(color: mainSkyBlue, width: 2.0)
+                        : const Border(),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      onRCTap(index);
+                    },
+                    child: Center(
+                      child: Text(
+                        "${index + 1}",
+                        style: index == _numberState
+                            ? body5(mainSkyBlue)
+                            : body5(grey06),
+                        softWrap: false,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+        )
+      ]),
+    );
+  }
+
+  Container remoteButton() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 100, right: 60),
+      child: SizedBox(
+        width: 56,
+        height: 56,
+        child: OutlinedButton(
+          onPressed: () {
+            setState(() {
+              remoteControl = !remoteControl;
+            });
+          },
+          style: OutlinedButton.styleFrom(
+            shape: const CircleBorder(),
+            side: const BorderSide(width: 2.0, color: blue07),
+            minimumSize: const Size(56, 56),
+          ),
+          child: const Icon(Icons.add),
+        ),
+      ),
+    );
+  }
+
+  Row answerButtons() {
+    return Row(
+      children: [
+        SizedBox(width: spaceBetweenNumbers),
+        numberButton('1', 1),
+        SizedBox(width: spaceBetweenNumbers),
+        numberButton('2', 2),
+        SizedBox(width: spaceBetweenNumbers),
+        numberButton('3', 3),
+        SizedBox(width: spaceBetweenNumbers),
+        numberButton('4', 4),
+        SizedBox(width: spaceBetweenNumbers),
+      ],
+    );
+  }
+
   void onRCTap(int index) {
     return setState(() {
       _numberState = index;
@@ -306,17 +313,22 @@ class _FullExamPageState extends State<FullExamPage> {
   ElevatedButton nextButton() {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateColor.resolveWith((states) => blue09),
+        backgroundColor: _selectedNumber == -1
+            ? MaterialStateColor.resolveWith((states) => grey02)
+            : MaterialStateColor.resolveWith((states) => blue02),
         elevation: MaterialStateProperty.all(0),
         fixedSize: MaterialStateProperty.all(const Size(140, 48)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0),
-          ),
+              borderRadius: BorderRadius.circular(4.0),
+              side: _selectedNumber == -1
+                  ? const BorderSide(color: Colors.transparent)
+                  : const BorderSide(width: 1.4, color: blue09)),
         ),
       ),
-      onPressed: submit,
-      child: Text('다음', style: button2(grey00)),
+      onPressed: goNext,
+      child: Text('다음',
+          style: _selectedNumber == -1 ? button2(grey00) : button2(blue09)),
     );
   }
 
@@ -345,7 +357,7 @@ class _FullExamPageState extends State<FullExamPage> {
         builder: (BuildContext context) => SubmitAlertDialog(
             notSolvedNumbers: notSolvedNumbers,
             corrects: corrects,
-            problems: _problems),
+            problems: problems),
       );
     });
   }
@@ -406,7 +418,7 @@ class _FullExamPageState extends State<FullExamPage> {
 
   List<int> checkanswers() {
     for (int i = 0; i < finalNumber; i++) {
-      if (_selectedNumbers[i] == _problems[i].answer) {
+      if (_selectedNumbers[i] == problems[i].answer) {
         corrects.add(1);
       } else {
         corrects.add(2);
@@ -427,11 +439,12 @@ class SubmitAlertDialog extends StatelessWidget {
     super.key,
     required this.notSolvedNumbers,
     required this.corrects,
-    required List<Problem> problems,
+    required this.problems,
   });
 
   final List<int> notSolvedNumbers;
   final List<int> corrects;
+  final List<Problem> problems;
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +487,8 @@ class SubmitAlertDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
-            Navigator.popAndPushNamed(context, '/fullExamGradingPage');
+            Navigator.popAndPushNamed(context, '/fullExamGradingPage',
+                arguments: GradingArguments(corrects, problems));
           },
           style: ElevatedButton.styleFrom(
             shape:
