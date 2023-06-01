@@ -349,7 +349,7 @@ class _FullExamPageState extends State<FullExamPage> {
             ? MaterialStateColor.resolveWith((states) => grey02)
             : MaterialStateColor.resolveWith((states) => blue02),
         elevation: MaterialStateProperty.all(0),
-        fixedSize: MaterialStateProperty.all(const Size(140, 48)),
+        fixedSize: MaterialStateProperty.all(const Size(120, 44)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.0),
@@ -369,7 +369,7 @@ class _FullExamPageState extends State<FullExamPage> {
       style: ButtonStyle(
         backgroundColor: MaterialStateColor.resolveWith((states) => blue09),
         elevation: MaterialStateProperty.all(0),
-        fixedSize: MaterialStateProperty.all(const Size(140, 48)),
+        fixedSize: MaterialStateProperty.all(const Size(120, 44)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4.0),
