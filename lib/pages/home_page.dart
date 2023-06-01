@@ -6,9 +6,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,18 +16,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children:  <Widget>[
-            const Text(
-              'Hello World!',
-            ),
-            //button that navigates to the image picker page
+          children: <Widget>[
             ElevatedButton(
-              onPressed: (){
-                Navigator.pushNamed(context, '/imageTestPage');
-              }
-              ,
-              child: const Text('image picker test'),
-            ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/selectUnitExamPage');
+                },
+                child: Text("Unit")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/selectFullExamPage');
+                },
+                child: Text("Full")),
           ],
         ),
       ),

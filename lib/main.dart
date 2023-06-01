@@ -1,8 +1,10 @@
 import 'package:black_bean/model/unit_exam_arguments.dart';
+import 'package:black_bean/pages/name_make.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'model/full_exam_arguments.dart';
 import 'pages/home_page.dart';
 import 'firebase_options.dart';
 import 'pages/select_full_exam_page.dart';
@@ -44,27 +46,38 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/wrongExam',
-
+        initialRoute: '/',
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
           '/testPage': (context) => const TestPage(),
-          '/fullExam': (context) => const FullExamPage(),
+          // '/fullExam': (context) => const FullExamPage(),
           '/fullExamGradingPage': (context) => const FullExamGradingPage(),
           '/selectFullExamPage': (context) => const SelectFullExamPage(),
           '/selectUnitExamPage': (context) => const SelectUnitExamPage(),
           // '/unitExam': (context) => UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
           '/wrongExam': (context) => const WrongExamPage(),
+          '/nameMake': (context) => NameMakePage(),
+
         },
         // ignore: body_might_complete_normally_nullable
         onGenerateRoute: ((settings) {
           if (settings.name == '/unitExam') {
             final args = settings.arguments as UnitExamArguments;
             return MaterialPageRoute(builder: (context) {
-              return UnitExamPage(arguments: args,);
+              return UnitExamPage(
+                arguments: args,
+              );
             });
+          }
+          if (settings.name == '/fullExam') {
+            final args = settings.arguments as FullExamArguments;
+            return MaterialPageRoute(builder: ((context) {
+              return FullExamPage(
+                arguments: args,
+              );
+            }));
           }
         }),
       ),

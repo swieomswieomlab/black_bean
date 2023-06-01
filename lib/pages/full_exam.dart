@@ -1,13 +1,15 @@
 import 'package:black_bean/class/grading_arguments.dart';
 import 'package:flutter/material.dart';
 
+import '../model/full_exam_arguments.dart';
 import '../textstyle.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';
 
 class FullExamPage extends StatefulWidget {
-  const FullExamPage({Key? key}) : super(key: key);
+  const FullExamPage({Key? key, required this.arguments}) : super(key: key);
+  final FullExamArguments arguments;
 
   @override
   State<FullExamPage> createState() => _FullExamPageState();
@@ -29,25 +31,28 @@ class _FullExamPageState extends State<FullExamPage> {
 
   List<int> corrects = [];
 
-  String testDegree = 'High';
-  String testSubject = 'Math';
-  String testYear = '2099-1';
-
   @override
   void initState() {
     super.initState();
+    var args = widget.arguments;
+    loadFromFireStore(args);
+  }
 
+  void loadFromFireStore(FullExamArguments args) async {
     _loadProblemsFuture = _firebaseService
-        .loadProblemYearFromDatabase(testDegree, testSubject, testYear)
-        .then((loadedProblems) {
+        .loadProblemYearFromDatabase(args.degree, args.subject, args.year)
+        .then((loadedProblems) async {
       loadedProblems.sort((a, b) => a.number.compareTo(b.number));
       finalNumber = loadedProblems.length;
       _selectedNumbers = List.generate(finalNumber, (index) => -1);
+      await loadMajorSectionNames(args);
       return loadedProblems;
     });
+  }
 
-    _firebaseService
-        .loadMajorSectionNameFromDatabase(testDegree, testSubject)
+  Future<void> loadMajorSectionNames(FullExamArguments args) async {
+    return _firebaseService
+        .loadMajorSectionNameFromDatabase(args.degree, args.subject)
         .then((loadedNames) {
       loadedNames.sort((a, b) => a.sectionNumber.compareTo(b.sectionNumber));
       for (var element in loadedNames) {
@@ -58,79 +63,84 @@ class _FullExamPageState extends State<FullExamPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: remoteControl ? remoteButton() : remoteController(),
-      appBar: AppBar(
-        backgroundColor: grey00,
-        centerTitle: true,
-        title: Text(
-          "${yearToKorean(testYear)} | ${subjectToKorean(testSubject)}",
-          style: title3(mainBlack),
-        ),
-      ),
-      backgroundColor: grey00,
-      body: Stack(
-        children: [
-          Positioned(
-            bottom: 0,
-            child: Container(
-              height: 70,
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.black,
-                    width: 1.0,
-                  ),
+    return FutureBuilder<List<Problem>>(
+      future: _loadProblemsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: Text(
+                "Loading...",
+                style: title3(mainBlack),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            body: const Center(
+              child:
+                  CircularProgressIndicator(), // show progress indicator while loading
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          problems = snapshot.data!;
+          if (problems.isEmpty) {
+            return noProblemPage(context);
+          } else {
+            var mSectionNumber = problems[_numberState].mSection;
+            return Scaffold(
+              floatingActionButton:
+                  remoteControl ? remoteButton() : remoteController(),
+              appBar: AppBar(
+                backgroundColor: grey00,
+                centerTitle: true,
+                title: Text(
+                  "${yearToKorean(widget.arguments.year)} | ${subjectToKorean(widget.arguments.subject)}",
+                  style: title3(mainBlack),
                 ),
               ),
-              padding: const EdgeInsets.only(bottom: 20, top: 20),
-            ),
-          ),
-          Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 36),
-                FutureBuilder<List<Problem>>(
-                  future: _loadProblemsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      problems = snapshot.data!;
-                      var mSectionNumber = problems[_numberState].mSection;
-                      return Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 40),
-                            width: 1200,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      width: 720,
-                                      child: Text(
-                                        "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
-                                        style: body3(mainSkyBlue),
-                                        textAlign: TextAlign.start,
-                                      ),
+              backgroundColor: grey00,
+              body: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 36),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          margin:
+                              const EdgeInsets.symmetric(horizontal: 40),
+                          width: 1200,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 720,
+                                    child: Text(
+                                      "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
+                                      style: body3(mainSkyBlue),
+                                      textAlign: TextAlign.start,
                                     ),
-                                    SingleChildScrollView(
+                                  ),
+                                  Expanded(
+                                    child: SingleChildScrollView(
                                       child: SizedBox(
                                         child: Image.network(
                                           problems[_numberState].problem,
+                                          fit: BoxFit.fitWidth,
                                           loadingBuilder: (context, child,
                                               loadingProgress) {
                                             if (loadingProgress == null) {
                                               return child;
                                             }
                                             return Center(
-                                              child: CircularProgressIndicator(
+                                              child:
+                                                  CircularProgressIndicator(
                                                 value: loadingProgress
                                                             .expectedTotalBytes !=
                                                         null
@@ -145,45 +155,62 @@ class _FullExamPageState extends State<FullExamPage> {
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    }
-                  },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 1200,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          answerButtons(),
+                          Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: _numberState == finalNumber - 1
+                                ? const SizedBox(width: 140)
+                                : nextButton(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: submitButton(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                SizedBox(
-                  width: 1200,
-                  height: 55,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        width: 350,
-                      ),
-                      answerButtons(),
-                      const SizedBox(
-                        width: 100,
-                      ),
-                      _numberState == finalNumber - 1
-                          ? const SizedBox(width: 120)
-                          : nextButton(),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      submitButton(),
-                    ],
-                  ),
-                ),
-              ],
+              ),
+            );
+          }
+        }
+      },
+    );
+  }
+
+  Scaffold noProblemPage(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            Text(
+              "해당 회차에 문제가 없습니다.",
+              style: Headline_H0(32, mainBlack),
             ),
-          ),
-        ],
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "돌아가기",
+                  style: Headline_H0(24, mainBlack),
+                ))
+          ],
+        ),
       ),
     );
   }
