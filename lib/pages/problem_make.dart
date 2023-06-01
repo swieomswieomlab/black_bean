@@ -39,12 +39,29 @@ class ProblemMakeWidget extends StatefulWidget {
 }
 
 List<String> degree = ['High', 'Middle'];
-List<String> subject = ['Math', 'Korean','English','Social','Science','History','Ethics'];
-List<String> year = ['2020-1','2020-2','2021-1','2021-2','2022-1', '2022-2', '2023-1','2099-1'];
+List<String> subject = [
+  'Math',
+  'Korean',
+  'English',
+  'Social',
+  'Science',
+  'History',
+  'Ethics'
+];
+List<String> year = [
+  '2020-1',
+  '2020-2',
+  '2021-1',
+  '2021-2',
+  '2022-1',
+  '2022-2',
+  '2023-1',
+  '2099-1'
+];
 List<String> number = List.generate(26, (i) => (i + 1).toString());
 List<String> majorSection = List.generate(9, (i) => (i + 1).toString());
 List<String> interSection = List.generate(9, (i) => (i + 1).toString());
-List<String> subSection = List.generate(9, (i) => (i + 1).toString());
+List<String> smallSection = List.generate(15, (i) => (i + 1).toString());
 List<String> answer = List.generate(4, (i) => (i + 1).toString());
 
 class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
@@ -54,7 +71,7 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
   String? numberDropdownValue = number.first;
   String? majorSectionDropdownValue = majorSection.first;
   String? interSectionDropdownValue = interSection.first;
-  String? subSectionDropdownValue = subSection.first;
+  String? subSectionDropdownValue = smallSection.first;
   String? answerDropdownValue = answer.first;
   String imgUrl = ""; //이미지 url 저장
   XFile? _image;
@@ -94,7 +111,7 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
             width: MediaQuery.of(context).size.width - 200,
             height: MediaQuery.of(context).size.height - 240,
             child: Center(
-                child: imgUrl.isNotEmpty
+              child: imgUrl.isNotEmpty
                   ? Image.network(imgUrl)
                   : const Text("No image selected"),
             ),
@@ -111,11 +128,17 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
                   (value) => yearDropdownValue = value),
               customDropdownButton(number, "번호", numberDropdownValue,
                   (value) => numberDropdownValue = value),
-              customDropdownButton(majorSection, "대단원", majorSectionDropdownValue,
+              customDropdownButton(
+                  majorSection,
+                  "대단원",
+                  majorSectionDropdownValue,
                   (value) => majorSectionDropdownValue = value),
-              customDropdownButton(interSection, "중단원", interSectionDropdownValue,
+              customDropdownButton(
+                  interSection,
+                  "중단원",
+                  interSectionDropdownValue,
                   (value) => interSectionDropdownValue = value),
-              customDropdownButton(subSection, "소단원", subSectionDropdownValue,
+              customDropdownButton(smallSection, "소단원", subSectionDropdownValue,
                   (value) => subSectionDropdownValue = value),
               customDropdownButton(answer, "정답", answerDropdownValue,
                   (value) => answerDropdownValue = value),
@@ -123,16 +146,21 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
           ),
         ),
         ElevatedButton(
-            onPressed: () {
-              submitProblem(context);
-            },
-            child: Text("Submit",style: Headline_H0(32, mainBlack),),
-            ),
+          onPressed: () {
+            submitProblem(context);
+          },
+          child: Text(
+            "Submit",
+            style: Headline_H0(32, mainBlack),
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Container(
-            decoration: BoxDecoration(border: Border.all(color: Colors.black87)),
-            child: const Text('중단원이 없는 경우는 1로 해주세요.'),),
+            decoration:
+                BoxDecoration(border: Border.all(color: Colors.black87)),
+            child: const Text('중단원이 없는 경우는 1로 해주세요.'),
+          ),
         ),
       ],
     );
