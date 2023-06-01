@@ -1,4 +1,5 @@
 import 'package:black_bean/model/unit_exam_arguments.dart';
+import 'package:black_bean/pages/name_make.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/',
+        initialRoute: '/nameMake',
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
           '/selectUnitExamPage': (context) => const SelectUnitExamPage(),
           // '/unitExam': (context) => UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
+          '/nameMake': (context) => NameMakePage(),
         },
         // ignore: body_might_complete_normally_nullable
         onGenerateRoute: ((settings) {
