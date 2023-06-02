@@ -18,16 +18,67 @@ class ProblemMake extends StatefulWidget {
 }
 
 class _ProblemMakeState extends State<ProblemMake> {
+  final String password = "jayu2004";
+  bool passed = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
+        body: passed
+            ? SingleChildScrollView(
+                child: Column(
+                  children: const [
+                    ProblemMakeWidget(),
+                  ],
+                ),
+              )
+            : BlockPage(
+              onPasswordEntered: (enteredPassword) {
+                if (enteredPassword == password) {
+                  setState(() {
+                    passed = true;
+                  });
+                }
+              },
+            ));
+  }
+}
+
+class BlockPage extends StatefulWidget {
+  const BlockPage({Key? key, required this.onPasswordEntered})
+      : super(key: key);
+
+  final Function(String) onPasswordEntered;
+
+  @override
+  State<BlockPage> createState() => _BlockPageState();
+}
+
+class _BlockPageState extends State<BlockPage> {
+  final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
       child: Column(
-        children: const [
-          ProblemMakeWidget(),
+        children: [
+          TextField(
+            controller: _textEditingController,
+          ),
+          ElevatedButton(
+              onPressed: () {
+                String enteredPassword = _textEditingController.text;
+                widget.onPasswordEntered(enteredPassword);
+              },
+              child: const Text("Submit"))
         ],
       ),
-    ));
+    );
   }
 }
 
