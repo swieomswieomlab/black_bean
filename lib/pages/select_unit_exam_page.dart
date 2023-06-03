@@ -27,8 +27,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
   //과목 목록 한국어
   List<String> subjectKor = ["국어", "수학", "영어", "사회", "과학", "한국사"];
   //구현된 과목 번호
-  List<int> containedNum = [1];
-  bool selected = false;
+  bool selectedSubject = false;
   int selectedNum = -1;
   String selectedYear = '';
   String selectedRound = '';
@@ -54,7 +53,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("모의고사", style: brand(grey09)),
+                Text("연습문제", style: brand(grey09)),
                 const SizedBox(
                   height: 24,
                 ),
@@ -102,7 +101,9 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                     const Spacer(),
                     Text(
                       "Start",
-                      style: button2(selected ? blue09 : grey02),
+                      style: button2(selectedSubject && selectedUnitNum != -1
+                          ? blue09
+                          : grey02),
                     ),
                     startButton(context)
                   ],
@@ -124,7 +125,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
       },
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(
-              selectedNum == -1 ? grey02 : blue09),
+              selectedNum != -1 && selectedUnitNum != -1 ? blue09 : grey02),
           side: MaterialStateProperty.all<BorderSide>(
             const BorderSide(color: Colors.transparent),
           ),
@@ -159,11 +160,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   side: BorderSide(
-                    color: containedNum.contains(index)
-                        ? selectedNum == index
-                            ? blue09
-                            : blue03
-                        : grey01,
+                    color: selectedNum == index ? blue09 : blue03,
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(4.0),
@@ -174,34 +171,32 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
               fixedSize: MaterialStateProperty.all<Size>(const Size(110, 44)),
             ),
             onPressed: () async {
-              if (containedNum.contains(index)) {
-                setState(() {
-                  selected = true;
-                  selectedNum = index;
-                  selectedUnitNum = -1;
-                  unitList.clear();
-                });
+              setState(() {
+                selectedNum = index;
+                selectedSubject = true;
+                selectedUnitNum = -1;
+                unitList.clear();
+              });
 
-                // Load the unit list from Firebase
-                unitList = await _firebaseService
-                    .loadMajorSectionNameFromDatabase(
-                  'High',
-                  subjectList[index],
-                )
-                    .then((value) {
-                  List<String> tmp = [];
-                  int ind = 1;
-                  for (var element in value) {
-                    tmp.add("$ind단원 ${element.name}");
-                    ind += 1;
-                  }
-                  return tmp;
-                });
+              // Load the unit list from Firebase
+              unitList = await _firebaseService
+                  .loadMajorSectionNameFromDatabase(
+                'High',
+                subjectList[index],
+              )
+                  .then((value) {
+                List<String> tmp = [];
+                int ind = 1;
+                for (var element in value) {
+                  tmp.add("$ind단원 ${element.name}");
+                  ind += 1;
+                }
+                return tmp;
+              });
 
-                setState(() {
-                  // Update the state to reflect the loaded unit list
-                });
-              }
+              setState(() {
+                // Update the state to reflect the loaded unit list
+              });
             },
             child: Text(
               subjectKor[index],
@@ -216,26 +211,22 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
   Color getColor(int index) {
     if (selectedNum == index) {
       return blue09;
-    } else if (containedNum.contains(index)) {
-      return greyBlue;
     } else {
-      return grey01;
+      return greyBlue;
     }
   }
 
   Color getButtonTextStyle(int index) {
     if (index == selectedNum) {
       return grey00;
-    } else if (containedNum.contains(index)) {
-      return grey08;
     } else {
-      return grey04;
+      return grey08;
     }
   }
 
   Visibility selectUnitSection() {
     return Visibility(
-      visible: selected,
+      visible: selectedSubject,
       child: SizedBox(
         height: 200,
         width: 400,
@@ -291,9 +282,9 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
         context: context,
         builder: (BuildContext context) => AlertDialog(
               titlePadding: const EdgeInsets.only(top: 60),
-              title: Text("${subjectKor[selectedNum]} 모의고사를 시작할까요?",
+              title: Text("${subjectKor[selectedNum]} 연습문제를 시작할까요?",
                   style: title1(mainBlack), textAlign: TextAlign.center),
-              content: Text("시작하기를 누르면 모의고사 문제가 시작돼요.",
+              content: Text("시작하기를 누르면 ${selectedUnitNum+1}단원 연습문제가 시작돼요.",
                   style: body1(grey08), textAlign: TextAlign.center),
               shape:
                   const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -333,8 +324,8 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/unitExam',
-                        arguments: UnitExamArguments(
-                            'High', subjectList[selectedNum], selectedUnitNum+1));
+                        arguments: UnitExamArguments('High',
+                            subjectList[selectedNum], selectedUnitNum + 1));
                   },
                   child: Text(
                     "시작하기",
