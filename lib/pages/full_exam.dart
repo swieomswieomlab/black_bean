@@ -169,6 +169,7 @@ class _FullExamPageState extends State<FullExamPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           answerButtons(),
+                          const SizedBox(width: 120,),
                           Padding(
                             padding: const EdgeInsets.all(6),
                             child: _numberState == finalNumber - 1

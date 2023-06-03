@@ -21,8 +21,6 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
   ];
 
   List<String> subjectKor = ["국어", "수학", "영어", "사회", "과학", "한국사"];
-
-  List<int> containedNum = [1];
   bool isSelectedSubject = false;
   bool isSelectedYear = false;
   bool isSelectedRound = false;
@@ -218,11 +216,7 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         side: BorderSide(
-                            color: containedNum.contains(index)
-                                ? selectedNum == index
-                                    ? blue09
-                                    : blue03
-                                : grey01,
+                            color: selectedNum == index ? blue09 : blue03,
                             width: 2),
                         borderRadius: BorderRadius.circular(4.0),
                       ),
@@ -231,17 +225,11 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                       if (states.contains(MaterialState.hovered)) {
                         if (selectedNum == index) {
                           return blue09;
-                        } else if (containedNum.contains(index)) {
-                          return greyBlue;
                         } else {
-                          return grey01;
+                          return greyBlue;
                         }
                       } else {
-                        return containedNum.contains(index)
-                            ? selectedNum == index
-                                ? blue09
-                                : mainLightBlue
-                            : grey01;
+                        return selectedNum == index ? blue09 : mainLightBlue;
                       }
                     }),
                     fixedSize:
@@ -249,19 +237,13 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                   ),
                   onPressed: () {
                     setState(() {
-                      if (containedNum.contains(index)) {
-                        isSelectedSubject = true;
-                        selectedNum = index;
-                      }
+                      isSelectedSubject = true;
+                      selectedNum = index;
                     });
                   },
                   child: Text(
                     subjectKor[index],
-                    style: button2(index == selectedNum
-                        ? grey00
-                        : containedNum.contains(index)
-                            ? grey08
-                            : grey04),
+                    style: button2(index == selectedNum ? grey00 : grey08),
                   ),
                 )),
       ),
