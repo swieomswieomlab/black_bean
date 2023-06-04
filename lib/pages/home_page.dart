@@ -27,6 +27,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.pushNamed(context, '/selectFullExamPage');
                 },
                 child: Text("Full")),
+                ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/landing');
+                },
+                child: Text("landing")),
           ],
         ),
       ),

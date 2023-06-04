@@ -1,4 +1,5 @@
 import 'package:black_bean/model/unit_exam_arguments.dart';
+import 'package:black_bean/pages/landing_page.dart';
 import 'package:black_bean/pages/name_make.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
           '/wrongExam': (context) => const WrongExamPage(),
           '/nameMake': (context) => NameMakePage(),
+          '/landing': (context) => const LandingPage(),
 
         },
         // ignore: body_might_complete_normally_nullable
