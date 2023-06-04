@@ -15,10 +15,9 @@ class LandingPage extends StatelessWidget {
           width: max(1300, MediaQuery.of(context).size.width),
           height: max(650, MediaQuery.of(context).size.height),
           color: blue09,
-          child: Column(children: [
-            SizedBox(height: 250),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text("검정고시 시험이 쉬워지는 공부 습관", style: title1(yellow04)),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Image.asset("assets/images/shiumshium.png"),
           ]),
         ),
@@ -26,24 +25,24 @@ class LandingPage extends StatelessWidget {
           width: max(1300, MediaQuery.of(context).size.width),
           height: max(650, MediaQuery.of(context).size.height),
           color: grey00,
-          child: Column(children: [
-            SizedBox(height: 230),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text("쉬엄쉬엄 조금씩 공부하다 보면", style: title1(grey09)),
+            const SizedBox(height: 34),
             Text("어느새 검정고시가 쉬워질 거에요", style: title1(grey09)),
-            SizedBox(height: 122),
+            const SizedBox(height: 122),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
                   children: [
                     Text("한 단원씩 골라 풀고 싶다면", style: title2(blue08)),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     OutlinedButton(
                       style: ButtonStyle(
-                        fixedSize:
-                            MaterialStateProperty.all<Size>(Size(250, 72)),
+                        fixedSize: MaterialStateProperty.all<Size>(
+                            const Size(250, 72)),
                         side: MaterialStateProperty.all<BorderSide>(
-                          BorderSide(
+                          const BorderSide(
                             color: blue09,
                             width: 5,
                           ),
@@ -62,25 +61,29 @@ class LandingPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("연습문제", style: title1(grey09)),
-                            SizedBox(width: 10),
-                            Icon(Icons.arrow_outward_outlined, color: grey09, size: 34,),
+                            const SizedBox(width: 10),
+                            const Icon(
+                              Icons.arrow_outward_outlined,
+                              color: grey09,
+                              size: 34,
+                            ),
                           ],
                         ),
                       ),
                     )
                   ],
                 ),
-                SizedBox(width: 56),
+                const SizedBox(width: 56),
                 Column(
                   children: [
                     Text("실제 시험처럼 풀고 싶다면", style: title2(blue08)),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     OutlinedButton(
                       style: ButtonStyle(
-                        fixedSize:
-                            MaterialStateProperty.all<Size>(Size(250, 72)),
+                        fixedSize: MaterialStateProperty.all<Size>(
+                            const Size(250, 72)),
                         side: MaterialStateProperty.all<BorderSide>(
-                          BorderSide(
+                          const BorderSide(
                             color: blue09,
                             width: 5,
                           ),
@@ -99,8 +102,12 @@ class LandingPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("모의고사", style: title1(grey09)),
-                            SizedBox(width: 10),
-                            Icon(Icons.arrow_outward_outlined, color: grey09, size: 34,),
+                            const SizedBox(width: 10),
+                            const Icon(
+                              Icons.arrow_outward_outlined,
+                              color: grey09,
+                              size: 34,
+                            ),
                           ],
                         ),
                       ),
