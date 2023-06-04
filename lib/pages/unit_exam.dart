@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../model/unit_exam_arguments.dart';
 import '../textstyle.dart';
@@ -18,7 +19,9 @@ class UnitExamPage extends StatefulWidget {
   State<UnitExamPage> createState() => _UnitExamPageState();
 }
 
-class _UnitExamPageState extends State<UnitExamPage> {
+class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMixin {
+  late final AnimationController lottieController;
+
   final FirebaseService _firebaseService = FirebaseService();
   final double spaceBetweenNumbers = 48;
   //0 for init, 1 for correct, 2 for wrong
@@ -40,8 +43,11 @@ class _UnitExamPageState extends State<UnitExamPage> {
   @override
   void initState() {
     super.initState();
+    
     var args = widget.arguments;
     loadProblems(args);
+    lottieController = AnimationController(vsync: this);
+    lottieController.duration = const Duration(milliseconds: 1000);
   }
 
   void loadProblems(UnitExamArguments args) async {
@@ -189,7 +195,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                             child: Column(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.only(left: 220),
+                                  width: 480,
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     yearToKorean(_problems[_numberState].year),
@@ -201,26 +207,47 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                       MediaQuery.of(context).size.height - 200,
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
-                                    child: Image.network(
-                                      _problems[_numberState].problem,
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                                : null,
+                                    child: Stack(
+                                      children: [
+                                        SizedBox(
+                                          width: 480,
+                                          child: Image.network(
+                                            _problems[_numberState].problem,
+                                            loadingBuilder:
+                                                (context, child, loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return Center(
+                                                child: CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
+                                        ),
+                                        Visibility(
+                                          visible:
+                                              answerType != AnswerType.basic,
+                                          child: SizedBox(
+                                            width: 100,
+                                            child: Lottie.asset(
+                                              answerType == AnswerType.correct
+                                                  ? 'assets/circleLottie.json' //맞췄을 때
+                                                  : 'assets/circleLottie.json', //틀렸을 때
+                                              controller: lottieController,
+                                              repeat: false,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -333,6 +360,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
           ),
         ),
         onPressed: () {
+
           if (_selectedNumber != -1) {
             // 뭔가 선택했을 때
             setState(() {
@@ -344,10 +372,16 @@ class _UnitExamPageState extends State<UnitExamPage> {
                   corrects[_numberState] = 1; // correct
                   answerType = AnswerType.correct;
                   isCorrect = true;
+                   Future.delayed(Duration(milliseconds: 100)).then((value) => lottieController
+                    ..reset()
+                    ..forward()) ;
                 } else {
                   //정답 못 맞춘 경우 wrong
                   corrects[_numberState] = 2; // wrong
                   answerType = AnswerType.wrong;
+                  Future.delayed(Duration(milliseconds: 100)).then((value) => lottieController
+                    ..reset()
+                    ..forward()) ;
                 }
               } else {
                 //정답 맞춘 후 '다음' 버튼으로 바뀌고 다음 문제로 넘어가는 부분
