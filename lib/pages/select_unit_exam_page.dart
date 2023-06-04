@@ -266,10 +266,12 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                         selectedUnitNum = index;
                       });
                     },
-                    child: Text(
-                      unitList[index],
-                      style:
-                          button2(index == selectedUnitNum ? grey09 : grey08),
+                    child: FittedBox(
+                      child: Text(
+                        unitList[index],
+                        style:
+                            button2(index == selectedUnitNum ? grey09 : grey08),
+                      ),
                     ),
                   )),
         ),
