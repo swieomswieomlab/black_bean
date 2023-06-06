@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:black_bean/textstyle.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -10,32 +11,32 @@ import 'package:image_picker/image_picker.dart';
 import '../model/problem.dart';
 import '../service/firebase_service.dart';
 
-class ProblemMake extends StatefulWidget {
-  const ProblemMake({super.key});
+class ImageChange extends StatefulWidget {
+  const ImageChange({super.key});
 
   @override
-  State<ProblemMake> createState() => _ProblemMakeState();
+  State<ImageChange> createState() => _ImageChangeState();
 }
 
-class _ProblemMakeState extends State<ProblemMake> {
+class _ImageChangeState extends State<ImageChange> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
         children: const [
-          ProblemMakeWidget(),
+          ImageMakeWidget(),
         ],
       ),
     ));
   }
 }
 
-class ProblemMakeWidget extends StatefulWidget {
-  const ProblemMakeWidget({super.key});
+class ImageMakeWidget extends StatefulWidget {
+  const ImageMakeWidget({super.key});
 
   @override
-  State<ProblemMakeWidget> createState() => _ProblemMakeWidgetState();
+  State<ImageMakeWidget> createState() => _ImageMakeWidgetState();
 }
 
 List<String> degree = ['High', 'Middle'];
@@ -59,20 +60,20 @@ List<String> year = [
   '2099-1'
 ];
 List<String> number = List.generate(26, (i) => (i + 1).toString());
-List<String> majorSection = List.generate(9, (i) => (i + 1).toString());
-List<String> interSection = List.generate(9, (i) => (i + 1).toString());
-List<String> smallSection = List.generate(15, (i) => (i + 1).toString());
-List<String> answer = List.generate(4, (i) => (i + 1).toString());
+// List<String> majorSection = List.generate(9, (i) => (i + 1).toString());
+// List<String> interSection = List.generate(9, (i) => (i + 1).toString());
+// List<String> smallSection = List.generate(15, (i) => (i + 1).toString());
+// List<String> answer = List.generate(4, (i) => (i + 1).toString());
 
-class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
+class _ImageMakeWidgetState extends State<ImageMakeWidget> {
   String? degreeDropdownValue = degree.first;
   String? subjectDropdownValue = subject.first;
   String? yearDropdownValue = year.first;
   String? numberDropdownValue = number.first;
-  String? majorSectionDropdownValue = majorSection.first;
-  String? interSectionDropdownValue = interSection.first;
-  String? subSectionDropdownValue = smallSection.first;
-  String? answerDropdownValue = answer.first;
+  // String? majorSectionDropdownValue = majorSection.first;
+  // String? interSectionDropdownValue = interSection.first;
+  // String? subSectionDropdownValue = smallSection.first;
+  // String? answerDropdownValue = answer.first;
   String imgUrl = ""; //이미지 url 저장
   XFile? _image;
   var url = '';
@@ -88,12 +89,12 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
           _image = image;
         });
         imgUrl = _image!.path;
-        print("problem_make.dart line 69: imgUrl : $imgUrl");
+        print("image_change.dart line 69: imgUrl : $imgUrl");
       } else {
-        print("problem_make.dart line 71:No image is selected.");
+        print("image_change.dart line 71:No image is selected.");
       }
     } catch (e) {
-      print("problem_make.dart line 74: Error while picking file!");
+      print("image_change.dart line 74: Error while picking file!");
     }
   }
 
@@ -128,26 +129,12 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
                   (value) => yearDropdownValue = value),
               customDropdownButton(number, "번호", numberDropdownValue,
                   (value) => numberDropdownValue = value),
-              customDropdownButton(
-                  majorSection,
-                  "대단원",
-                  majorSectionDropdownValue,
-                  (value) => majorSectionDropdownValue = value),
-              customDropdownButton(
-                  interSection,
-                  "중단원",
-                  interSectionDropdownValue,
-                  (value) => interSectionDropdownValue = value),
-              customDropdownButton(smallSection, "소단원", subSectionDropdownValue,
-                  (value) => subSectionDropdownValue = value),
-              customDropdownButton(answer, "정답", answerDropdownValue,
-                  (value) => answerDropdownValue = value),
             ],
           ),
         ),
         ElevatedButton(
           onPressed: () {
-            submitProblem(context);
+            submitImage(context);
           },
           child: Text(
             "Submit",
@@ -159,14 +146,14 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
           child: Container(
             decoration:
                 BoxDecoration(border: Border.all(color: Colors.black87)),
-            child: const Text('중단원이 없는 경우는 1로 해주세요.'),
+            child: const Text('쉽지않다쉽지않다'),
           ),
         ),
       ],
     );
   }
 
-  Future<Problem> submitProblem(BuildContext context) async {
+  Future<void> submitImage(BuildContext context) async {
     String imageName =
         "${subjectDropdownValue}_${yearDropdownValue!}_${int.parse(numberDropdownValue!)}.jpg";
     await _firebaseService
@@ -175,20 +162,28 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
               imgUrl = value;
             }));
 //upload to firebase
-    Problem problem = Problem(
-        answer: int.parse(answerDropdownValue!),
-        iSection: int.parse(interSectionDropdownValue!),
-        mSection: int.parse(majorSectionDropdownValue!),
-        number: int.parse(numberDropdownValue!),
-        problem: imgUrl,
-        sSection: int.parse(subSectionDropdownValue!),
-        year: yearDropdownValue!);
+    // Problem problem = Problem(
+    //     answer: int.parse(answerDropdownValue!),
+    //     iSection: int.parse(interSectionDropdownValue!),
+    //     mSection: int.parse(majorSectionDropdownValue!),
+    //     number: int.parse(numberDropdownValue!),
+    //     problem: imgUrl,
+    //     sSection: int.parse(subSectionDropdownValue!),
+    //     year: yearDropdownValue!);
 
+    DocumentSnapshot documentSnapshot =
+        await _firebaseService.getInstanceFromProblem(
+            degreeDropdownValue!,
+            subjectDropdownValue!,
+            yearDropdownValue!,
+            int.parse(numberDropdownValue!));
+
+    documentSnapshot.reference.update({'problem': imgUrl});
     //assert _image is not null
     //upload to storage?
 
-    await _firebaseService.addProblemToDatabase(
-        degreeDropdownValue!, subjectDropdownValue!, problem);
+    // await _firebaseService.addProblemToDatabase(
+    //     degreeDropdownValue!, subjectDropdownValue!, problem);
 
     await showDialog(
         context: context,
@@ -212,7 +207,7 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
     //드롭다운 밸류는?
     numberDropdownValue = (int.parse(numberDropdownValue!) + 1).toString();
 
-    return problem;
+    // return problem;
   }
 
   Widget customDropdownButton(List<dynamic> items, String des, String? value,

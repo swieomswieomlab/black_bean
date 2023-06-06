@@ -1,4 +1,5 @@
 import 'package:black_bean/model/unit_exam_arguments.dart';
+import 'package:black_bean/pages/image_change.dart';
 import 'package:black_bean/pages/landing_page.dart';
 import 'package:black_bean/pages/name_make.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/',
+        initialRoute: '/imageChange',
         routes: {
           '/': (context) => const MyHomePage(),
           '/problemMake': (context) => const ProblemMake(),
@@ -61,6 +62,10 @@ class MyApp extends StatelessWidget {
           '/wrongExam': (context) => const WrongExamPage(),
           '/nameMake': (context) => NameMakePage(),
           '/landing': (context) => const LandingPage(),
+
+
+          // TO DELETE
+          '/imageChange' : (context) =>  const ImageChange(),
 
         },
         // ignore: body_might_complete_normally_nullable
