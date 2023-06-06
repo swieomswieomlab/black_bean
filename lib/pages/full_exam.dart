@@ -30,6 +30,7 @@ class _FullExamPageState extends State<FullExamPage> {
   late int finalNumber = 99;
   bool remoteControl = true;
   double imageWidth = 480;
+  bool speechBubble = false;
 
   List<int> corrects = [];
 
@@ -38,6 +39,15 @@ class _FullExamPageState extends State<FullExamPage> {
     super.initState();
     var args = widget.arguments;
     loadFromFireStore(args);
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        speechBubble = true;
+      });
+    }).then((value) => Future.delayed(const Duration(seconds: 5), () {
+          setState(() {
+            speechBubble = false;
+          });
+        }));
   }
 
   void loadFromFireStore(FullExamArguments args) async {
@@ -109,18 +119,27 @@ class _FullExamPageState extends State<FullExamPage> {
                 children: [
                   Positioned(
                     bottom: 0,
-                    child: Container(
-                      height: 70,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                            color: grey07,
-                            width: 1.0,
+                    child: Column(
+                      children: [
+                        AnimatedOpacity(
+                            opacity: speechBubble ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 500),
+                            child:
+                                Image.asset("assets/images/speech_bubble.png")),
+                        Container(
+                          height: 70,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: grey07,
+                                width: 1.0,
+                              ),
+                            ),
                           ),
+                          padding: const EdgeInsets.only(bottom: 20, top: 20),
                         ),
-                      ),
-                      padding: const EdgeInsets.only(bottom: 20, top: 20),
+                      ],
                     ),
                   ),
                   Center(
@@ -140,7 +159,8 @@ class _FullExamPageState extends State<FullExamPage> {
                                 children: [
                                   Column(
                                     children: [
-                                      SizedBox(
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 10),
                                         width: imageWidth,
                                         child: Text(
                                           "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
@@ -202,7 +222,9 @@ class _FullExamPageState extends State<FullExamPage> {
                                           ],
                                         ),
                                       ),
-                                      const SizedBox(height: 10,)
+                                      const SizedBox(
+                                        height: 10,
+                                      )
                                     ],
                                   ),
                                 ],
@@ -370,7 +392,6 @@ class _FullExamPageState extends State<FullExamPage> {
     return setState(() {
       _numberState = index;
       _selectedNumber = _selectedNumbers[_numberState];
-      
     });
   }
 
@@ -439,7 +460,8 @@ class _FullExamPageState extends State<FullExamPage> {
         });
       },
       style: ButtonStyle(
-        side: MaterialStateProperty.all(BorderSide(color: isSelected ? blue10 : grey07)),
+        side: MaterialStateProperty.all(
+            BorderSide(color: isSelected ? blue10 : grey07)),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
             if (isSelected) {

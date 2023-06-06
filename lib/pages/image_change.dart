@@ -138,7 +138,7 @@ class _ImageMakeWidgetState extends State<ImageMakeWidget> {
           },
           child: Text(
             "Submit",
-            style: Headline_H0(32, mainBlack),
+            style: Headline(mainBlack),
           ),
         ),
         Padding(
