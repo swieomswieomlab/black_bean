@@ -314,4 +314,20 @@ class FirebaseService {
 
     return majorSectionNames;
   }
+
+  Future<DocumentSnapshot> getInstanceFromProblem(
+      String degree, String subject, String year, int number) async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('degree')
+        .doc(degree)
+        .collection('subject')
+        .doc(subject)
+        .collection('problems')
+        .where('number', isEqualTo: number)
+        .where('year', isEqualTo: year)
+        .get();
+
+    assert(querySnapshot.docs.isNotEmpty);
+    return querySnapshot.docs.first;
+  }
 }
