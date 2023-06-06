@@ -236,8 +236,8 @@ class FirebaseService {
   }
 
   //소단원별로 문제 불러오기, 다 불러와서 랜덤 2개만 리턴
-  Future<List<Problem>> loadProblemSmallSectionFromDatabase(
-      String degree, String subject, int mSections, int sSections) async {
+  Future<List<Problem>> loadProblemSmallSectionFromDatabase(String degree,
+      String subject, int mSections, int iSections, int sSections) async {
     QuerySnapshot querySnapshot = await _firestore
         .collection('degree')
         .doc(degree)
@@ -245,6 +245,7 @@ class FirebaseService {
         .doc(subject)
         .collection('problems')
         .where('mSection', isEqualTo: mSections)
+        .where('iSection', isEqualTo: iSections)
         .where('sSection', isEqualTo: sSections)
         .get();
 
@@ -275,9 +276,7 @@ class FirebaseService {
 
       problems.add(problem);
     });
-
     problems.shuffle();
-
     assert(problems.length >= 2);
     return problems.sublist(0, 2);
   }
@@ -315,6 +314,7 @@ class FirebaseService {
     return majorSectionNames;
   }
 
+  // 년도, 번호로 문제 레퍼런스 들고옴
   Future<DocumentSnapshot> getInstanceFromProblem(
       String degree, String subject, String year, int number) async {
     QuerySnapshot querySnapshot = await _firestore

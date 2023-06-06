@@ -116,7 +116,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
                       i < columnCount - tileNumbers.length % columnCount;
                       i++)
                     Container(
-                      margin: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(2),
                     ),
                 ],
               ],
@@ -166,7 +166,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: routeToNotePage,
+                onPressed: routeToWrongExamPage,
                 style: ElevatedButton.styleFrom(
                     side: const BorderSide(color: yellow05),
                     backgroundColor: const Color(0xffE7FFF2),
@@ -207,7 +207,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
     return correctNumbers;
   }
 
-  void routeToNotePage() {
-    //TODO: implement this functions.
+  void routeToWrongExamPage() {
+    Navigator.pushNamed(context, '/wrongExam');
   }
 }
