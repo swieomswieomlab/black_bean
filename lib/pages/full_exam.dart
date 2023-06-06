@@ -1,4 +1,4 @@
-import 'package:black_bean/class/grading_arguments.dart';
+import 'package:black_bean/model/full_grading_arguments.dart';
 import 'package:flutter/material.dart';
 
 import '../model/full_exam_arguments.dart';
@@ -111,8 +111,7 @@ class _FullExamPageState extends State<FullExamPage> {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Container(
-                          margin:
-                              const EdgeInsets.symmetric(horizontal: 40),
+                          margin: const EdgeInsets.symmetric(horizontal: 40),
                           width: 1200,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -139,8 +138,7 @@ class _FullExamPageState extends State<FullExamPage> {
                                               return child;
                                             }
                                             return Center(
-                                              child:
-                                                  CircularProgressIndicator(
+                                              child: CircularProgressIndicator(
                                                 value: loadingProgress
                                                             .expectedTotalBytes !=
                                                         null
@@ -169,7 +167,9 @@ class _FullExamPageState extends State<FullExamPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           answerButtons(),
-                          const SizedBox(width: 120,),
+                          const SizedBox(
+                            width: 120,
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(6),
                             child: _numberState == finalNumber - 1
@@ -388,6 +388,8 @@ class _FullExamPageState extends State<FullExamPage> {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => SubmitAlertDialog(
+            degree: widget.arguments.degree,
+            subject: widget.arguments.subject,
             notSolvedNumbers: notSolvedNumbers,
             corrects: corrects,
             problems: problems),
@@ -473,11 +475,15 @@ class SubmitAlertDialog extends StatelessWidget {
     required this.notSolvedNumbers,
     required this.corrects,
     required this.problems,
+    required this.degree,
+    required this.subject,
   });
 
   final List<int> notSolvedNumbers;
   final List<int> corrects;
   final List<Problem> problems;
+  final String degree;
+  final String subject;
 
   @override
   Widget build(BuildContext context) {
@@ -521,7 +527,8 @@ class SubmitAlertDialog extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
             Navigator.popAndPushNamed(context, '/fullExamGradingPage',
-                arguments: GradingArguments(corrects, problems));
+                arguments:
+                    FullGradingArguments(degree, subject, corrects, problems));
           },
           style: ElevatedButton.styleFrom(
             shape:

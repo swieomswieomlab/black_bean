@@ -3,7 +3,7 @@ import 'package:lottie/lottie.dart';
 
 import '../model/unit_exam_arguments.dart';
 import '../textstyle.dart';
-import '../class/grading_arguments.dart';
+import '../model/full_grading_arguments.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';
@@ -19,7 +19,8 @@ class UnitExamPage extends StatefulWidget {
   State<UnitExamPage> createState() => _UnitExamPageState();
 }
 
-class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMixin {
+class _UnitExamPageState extends State<UnitExamPage>
+    with TickerProviderStateMixin {
   late final AnimationController lottieController;
 
   final FirebaseService _firebaseService = FirebaseService();
@@ -43,7 +44,7 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    
+
     var args = widget.arguments;
     loadProblems(args);
     lottieController = AnimationController(vsync: this);
@@ -213,13 +214,14 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
                                           width: 480,
                                           child: Image.network(
                                             _problems[_numberState].problem,
-                                            loadingBuilder:
-                                                (context, child, loadingProgress) {
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
                                               if (loadingProgress == null) {
                                                 return child;
                                               }
                                               return Center(
-                                                child: CircularProgressIndicator(
+                                                child:
+                                                    CircularProgressIndicator(
                                                   value: loadingProgress
                                                               .expectedTotalBytes !=
                                                           null
@@ -360,7 +362,6 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
           ),
         ),
         onPressed: () {
-
           if (_selectedNumber != -1) {
             // 뭔가 선택했을 때
             setState(() {
@@ -372,16 +373,18 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
                   corrects[_numberState] = 1; // correct
                   answerType = AnswerType.correct;
                   isCorrect = true;
-                   Future.delayed(Duration(milliseconds: 100)).then((value) => lottieController
-                    ..reset()
-                    ..forward()) ;
+                  Future.delayed(Duration(milliseconds: 100))
+                      .then((value) => lottieController
+                        ..reset()
+                        ..forward());
                 } else {
                   //정답 못 맞춘 경우 wrong
                   corrects[_numberState] = 2; // wrong
                   answerType = AnswerType.wrong;
-                  Future.delayed(Duration(milliseconds: 100)).then((value) => lottieController
-                    ..reset()
-                    ..forward()) ;
+                  Future.delayed(Duration(milliseconds: 100))
+                      .then((value) => lottieController
+                        ..reset()
+                        ..forward());
                 }
               } else {
                 //정답 맞춘 후 '다음' 버튼으로 바뀌고 다음 문제로 넘어가는 부분
@@ -393,7 +396,8 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
               //if final number, route to grading page
               if (_numberState == finalNumber) {
                 Navigator.pushNamed(context, '/unitExamGradingPage',
-                    arguments: GradingArguments(corrects, _problems));
+                    arguments: FullGradingArguments(widget.arguments.degree,
+                        widget.arguments.subject, corrects, _problems));
                 _numberState = 0;
               }
             });

@@ -1,9 +1,7 @@
-import 'package:black_bean/pages/problem_make.dart';
 import 'package:flutter/material.dart';
 
-import '../model/unit_exam_arguments.dart';
+import '../model/wrong_exam_arguments.dart';
 import '../textstyle.dart';
-import '../class/grading_arguments.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';
@@ -12,11 +10,8 @@ import '../service/firebase_service.dart';
 enum AnswerType { basic, wrong, correct }
 
 class WrongExamPage extends StatefulWidget {
-  const WrongExamPage({Key? key
-      // , required this.arguments
-      })
-      : super(key: key);
-  // final UnitExamArguments arguments;
+  const WrongExamPage({Key? key, required this.arguments}) : super(key: key);
+  final WrongExamArguments arguments;
 
   @override
   State<WrongExamPage> createState() => _WrongExamPageState();
@@ -25,7 +20,6 @@ class WrongExamPage extends StatefulWidget {
 class _WrongExamPageState extends State<WrongExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
   final double spaceBetweenNumbers = 48;
-  //0 for init, 1 for correct, 2 for wrong
   late List<int> _selectedNumbers;
 
   late Future<List<Problem>> _loadProblemsFuture;
@@ -34,13 +28,12 @@ class _WrongExamPageState extends State<WrongExamPage> {
   int _selectedNumber = -1;
   int _numberState = 0;
   late int finalNumber;
-  AnswerType answerType = AnswerType.basic; //정답 여부 나타내는 변수. 하단 버튼 부분 색상 변경에 사용.
+  AnswerType answerType = AnswerType.basic;
   bool isCorrect = false;
   double imageWidth = 480;
   int answer = -1;
   bool solved = false;
   Color submitButtonColor = grey02;
-  // bool correct = false;
 
   List<String> majorSectionNames = [];
 
@@ -50,41 +43,28 @@ class _WrongExamPageState extends State<WrongExamPage> {
   @override
   void initState() {
     super.initState();
-    // var args = widget.arguments;
-    // loadProblems(args);
-    // TODO: from previous page
-    loadProblems();
+    var args = widget.arguments;
+    loadProblems(args);
   }
 
-  void loadProblems(
-      // UnitExamArguments args
-      ) async {
-    _loadProblemsFuture = _firebaseService
-        .loadProblemYearFromDatabase(
-            // args.degree, args.subject, args.unit
-            "High",
-            "Math",
-            "2099-1")
-        .then((loadedProblems) async {
+  void loadProblems(WrongExamArguments args) async {
+    _loadProblemsFuture =
+        Future.value(args.problems).then((loadedProblems) async {
       finalNumber = loadedProblems.length;
-      await loadMajorSectionNames(
-          // args
-          );
-
-      await loadInternalProblems(loadedProblems);
+      await loadMajorSectionNames(args);
+      await loadInternalProblems(args);
       return loadedProblems;
     });
   }
 
-  Future<void> loadInternalProblems(List<Problem> problems) async {
-    String degree = 'High';
-    String subject = 'Math';
+  Future<void> loadInternalProblems(WrongExamArguments args) async {
+    List<Problem> problems = args.problems;
 
     for (int i = 0; i < problems.length; i++) {
       List<Problem> tmp =
           await _firebaseService.loadProblemSmallSectionFromDatabase(
-              degree,
-              subject,
+              args.degree,
+              args.subject,
               problems[i].mSection,
               problems[i].iSection,
               problems[i].sSection);
@@ -93,14 +73,9 @@ class _WrongExamPageState extends State<WrongExamPage> {
     }
   }
 
-  Future<void> loadMajorSectionNames(
-      // UnitExamArguments args
-      ) async {
+  Future<void> loadMajorSectionNames(WrongExamArguments args) async {
     return _firebaseService
-        .loadMajorSectionNameFromDatabase(
-            // args.degree, args.subject
-            "High",
-            "Math")
+        .loadMajorSectionNameFromDatabase(args.degree, args.subject)
         .then((loadedNames) {
       loadedNames.sort((a, b) => a.sectionNumber.compareTo(b.sectionNumber));
       for (var element in loadedNames) {
@@ -351,6 +326,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
                 if (_numberState == finalNumber - 1) {
                   Navigator.pop(context);
                 } else {
+                  submitButtonColor = grey02;
                   answerType = AnswerType.basic;
                   answerLineColor = grey05;
                   answerLineBackgroundColor = Colors.white;
@@ -385,8 +361,12 @@ class _WrongExamPageState extends State<WrongExamPage> {
       onPressed: () {
         if (!solved) {
           setState(() {
+            if (isSelected) {
+              submitButtonColor = grey02;
+            } else {
+              submitButtonColor = yellow05;
+            }
             _selectedNumber = isSelected ? -1 : value;
-            submitButtonColor = yellow05;
           });
         }
       },
