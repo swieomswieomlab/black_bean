@@ -151,7 +151,7 @@ class _ProblemMakeWidgetState extends State<ProblemMakeWidget> {
           },
           child: Text(
             "Submit",
-            style: Headline_H0(32, mainBlack),
+            style: Headline(mainBlack),
           ),
         ),
         Padding(

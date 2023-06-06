@@ -40,24 +40,27 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
             margin: const EdgeInsets.symmetric(horizontal: 120),
             width: 1040,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("모의고사", style: brand(grey09)),
+                Text("모의고사", style: Headline(grey09)),
                 const SizedBox(
                   height: 24,
                 ),
-                //TODO: 연습문제 설명 적기
-                Text("연습문제에 대한 설명 글입니다.", style: body2(grey07)),
-                Text("연습문제에 대한 설명 글입니다.", style: body2(grey07)),
+                Text(
+                  "실제 검정고시 시험 치듯 문제를 풀어볼 수 있어요.\n긴장하지 않고 편안한 마음으로 끝까지 파이팅 해보아요!",
+                  style: body1(grey08),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(
-                  height: 62,
+                  height: 92,
                 ),
                 subjectAndYearSelect(),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 40),
+                      margin: const EdgeInsets.only(top: 10, left: 60),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
@@ -69,34 +72,39 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                         style: body3(grey07),
                       ),
                     ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 100,
+                ),
+                Row(
+                  children: [
                     const Spacer(),
-                    Text(
-                      "Start",
-                      style: button2(canRoute ? blue09 : grey02),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {
+                    InkWell(
+                      onTap: () {
                         if (canRoute) examStartDialog(context);
                       },
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              canRoute ? blue09 : grey02),
-                          side: MaterialStateProperty.all<BorderSide>(
-                            const BorderSide(color: Colors.transparent),
-                          ),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                            const CircleBorder(),
-                          ),
-                          minimumSize: MaterialStateProperty.all<Size>(
-                            const Size(96, 96),
-                          ),
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white)),
-                      child: const Icon(
-                        Icons.arrow_forward,
-                        size: 44,
+                      child: SizedBox(
+                        width: 150,
+                        height: 80,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Start",
+                                style: title1(canRoute ? blue09 : grey02),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Icon(
+                                Icons.arrow_outward,
+                                size: 40,
+                                color: canRoute ? blue10 : grey02,
+                              )
+                            ]),
                       ),
-                    )
+                    ),
                   ],
                 )
               ],
@@ -111,10 +119,11 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
 
   Row subjectAndYearSelect() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         subjectSelect(),
-        const SizedBox(width: 89),
+        const SizedBox(width: 136),
         yearSelect(),
         const SizedBox(width: 24),
         roundSelect(),
@@ -212,26 +221,38 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
             6,
             (index) => ElevatedButton(
                   style: ButtonStyle(
+                    foregroundColor: MaterialStateColor.resolveWith(
+                      (Set<MaterialState> states) {
+                        if (selectedNum == index) {
+                          return blue10;
+                        }
+                        if (states.contains(MaterialState.hovered)) {
+                          return grey00; // Set the text color when hovered
+                        }
+                        return getButtonTextStyle(
+                            index); // Set the default text color
+                      },
+                    ),
                     elevation: MaterialStateProperty.all(0),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         side: BorderSide(
-                            color: selectedNum == index ? blue09 : blue03,
-                            width: 2),
-                        borderRadius: BorderRadius.circular(4.0),
+                            color: getButtonTextStyle(index), width: 2),
+                        borderRadius: BorderRadius.circular(40.0),
                       ),
                     ),
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
-                      if (states.contains(MaterialState.hovered)) {
+                    backgroundColor: MaterialStateColor.resolveWith(
+                      (Set<MaterialState> states) {
                         if (selectedNum == index) {
-                          return blue09;
-                        } else {
-                          return greyBlue;
+                          return yellowButton;
                         }
-                      } else {
-                        return selectedNum == index ? blue09 : mainLightBlue;
-                      }
-                    }),
+                        if (states.contains(MaterialState.hovered)) {
+                          return blue08; // Set the desired background color when hovered
+                        }
+                        return getColor(
+                            index); // Set the default background color
+                      },
+                    ),
                     fixedSize:
                         MaterialStateProperty.all<Size>(const Size(110, 44)),
                   ),
@@ -243,11 +264,31 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
                   },
                   child: Text(
                     subjectKor[index],
-                    style: button2(index == selectedNum ? grey00 : grey08),
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Pretendard",
+                        height: 18 / 18),
                   ),
                 )),
       ),
     );
+  }
+
+  Color getColor(int index) {
+    if (selectedNum == index) {
+      return yellowButton;
+    } else {
+      return grey00;
+    }
+  }
+
+  Color getButtonTextStyle(int index) {
+    if (index == selectedNum) {
+      return blue10;
+    } else {
+      return grey08;
+    }
   }
 
   Future<dynamic> examStartDialog(BuildContext context) {

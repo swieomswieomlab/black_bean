@@ -51,29 +51,32 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
             margin: const EdgeInsets.symmetric(horizontal: 120),
             width: 1040,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("연습문제", style: brand(grey09)),
+                Text("연습문제", style: Headline(grey09)),
                 const SizedBox(
                   height: 24,
                 ),
-                //TODO: 연습문제 설명 글 추후에 수정 필요
-                Text("연습문제에 대한 설명 글입니다.", style: body2(grey07)),
-                Text("연습문제에 대한 설명 글입니다.", style: body2(grey07)),
+                Text(
+                  "공부하고 싶은 과목과 단원 하나를 골라 문제를 풀어보세요.\n많이 풀지 않아도 괜찮아요. 한 문제 한 문제 조금씩 함께 해요.",
+                  style: body1(grey08),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(
-                  height: 62,
+                  height: 92,
                 ),
                 SizedBox(
-                  height: 200,
+                  height: 300,
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           selectSubjectSection(),
                           Container(
-                            // margin: const EdgeInsets.only(bottom: 40),
+                            margin: const EdgeInsets.only(top: 10),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
                             decoration: BoxDecoration(
@@ -89,7 +92,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                       ),
                       //년도 드랍다운 버튼
                       const SizedBox(
-                        width: 89,
+                        width: 55,
                       ),
                       selectUnitSection(),
                     ],
@@ -97,17 +100,8 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Spacer(),
-                    Text(
-                      "Start",
-                      style: button2(selectedSubject && selectedUnitNum != -1
-                          ? blue09
-                          : grey02),
-                    ),
-                    startButton(context)
-                  ],
-                )
+                  children: [const Spacer(), startButton(context)],
+                ),
               ],
             ),
           ),
@@ -116,31 +110,31 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
     );
   }
 
-  OutlinedButton startButton(BuildContext context) {
-    return OutlinedButton(
-      onPressed: () {
+  InkWell startButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
         if (selectedNum != -1 && selectedUnitNum != -1) {
           examStartDialog(context);
         }
       },
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(
-              selectedNum != -1 && selectedUnitNum != -1 ? blue09 : grey02),
-          side: MaterialStateProperty.all<BorderSide>(
-            const BorderSide(color: Colors.transparent),
+      child: SizedBox(
+        width: 150,
+        height: 80,
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            "Start",
+            style: title1(
+                selectedNum != -1 && selectedUnitNum != -1 ? blue09 : grey02),
           ),
-          shape: MaterialStateProperty.all<OutlinedBorder>(
-            const CircleBorder(),
+          const SizedBox(
+            width: 8,
           ),
-          minimumSize: MaterialStateProperty.all<Size>(
-            const Size(96, 96),
-          ),
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.white
-              // selectedNum == -1 ? Colors.grey : Colors.black
-              )),
-      child: const Icon(
-        Icons.arrow_forward,
-        size: 44,
+          Icon(
+            Icons.arrow_outward,
+            size: 40,
+            color: selectedNum != -1 && selectedUnitNum != -1 ? blue10 : grey02,
+          )
+        ]),
       ),
     );
   }
@@ -156,18 +150,39 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
           6,
           (index) => ElevatedButton(
             style: ButtonStyle(
+              foregroundColor: MaterialStateColor.resolveWith(
+                (Set<MaterialState> states) {
+                  if (selectedNum == index) {
+                    return blue10;
+                  }
+                  if (states.contains(MaterialState.hovered)) {
+                    return grey00; // Set the text color when hovered
+                  }
+                  return getButtonTextStyle(
+                      index); // Set the default text color
+                },
+              ),
               elevation: MaterialStateProperty.all(0),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   side: BorderSide(
-                    color: selectedNum == index ? blue09 : blue03,
+                    color: getButtonTextStyle(index),
                     width: 2,
                   ),
-                  borderRadius: BorderRadius.circular(4.0),
+                  borderRadius: BorderRadius.circular(40.0),
                 ),
               ),
-              backgroundColor:
-                  MaterialStateColor.resolveWith((states) => getColor(index)),
+              backgroundColor: MaterialStateColor.resolveWith(
+                (Set<MaterialState> states) {
+                  if (selectedNum == index) {
+                    return yellowButton;
+                  }
+                  if (states.contains(MaterialState.hovered)) {
+                    return blue08; // Set the desired background color when hovered
+                  }
+                  return getColor(index); // Set the default background color
+                },
+              ),
               fixedSize: MaterialStateProperty.all<Size>(const Size(110, 44)),
             ),
             onPressed: () async {
@@ -188,7 +203,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                 List<String> tmp = [];
                 int ind = 1;
                 for (var element in value) {
-                  tmp.add("$ind단원 ${element.name}");
+                  tmp.add(element.name);
                   ind += 1;
                 }
                 return tmp;
@@ -198,10 +213,14 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                 // Update the state to reflect the loaded unit list
               });
             },
-            child: Text(
-              subjectKor[index],
-              style: button2(getButtonTextStyle(index)),
-            ),
+            child: Text(subjectKor[index],
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: "Pretendard",
+                    height: 18 / 18)
+                // button2(getButtonTextStyle(index)),
+                ),
           ),
         ),
       ),
@@ -210,15 +229,15 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
 
   Color getColor(int index) {
     if (selectedNum == index) {
-      return blue09;
+      return yellowButton;
     } else {
-      return greyBlue;
+      return grey00;
     }
   }
 
   Color getButtonTextStyle(int index) {
     if (index == selectedNum) {
-      return grey00;
+      return blue10;
     } else {
       return grey08;
     }
@@ -227,9 +246,10 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
   Visibility selectUnitSection() {
     return Visibility(
       visible: selectedSubject,
+      replacement: const SizedBox(width: 580, height: 300),
       child: SizedBox(
-        height: 200,
-        width: 400,
+        height: 300,
+        width: 580,
         child: Wrap(
           spacing: 12,
           runSpacing: 16,
@@ -249,29 +269,47 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
                       backgroundColor: MaterialStateColor.resolveWith((states) {
                         if (states.contains(MaterialState.hovered)) {
                           if (selectedUnitNum == index) {
+                            return yellowButton;
+                          }
+                          if (selectedUnitNum == index) {
                             return blue03;
                           } else {
                             return blue01;
                           }
                           // Set the hover color here
                         } else {
-                          return selectedUnitNum == index ? blue03 : grey00;
+                          return selectedUnitNum == index
+                              ? yellowButton
+                              : grey00;
                         }
                       }),
                       fixedSize:
-                          MaterialStateProperty.all<Size>(const Size(176, 36)),
+                          MaterialStateProperty.all<Size>(const Size(268, 44)),
                     ),
                     onPressed: () {
                       setState(() {
                         selectedUnitNum = index;
                       });
                     },
-                    child: FittedBox(
-                      child: Text(
-                        unitList[index],
-                        style:
-                            button2(index == selectedUnitNum ? grey09 : grey08),
-                      ),
+                    child: Row(
+                      children: [
+                        Text("${index + 1}단원",
+                            style: button2(
+                                index == selectedUnitNum ? blue10 : grey09)),
+                        const SizedBox(width: 10),
+                        SizedBox(
+                          width: 180,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              unitList[index],
+                              style: body4(
+                                  index == selectedUnitNum ? blue10 : grey09),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   )),
         ),
@@ -286,7 +324,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
               titlePadding: const EdgeInsets.only(top: 60),
               title: Text("${subjectKor[selectedNum]} 연습문제를 시작할까요?",
                   style: title1(mainBlack), textAlign: TextAlign.center),
-              content: Text("시작하기를 누르면 ${selectedUnitNum+1}단원 연습문제가 시작돼요.",
+              content: Text("시작하기를 누르면 ${selectedUnitNum + 1}단원 연습문제가 시작돼요.",
                   style: body1(grey08), textAlign: TextAlign.center),
               shape:
                   const RoundedRectangleBorder(borderRadius: BorderRadius.zero),

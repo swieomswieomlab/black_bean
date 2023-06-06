@@ -45,6 +45,7 @@ const Color red03 = Color(0xfff25d5d);
 const Color red02 = Color(0xfffde5e5);
 const Color red01 = Color(0xfffef5f5);
 
+const Color yellowButton = Color(0xffffeea0);
 const Color yellow06 = Color(0xffdec46a);
 const Color yellow05 = Color(0xfffcce2e);
 const Color yellow04 = Color(0xfffdda61);
@@ -52,7 +53,7 @@ const Color yellow03 = Color(0xfffdf7e3);
 const Color yellow02 = Color(0xfffcfaf4);
 const Color yellow01 = Color(0xfffffefa);
 
-TextStyle Headline_H0(double fontsize, Color color) {
+TextStyle Headline(Color color) {
   return TextStyle(
     fontSize: 72,
     decoration: TextDecoration.none,

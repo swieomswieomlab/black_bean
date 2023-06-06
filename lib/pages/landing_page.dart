@@ -65,7 +65,7 @@ class _LandingPageState extends State<LandingPage> {
                                       const Size(250, 72)),
                                   side: MaterialStateProperty.all<BorderSide>(
                                     const BorderSide(
-                                      color: blue09,
+                                      color: blue10,
                                       width: 5,
                                     ),
                                   ),
@@ -74,6 +74,19 @@ class _LandingPageState extends State<LandingPage> {
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(40),
                                     ),
+                                  ),
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      if (states
+                                          .contains(MaterialState.pressed)) {
+                                        return yellowButton;
+                                      } else if (states
+                                          .contains(MaterialState.hovered)) {
+                                        return blue09;
+                                      }
+                                      return grey00; // Return null for default background color
+                                    },
                                   ),
                                 ),
                                 onPressed: () {
@@ -109,7 +122,7 @@ class _LandingPageState extends State<LandingPage> {
                                       const Size(250, 72)),
                                   side: MaterialStateProperty.all<BorderSide>(
                                     const BorderSide(
-                                      color: blue09,
+                                      color: blue10,
                                       width: 5,
                                     ),
                                   ),
@@ -118,6 +131,19 @@ class _LandingPageState extends State<LandingPage> {
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(40),
                                     ),
+                                  ),
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      if (states
+                                          .contains(MaterialState.pressed)) {
+                                        return yellowButton;
+                                      } else if (states
+                                          .contains(MaterialState.hovered)) {
+                                        return blue09;
+                                      }
+                                      return grey00; // Return null for default background color
+                                    },
                                   ),
                                 ),
                                 onPressed: () {

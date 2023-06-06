@@ -1,4 +1,5 @@
 import 'package:black_bean/model/full_grading_arguments.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../model/full_exam_arguments.dart';
@@ -28,6 +29,7 @@ class _FullExamPageState extends State<FullExamPage> {
   int _numberState = 0;
   late int finalNumber = 99;
   bool remoteControl = true;
+  double imageWidth = 480;
 
   List<int> corrects = [];
 
@@ -63,6 +65,7 @@ class _FullExamPageState extends State<FullExamPage> {
 
   @override
   Widget build(BuildContext context) {
+    imageWidth = max(MediaQuery.of(context).size.width * 0.375, 480);
     return FutureBuilder<List<Problem>>(
       future: _loadProblemsFuture,
       builder: (context, snapshot) {
@@ -102,89 +105,115 @@ class _FullExamPageState extends State<FullExamPage> {
                 ),
               ),
               backgroundColor: grey00,
-              body: Center(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 36),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 40),
-                          width: 1200,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  SizedBox(
-                                    width: 720,
-                                    child: Text(
-                                      "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
-                                      style: body3(mainSkyBlue),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      child: SizedBox(
-                                        child: Image.network(
-                                          problems[_numberState].problem,
-                                          fit: BoxFit.fitWidth,
-                                          loadingBuilder: (context, child,
-                                              loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            }
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
-                                                    : null,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+              body: Stack(
+                children: [
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      height: 70,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                            color: grey07,
+                            width: 1.0,
                           ),
                         ),
                       ),
+                      padding: const EdgeInsets.only(bottom: 20, top: 20),
                     ),
-                    SizedBox(
-                      width: 1200,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          answerButtons(),
-                          const SizedBox(
-                            width: 120,
+                  ),
+                  Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 36),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 40),
+                              // width: 1200,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: imageWidth,
+                                        child: Text(
+                                          "$mSectionNumber단원 | ${majorSectionNames[mSectionNumber - 1]}",
+                                          style: body3(mainSkyBlue),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: SingleChildScrollView(
+                                          child: SizedBox(
+                                            width: imageWidth,
+                                            child: Image.network(
+                                              problems[_numberState].problem,
+                                              fit: BoxFit.fitWidth,
+                                              loadingBuilder: (context, child,
+                                                  loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: loadingProgress
+                                                                .expectedTotalBytes !=
+                                                            null
+                                                        ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                            loadingProgress
+                                                                .expectedTotalBytes!
+                                                        : null,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 1100,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            answerButtons(),
+                                            const SizedBox(
+                                              width: 120,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(6),
+                                              child: _numberState ==
+                                                      finalNumber - 1
+                                                  ? const SizedBox(width: 140)
+                                                  : nextButton(),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(6),
+                                              child: submitButton(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10,)
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: _numberState == finalNumber - 1
-                                ? const SizedBox(width: 140)
-                                : nextButton(),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: submitButton(),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }
@@ -200,7 +229,7 @@ class _FullExamPageState extends State<FullExamPage> {
           children: [
             Text(
               "해당 회차에 문제가 없습니다.",
-              style: Headline_H0(32, mainBlack),
+              style: Headline(mainBlack),
             ),
             ElevatedButton(
                 onPressed: () {
@@ -208,7 +237,7 @@ class _FullExamPageState extends State<FullExamPage> {
                 },
                 child: Text(
                   "돌아가기",
-                  style: Headline_H0(24, mainBlack),
+                  style: Headline(mainBlack),
                 ))
           ],
         ),
@@ -340,6 +369,8 @@ class _FullExamPageState extends State<FullExamPage> {
   void onRCTap(int index) {
     return setState(() {
       _numberState = index;
+      _selectedNumber = _selectedNumbers[_numberState];
+      
     });
   }
 
@@ -408,11 +439,11 @@ class _FullExamPageState extends State<FullExamPage> {
         });
       },
       style: ButtonStyle(
-        side: MaterialStateProperty.all(const BorderSide(color: Colors.black)),
+        side: MaterialStateProperty.all(BorderSide(color: isSelected ? blue10 : grey07)),
         backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (states) {
             if (isSelected) {
-              return Colors.blue;
+              return blue02;
             } else {
               return null;
             }
@@ -425,7 +456,7 @@ class _FullExamPageState extends State<FullExamPage> {
         number,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: isSelected ? grey00 : Colors.black,
+          color: isSelected ? blue10 : grey07,
         ),
       ),
     );
