@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, avoid_print, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// ignore: must_be_immutable
 class NameMakePage extends StatelessWidget {
   NameMakePage({super.key});
 

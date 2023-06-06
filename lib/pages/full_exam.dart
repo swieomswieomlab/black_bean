@@ -1,5 +1,5 @@
+import 'package:black_bean/model/full_grading_arguments.dart';
 import 'dart:math';
-import 'package:black_bean/class/grading_arguments.dart';
 import 'package:flutter/material.dart';
 
 import '../model/full_exam_arguments.dart';
@@ -419,6 +419,8 @@ class _FullExamPageState extends State<FullExamPage> {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => SubmitAlertDialog(
+            degree: widget.arguments.degree,
+            subject: widget.arguments.subject,
             notSolvedNumbers: notSolvedNumbers,
             corrects: corrects,
             problems: problems),
@@ -504,11 +506,15 @@ class SubmitAlertDialog extends StatelessWidget {
     required this.notSolvedNumbers,
     required this.corrects,
     required this.problems,
+    required this.degree,
+    required this.subject,
   });
 
   final List<int> notSolvedNumbers;
   final List<int> corrects;
   final List<Problem> problems;
+  final String degree;
+  final String subject;
 
   @override
   Widget build(BuildContext context) {
@@ -552,7 +558,8 @@ class SubmitAlertDialog extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
             Navigator.popAndPushNamed(context, '/fullExamGradingPage',
-                arguments: GradingArguments(corrects, problems));
+                arguments:
+                    FullGradingArguments(degree, subject, corrects, problems));
           },
           style: ElevatedButton.styleFrom(
             shape:

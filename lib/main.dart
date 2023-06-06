@@ -1,4 +1,6 @@
+import 'package:black_bean/model/full_grading_arguments.dart';
 import 'package:black_bean/model/unit_exam_arguments.dart';
+import 'package:black_bean/model/wrong_exam_arguments.dart';
 import 'package:black_bean/pages/image_change.dart';
 import 'package:black_bean/pages/landing_page.dart';
 import 'package:black_bean/pages/name_make.dart';
@@ -7,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'model/full_exam_arguments.dart';
-import 'pages/home_page.dart';
 import 'firebase_options.dart';
 import 'pages/select_full_exam_page.dart';
 import 'pages/select_unit_exam_page.dart';
@@ -53,19 +54,13 @@ class MyApp extends StatelessWidget {
           '/': (context) => const LandingPage(),
           '/problemMake': (context) => const ProblemMake(),
           '/testPage': (context) => const TestPage(),
-          // '/fullExam': (context) => const FullExamPage(),
-          '/fullExamGradingPage': (context) => const FullExamGradingPage(),
           '/selectFullExamPage': (context) => const SelectFullExamPage(),
           '/selectUnitExamPage': (context) => const SelectUnitExamPage(),
-          // '/unitExam': (context) => UnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
-          '/wrongExam': (context) => const WrongExamPage(),
           '/nameMake': (context) => NameMakePage(),
 
-
           // TO DELETE
-          '/imageChange' : (context) =>  const ImageChange(),
-
+          '/imageChange': (context) => const ImageChange(),
         },
         // ignore: body_might_complete_normally_nullable
         onGenerateRoute: ((settings) {
@@ -81,6 +76,22 @@ class MyApp extends StatelessWidget {
             final args = settings.arguments as FullExamArguments;
             return MaterialPageRoute(builder: ((context) {
               return FullExamPage(
+                arguments: args,
+              );
+            }));
+          }
+          if (settings.name == '/fullExamGradingPage') {
+            final args = settings.arguments as FullGradingArguments;
+            return MaterialPageRoute(builder: ((context) {
+              return FullExamGradingPage(
+                arguments: args,
+              );
+            }));
+          }
+          if (settings.name == '/wrongExam') {
+            final args = settings.arguments as WrongExamArguments;
+            return MaterialPageRoute(builder: ((context) {
+              return WrongExamPage(
                 arguments: args,
               );
             }));

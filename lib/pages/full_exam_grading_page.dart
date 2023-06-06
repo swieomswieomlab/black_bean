@@ -1,31 +1,40 @@
-import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
 
-import '../class/grading_arguments.dart';
+import '../model/wrong_exam_arguments.dart';
+import '../textstyle.dart';
+import '../model/full_grading_arguments.dart';
 import '../components.dart';
 import '../model/problem.dart';
 
 class FullExamGradingPage extends StatefulWidget {
-  const FullExamGradingPage({
-    Key? key,
-  }) : super(key: key);
+  const FullExamGradingPage({Key? key, required this.arguments})
+      : super(key: key);
+  final FullGradingArguments arguments;
 
   @override
   FullExamGradingPageState createState() => FullExamGradingPageState();
 }
 
 class FullExamGradingPageState extends State<FullExamGradingPage> {
+  late String degree;
+  late String subject;
+  late List<int> correctNumbers;
+  late List<Problem> problems;
+  late List<int> wrongNumbers;
+
   @override
   void initState() {
     super.initState();
+    var args = widget.arguments;
+    degree = args.degree;
+    subject = args.subject;
+    problems = args.problems;
+    correctNumbers = getCorrectNumber(problems.length, args.corrects);
+    wrongNumbers = getWrongNumber(problems.length, correctNumbers);
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as GradingArguments;
-    List<Problem> problems = args.problems;
-    List<int> correctNumbers = getCorrectNumber(problems.length, args.corrects);
-    List<int> wrongNumbers = getWrongNumber(problems.length, correctNumbers);
     return Scaffold(
       appBar: basicAppbar(),
       body: SingleChildScrollView(
@@ -116,7 +125,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
                       i < columnCount - tileNumbers.length % columnCount;
                       i++)
                     Container(
-                      margin: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(2),
                     ),
                 ],
               ],
@@ -166,7 +175,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: routeToNotePage,
+                onPressed: routeToWrongExamPage,
                 style: ElevatedButton.styleFrom(
                     side: const BorderSide(color: yellow05),
                     backgroundColor: const Color(0xffE7FFF2),
@@ -207,7 +216,19 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
     return correctNumbers;
   }
 
-  void routeToNotePage() {
-    //TODO: implement this functions.
+  List<Problem> getWrongProblems(List<int> wrongs, List<Problem> problems) {
+    List<Problem> wrongProblems = [];
+    for (var problem in problems) {
+      if (wrongs.contains(problem.number)) {
+        wrongProblems.add(problem);
+      }
+    }
+    return wrongProblems;
+  }
+
+  void routeToWrongExamPage() {
+    Navigator.pushNamed(context, '/wrongExam',
+        arguments: WrongExamArguments(
+            degree, subject, getWrongProblems(wrongNumbers, problems)));
   }
 }

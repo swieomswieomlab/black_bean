@@ -1,9 +1,7 @@
-import 'package:black_bean/pages/problem_make.dart';
 import 'package:flutter/material.dart';
 
-import '../model/unit_exam_arguments.dart';
+import '../model/wrong_exam_arguments.dart';
 import '../textstyle.dart';
-import '../class/grading_arguments.dart';
 import '../model/problem.dart';
 
 import '../service/firebase_service.dart';
@@ -12,11 +10,8 @@ import '../service/firebase_service.dart';
 enum AnswerType { basic, wrong, correct }
 
 class WrongExamPage extends StatefulWidget {
-  const WrongExamPage({Key? key
-      // , required this.arguments
-      })
-      : super(key: key);
-  // final UnitExamArguments arguments;
+  const WrongExamPage({Key? key, required this.arguments}) : super(key: key);
+  final WrongExamArguments arguments;
 
   @override
   State<WrongExamPage> createState() => _WrongExamPageState();
@@ -25,59 +20,61 @@ class WrongExamPage extends StatefulWidget {
 class _WrongExamPageState extends State<WrongExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
   final double spaceBetweenNumbers = 48;
-  //0 for init, 1 for correct, 2 for wrong
-  late List<int> _selectedNumbers;
 
   late Future<List<Problem>> _loadProblemsFuture;
   late List<Problem> _problems;
+  List<List<Problem>> internalProblems = [];
   int _selectedNumber = -1;
   int _numberState = 0;
   late int finalNumber;
-  // bool remoteControl = true; // remote control on/off
-  AnswerType answerType = AnswerType.basic; //정답 여부 나타내는 변수. 하단 버튼 부분 색상 변경에 사용.
+  AnswerType answerType = AnswerType.basic;
   bool isCorrect = false;
-  double imageWidth = 520;
+  double imageWidth = 480;
   int answer = -1;
-
-  List<int> corrects = [];
+  bool solved = false;
+  Color submitButtonColor = grey02;
 
   List<String> majorSectionNames = [];
+
+  Color answerLineColor = grey05;
+  Color answerLineBackgroundColor = Colors.white;
 
   @override
   void initState() {
     super.initState();
-    // var args = widget.arguments;
-    // loadProblems(args);
-    loadProblems();
+    var args = widget.arguments;
+    loadProblems(args);
   }
 
-  void loadProblems(
-      // UnitExamArguments args
-      ) async {
-    _loadProblemsFuture = _firebaseService
-        .loadProblemMajorSectionFromDatabase(
-            // args.degree, args.subject, args.unit
-            "High",
-            "Math",
-            1)
-        .then((loadedProblems) async {
+  void loadProblems(WrongExamArguments args) async {
+    _loadProblemsFuture =
+        Future.value(args.problems).then((loadedProblems) async {
       finalNumber = loadedProblems.length;
-      corrects = List.generate(finalNumber, (index) => 0);
-      await loadMajorSectionNames(
-          // args
-          );
+      await loadMajorSectionNames(args);
+      await loadInternalProblems(args);
       return loadedProblems;
     });
   }
 
-  Future<void> loadMajorSectionNames(
-      // UnitExamArguments args
-      ) async {
+  Future<void> loadInternalProblems(WrongExamArguments args) async {
+    List<Problem> problems = args.problems;
+
+    for (int i = 0; i < problems.length; i++) {
+      List<Problem> tmp =
+          await _firebaseService.loadProblemSmallSectionFromDatabase(
+              args.degree,
+              args.subject,
+              problems[i].mSection,
+              problems[i].iSection,
+              problems[i].sSection);
+      assert(tmp.length == 2);
+      internalProblems.add(tmp);
+    }
+  }
+
+  Future<void> loadMajorSectionNames(WrongExamArguments args) async {
     return _firebaseService
-        .loadMajorSectionNameFromDatabase(
-            // args.degree, args.subject
-            "High",
-            "Math")
+        .loadMajorSectionNameFromDatabase(args.degree, args.subject)
         .then((loadedNames) {
       loadedNames.sort((a, b) => a.sectionNumber.compareTo(b.sectionNumber));
       for (var element in loadedNames) {
@@ -164,7 +161,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
             ),
             floatingActionButton: Visibility(
                 visible: answerType != AnswerType.basic,
-                child: goToUnitProbleButton()),
+                child: goToUnitProbleButton(internalProblems[_numberState])),
             backgroundColor: grey00,
             body: Stack(
               children: [
@@ -174,18 +171,10 @@ class _WrongExamPageState extends State<WrongExamPage> {
                     height: 70,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: answerType == AnswerType.basic
-                          ? grey00
-                          : answerType == AnswerType.correct
-                              ? green01
-                              : red01,
+                      color: answerLineBackgroundColor,
                       border: Border(
                         top: BorderSide(
-                          color: answerType == AnswerType.basic
-                              ? grey04
-                              : answerType == AnswerType.correct
-                                  ? pointGreen
-                                  : pointRed,
+                          color: answerLineColor,
                           width: 1.0,
                         ),
                       ),
@@ -303,15 +292,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
           elevation: MaterialStateProperty.all(0),
           backgroundColor: MaterialStateProperty.resolveWith<Color?>(
             (states) {
-              if (_selectedNumber == -1) {
-                return grey02;
-              } else if (answerType == AnswerType.basic) {
-                return yellow04;
-              } else if (answerType == AnswerType.correct) {
-                return pointGreen;
-              } else {
-                return pointRed;
-              }
+              return submitButtonColor;
             },
           ),
           fixedSize: MaterialStateProperty.all(const Size(132, 48)),
@@ -323,55 +304,70 @@ class _WrongExamPageState extends State<WrongExamPage> {
         ),
         onPressed: () {
           if (_selectedNumber != -1) {
-            // 뭔가 선택했을 때
             setState(() {
-              answer = _problems[_numberState].answer;
-              if (answerType == AnswerType.basic) {
-                if (answer == _selectedNumber) {
-                  //정답 맞춘 경우 correct
-                  corrects[_numberState] = 1; // correct
+              if (!solved) {
+                //채점
+                solved = true;
+                answer = _problems[_numberState].answer;
+                if (_selectedNumber == answer) {
                   answerType = AnswerType.correct;
-                  isCorrect = true;
+                  submitButtonColor = green03;
+                  answerLineColor = green03;
+                  answerLineBackgroundColor = green01;
                 } else {
-                  //정답 못 맞춘 경우 wrong
-                  corrects[_numberState] = 2; // wrong
                   answerType = AnswerType.wrong;
+                  submitButtonColor = red03;
+                  answerLineColor = red03;
+                  answerLineBackgroundColor = red01;
                 }
               } else {
-                //정답 맞춘 후 '다음' 버튼으로 바뀌고 다음 문제로 넘어가는 부분
-                answerType = AnswerType.basic;
-                isCorrect = false;
-                _numberState += 1;
-                _selectedNumber = -1;
-              }
-              //if final number, route to grading page
-              if (_numberState == finalNumber) {
-                Navigator.pushNamed(context, '/unitExamGradingPage',
-                    arguments: GradingArguments(corrects, _problems));
-                _numberState = 0;
+                //다음
+                if (_numberState == finalNumber - 1) {
+                  Navigator.pop(context);
+                } else {
+                  submitButtonColor = grey02;
+                  answerType = AnswerType.basic;
+                  answerLineColor = grey05;
+                  answerLineBackgroundColor = Colors.white;
+                  _numberState += 1;
+                  solved = false;
+                  _selectedNumber = -1;
+                  answer = -1;
+                }
               }
             });
           }
-          // number selected, check if it's correct
-
-          // when problems are finishied, route to grading page
-          // print("_numberState: "+_numberState.toString()+" finalNumber: "+finalNumber.toString());
         },
-        child: _numberState == finalNumber - 1 && isCorrect
-            ? const Text('완료')
-            : answerType != AnswerType.basic
-                ? const Text('다음')
-                : const Text('채점하기'),
+        child: !solved
+            ? Text(
+                "채점",
+                style: button2(grey00),
+              )
+            : _numberState == finalNumber - 1
+                ? Text(
+                    "완료",
+                    style: button2(grey00),
+                  )
+                : Text(
+                    "다음",
+                    style: button2(grey00),
+                  ),
       );
 
   OutlinedButton numberButton(String number, int value) {
     bool isSelected = _selectedNumber == value;
-
     return OutlinedButton(
       onPressed: () {
-        setState(() {
-          _selectedNumber = isSelected ? -1 : value;
-        });
+        if (!solved) {
+          setState(() {
+            if (isSelected) {
+              submitButtonColor = grey02;
+            } else {
+              submitButtonColor = yellow05;
+            }
+            _selectedNumber = isSelected ? -1 : value;
+          });
+        }
       },
       style: ButtonStyle(
         side: MaterialStateProperty.all(BorderSide(
@@ -422,49 +418,12 @@ class _WrongExamPageState extends State<WrongExamPage> {
     );
   }
 
-  int goPrevious() {
-    setState(() {
-      if (_numberState > 0) {
-        _numberState -= 1;
-        _selectedNumber = _selectedNumbers[_numberState];
-      }
-    });
-    return _numberState;
-  }
-
-  int goNext() {
-    setState(() {
-      if (_numberState < (finalNumber - 1)) {
-        _numberState += 1;
-        _selectedNumber = _selectedNumbers[_numberState];
-      }
-    });
-    return _numberState;
-  }
-
-  List<int> checkanswers() {
-    for (int i = 0; i < finalNumber; i++) {
-      if (_selectedNumbers[i] == _problems[i].answer) {
-        corrects.add(1);
-      } else {
-        corrects.add(2);
-      }
-    }
-    List<int> unSolvedNumbers = [];
-    for (int i = 0; i < finalNumber; i++) {
-      if (_selectedNumbers[i] == -1) {
-        unSolvedNumbers.add(i + 1);
-      }
-    }
-    return unSolvedNumbers;
-  }
-
-  Container goToUnitProbleButton() {
+  Container goToUnitProbleButton(List<Problem> problems) {
     return Container(
       margin: const EdgeInsets.only(bottom: 100, right: 60),
       child: OutlinedButton(
         onPressed: () {
-          showStatefulBuilderDialog(context);
+          showStatefulBuilderDialog(context, problems);
           setState(() {});
         },
         style: OutlinedButton.styleFrom(
@@ -482,83 +441,63 @@ class _WrongExamPageState extends State<WrongExamPage> {
     );
   }
 
-//TODO: DB연결필요
-  Future<dynamic> showStatefulBuilderDialog(BuildContext context) async {
+  Future<dynamic> showStatefulBuilderDialog(
+      BuildContext context, List<Problem> problems) async {
     await showDialog<void>(
       context: context,
-      builder: (_) {
-        int selectedNumber2 = -1;
-        int numberState2 = 0;
-        int finalNumber2 = 2;
-        int answer2 = -1;
-        List<int> corrects2 = [];
-        // bool remoteControl = true; // remote control on/off
-        AnswerType answerType2 =
-            AnswerType.basic; //정답 여부 나타내는 변수. 하단 버튼 부분 색상 변경에 사용.
-        bool isCorrect2 = false;
+      builder: (BuildContext context) {
+        int numberState = 0;
+        int finalNumber = problems.length;
         double spaceBetweenNumbers = 30;
-
-        OutlinedButton numberButton2(String number, int value) {
-          bool isSelected2 = selectedNumber2 == value;
-
-          return OutlinedButton(
-            onPressed: () {
-              setState(() {
-                selectedNumber2 = isSelected2 ? -1 : value;
-              });
-            },
-            style: ButtonStyle(
-              side: MaterialStateProperty.all(BorderSide(
-                color: isSelected2
-                    ? answerType2 == AnswerType.basic
-                        ? yellow04
-                        : answerType2 == AnswerType.correct
-                            ? green03
-                            : pointRed
-                    : value == answer2
-                        ? green03
-                        : grey09,
-              )),
-              backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                (states) {
-                  if (isSelected2) {
-                    switch (answerType2) {
-                      case AnswerType.basic:
-                        return yellow03;
-                      case AnswerType.correct:
-                        return green02;
-                      case AnswerType.wrong:
-                        return red02;
-                    }
-                  } else {
-                    return value == answer2 ? green02 : grey00;
-                  }
-                },
-              ),
-              fixedSize: MaterialStateProperty.all(const Size(40, 40)),
-              shape: MaterialStateProperty.all(const CircleBorder()),
-            ),
-            child: Text(
-              number,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isSelected2
-                    ? answerType2 == AnswerType.basic
-                        ? yellow04
-                        : answerType2 == AnswerType.correct
-                            ? pointGreen
-                            : pointRed
-                    : value == answer2
-                        ? green03
-                        : grey09,
-              ),
-            ),
-          );
-        }
+        int answer = problems[numberState].answer;
+        List<Color> textColors = List.generate(5, (i) => grey07);
+        List<Color> backgroundColors =
+            List.generate(5, (i) => Colors.transparent);
+        bool solved = false;
 
         return AlertDialog(
           content: StatefulBuilder(
-            builder: (__, StateSetter setState) {
+            builder: (BuildContext context, StateSetter stateSet) {
+              OutlinedButton numberButtonIn(String number, int value,
+                  Color textColor, Color backgroundColor) {
+                return OutlinedButton(
+                  onPressed: () {
+                    stateSet(
+                      () {
+                        if (!solved) {
+                          solved = true;
+                          if (answer == value) {
+                            textColors[value] = green03;
+                            backgroundColors[value] = green02;
+                          } else {
+                            textColors[value] = red03;
+                            backgroundColors[value] = red02;
+                            textColors[answer] = green03;
+                            backgroundColors[answer] = green02;
+                          }
+                        }
+                      },
+                    );
+                  },
+                  style: ButtonStyle(
+                    side:
+                        MaterialStateProperty.all(BorderSide(color: textColor)),
+                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                      (states) {
+                        return backgroundColor;
+                      },
+                    ),
+                    fixedSize: MaterialStateProperty.all(const Size(40, 40)),
+                    shape: MaterialStateProperty.all(const CircleBorder()),
+                  ),
+                  child: Text(
+                    number,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: textColor),
+                  ),
+                );
+              }
+
               return Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -567,7 +506,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
                       padding:
                           const EdgeInsets.only(left: 92, right: 80, top: 20),
                       child: Text(
-                        "1단원|직선의 방정식",
+                        "${problems[numberState].mSection}단원|랄랄루",
                         style: body3(yellow06),
                       ),
                     ),
@@ -580,7 +519,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
                           width: 480,
                           height: 390,
                           child: Image.network(
-                            _problems[numberState2].problem,
+                            problems[numberState].problem,
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) {
                                 return child;
@@ -599,100 +538,84 @@ class _WrongExamPageState extends State<WrongExamPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 66,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: 140,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            numberButton2('1', 1),
+                            numberButtonIn(
+                                '1', 1, textColors[1], backgroundColors[1]),
                             SizedBox(width: spaceBetweenNumbers),
-                            numberButton2('2', 2),
+                            numberButtonIn(
+                                '2', 2, textColors[2], backgroundColors[2]),
                             SizedBox(width: spaceBetweenNumbers),
-                            numberButton2('3', 3),
+                            numberButtonIn(
+                                '3', 3, textColors[3], backgroundColors[3]),
                             SizedBox(width: spaceBetweenNumbers),
-                            numberButton2('4', 4),
+                            numberButtonIn(
+                                '4', 4, textColors[4], backgroundColors[4]),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 50,
                         ),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color?>(
-                              (states) {
-                                if (selectedNumber2 == -1) {
-                                  return grey02;
-                                } else if (answerType2 == AnswerType.basic) {
-                                  return yellow04;
-                                } else if (answerType2 == AnswerType.correct) {
-                                  return pointGreen;
-                                } else {
-                                  return pointRed;
-                                }
-                              },
-                            ),
-                            fixedSize:
-                                MaterialStateProperty.all(const Size(90, 44)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
-                            if (selectedNumber2 != -1) {
-                              // 뭔가 선택했을 때
-                              setState(() {
-                                answer = _problems[numberState2].answer;
-                                if (answerType2 == AnswerType.basic) {
-                                  if (answer == selectedNumber2) {
-                                    //정답 맞춘 경우 correct
-                                    corrects2[numberState2] = 1; // correct
-                                    answerType2 = AnswerType.correct;
-                                    isCorrect2 = true;
-                                  } else {
-                                    //정답 못 맞춘 경우 wrong
-                                    corrects2[numberState2] = 2; // wrong
-                                    answerType2 = AnswerType.wrong;
-                                  }
-                                } else {
-                                  //정답 맞춘 후 '다음' 버튼으로 바뀌고 다음 문제로 넘어가는 부분
-                                  answerType2 = AnswerType.basic;
-                                  isCorrect2 = false;
-                                  numberState2 += 1;
-                                  selectedNumber2 = -1;
-                                }
-                                //if final number, route to grading page
-                                if (numberState2 == finalNumber2) {
-                                  Navigator.pushNamed(
-                                      context, '/unitExamGradingPage',
-                                      arguments: GradingArguments(
-                                          corrects2, _problems));
-                                  numberState2 = 0;
-                                }
-                              });
-                            }
-                            // number selected, check if it's correct
-
-                            // when problems are finishied, route to grading page
-                            // print("_numberState2: "+_numberState2.toString()+" finalNumber: "+finalNumber.toString());
-                          },
-                          child: numberState2 == finalNumber2 - 1 && isCorrect2
-                              ? const Text('완료')
-                              : answerType != AnswerType.basic
-                                  ? const Text('다음')
-                                  : const Text('채점하기'),
-                        )
+                        !solved
+                            ? const SizedBox(
+                                width: 90,
+                                height: 44,
+                              )
+                            : ElevatedButton(
+                                style: ButtonStyle(
+                                  elevation: MaterialStateProperty.all(0),
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color?>(
+                                    (states) {
+                                      return yellow05;
+                                    },
+                                  ),
+                                  fixedSize: MaterialStateProperty.all(
+                                      const Size(90, 44)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  stateSet(
+                                    () {
+                                      if (numberState != finalNumber - 1) {
+                                        numberState += 1;
+                                        solved = false;
+                                        answer = problems[numberState].answer;
+                                        textColors =
+                                            List.generate(5, (i) => grey07);
+                                        backgroundColors = List.generate(
+                                            5, (i) => Colors.transparent);
+                                      } else {
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                  );
+                                },
+                                child: numberState == finalNumber - 1
+                                    ? Text(
+                                        '완료',
+                                        style: body3(grey00),
+                                      )
+                                    : Text(
+                                        '다음',
+                                        style: body3(grey00),
+                                      ),
+                              )
                       ],
                     ),
                   ]);
