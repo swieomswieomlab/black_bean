@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => const MyHomePage(),
+          '/': (context) => LandingPage(),
           '/problemMake': (context) => const ProblemMake(),
           '/testPage': (context) => const TestPage(),
           // '/fullExam': (context) => const FullExamPage(),
@@ -60,8 +60,6 @@ class MyApp extends StatelessWidget {
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
           '/wrongExam': (context) => const WrongExamPage(),
           '/nameMake': (context) => NameMakePage(),
-          '/landing': (context) => const LandingPage(),
-
         },
         // ignore: body_might_complete_normally_nullable
         onGenerateRoute: ((settings) {

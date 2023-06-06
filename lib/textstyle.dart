@@ -26,6 +26,7 @@ const Color pointGreen = Color(0xff30d07a);
 const Color dimmed02 = Color(0x73000000);
 const Color dimmed01 = Color(0x40000000);
 
+const Color blue10 = Color(0xff1688E1);
 const Color blue09 = Color(0xff43a7f5);
 const Color blue08 = Color(0xff4db0fd);
 const Color blue07 = Color(0xff6eb6ee);
