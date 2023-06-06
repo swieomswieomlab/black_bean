@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../model/unit_exam_arguments.dart';
@@ -20,7 +22,6 @@ class UnitExamPage extends StatefulWidget {
 
 class _UnitExamPageState extends State<UnitExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
-  final double spaceBetweenNumbers = 48;
   //0 for init, 1 for correct, 2 for wrong
   late List<int> _selectedNumbers;
 
@@ -32,6 +33,8 @@ class _UnitExamPageState extends State<UnitExamPage> {
   // bool remoteControl = true; // remote control on/off
   AnswerType answerType = AnswerType.basic; //정답 여부 나타내는 변수. 하단 버튼 부분 색상 변경에 사용.
   bool isCorrect = false;
+  double imageWidth = 480;
+  late double screenWidth;
 
   List<int> corrects = [];
 
@@ -69,6 +72,10 @@ class _UnitExamPageState extends State<UnitExamPage> {
 
   @override
   Widget build(BuildContext context) {
+    imageWidth = max(MediaQuery.of(context).size.width * 0.375, 480);
+    screenWidth = MediaQuery.of(context).size.width;
+    final double spaceBetweenNumbers = max(screenWidth / 1200 * 48, 48);
+
     return FutureBuilder<List<Problem>>(
       future: _loadProblemsFuture,
       builder: (context, snapshot) {
@@ -184,11 +191,11 @@ class _UnitExamPageState extends State<UnitExamPage> {
                           scrollDirection: Axis.horizontal,
                           child: Container(
                             margin: const EdgeInsets.symmetric(horizontal: 40),
-                            width: 1200,
                             height: MediaQuery.of(context).size.height - 100,
                             child: Column(
                               children: [
                                 Container(
+                                  width: imageWidth,
                                   padding: const EdgeInsets.only(left: 220),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
@@ -197,6 +204,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                   ),
                                 ),
                                 SizedBox(
+                                  width: imageWidth,
                                   height:
                                       MediaQuery.of(context).size.height - 200,
                                   child: SingleChildScrollView(
@@ -226,7 +234,7 @@ class _UnitExamPageState extends State<UnitExamPage> {
                                 ),
                                 const Spacer(),
                                 SizedBox(
-                                  width: 1200,
+                                  width: 1100,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,

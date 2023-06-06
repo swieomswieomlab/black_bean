@@ -98,7 +98,7 @@ class GradingPageState extends State<GradingPage> {
                         children: [
                           Text(
                             "$_score점",
-                            style: Headline_H0(72, mainSkyBlue),
+                            style: Headline(mainSkyBlue),
                           ),
                           Text(
                             "합격까지 한 문제! 너무 잘 하고 있어요 :)",

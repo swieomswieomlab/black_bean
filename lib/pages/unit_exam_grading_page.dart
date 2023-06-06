@@ -48,7 +48,7 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
                         children: [
                           Text(
                             "수고하셨습니다!",
-                            style: Headline_H0(72, mainSkyBlue),
+                            style: Headline(mainSkyBlue),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
