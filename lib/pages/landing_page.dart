@@ -10,16 +10,15 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  double standardWidth = 1194;
-  double standardHeight = 796;
-  
+  double standardWidth = 1194; //responsive를 위한 기준 width
+  double standardHeight = 796; //responsive를 위한 기준 height
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double actualWidth = max(standardWidth, screenWidth);
-    double actualHeight = max(standardHeight, screenHeight);
+    double screenWidth = MediaQuery.of(context).size.width; //화면 창의 width
+    double screenHeight = MediaQuery.of(context).size.height; //화면 창의 height
+    double actualWidth = max(standardWidth, screenWidth); //실제로 적용되는 width
+    double actualHeight = max(standardHeight, screenHeight); //실제로 적용되는 height
 
     return Scaffold(
         body: Center(
@@ -36,12 +35,9 @@ class _LandingPageState extends State<LandingPage> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // OutlinedButton(onPressed: (){
-                      //   print("width: $screenWidth, height: $screenHeight");
-                      // }, child: Text("width: $actualWidth, height: $actualHeight")),
                       Image.asset(
                         "assets/images/landing_title.png",
-                        width: actualWidth /(1280/609),
+                        width: actualWidth / (1280 / 609),
                         fit: BoxFit.fitWidth,
                       ),
                     ]),
@@ -53,7 +49,8 @@ class _LandingPageState extends State<LandingPage> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("쉬엄쉬엄 조금씩 공부하다 보면\n어느새 검정고시가 쉬워질 거에요",textAlign: TextAlign.center, style: title4(grey09)),
+                      Text("쉬엄쉬엄 조금씩 공부하다 보면\n어느새 검정고시가 쉬워질 거에요",
+                          textAlign: TextAlign.center, style: title4(grey09)),
                       const SizedBox(height: 122),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -150,14 +147,42 @@ class _LandingPageState extends State<LandingPage> {
                     ]),
               ),
             ]),
+            //책으로 만든 계단 이미지
             Positioned(
-                right: 40,
-                top: 100,
-                child: Image.asset("assets/images/stairs.png", width: actualWidth / 1200*270, fit: BoxFit.fitWidth,),),
-            Positioned(bottom: 0, child: Image.asset("assets/images/flower2.png", width: actualWidth / 1200*307, fit: BoxFit.fitWidth,)),
-            Positioned(top: actualHeight * 0.717, child: Image.asset("assets/images/dudu.png", width: actualWidth / 1200*562, fit: BoxFit.fitWidth,)),
+              right: 40,
+              top: 100,
+              child: Image.asset(
+                "assets/images/stairs.png",
+                width: actualWidth /
+                    1200 *
+                    270, //디자이너가 준 기준에 맞추기 위한 수치. Figma에서 확인 가능.
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+            //하단 꽃 이미지
             Positioned(
-                top: 0, child: Image.asset("assets/images/flower.png", width: actualWidth / 1200*348, fit: BoxFit.fitWidth,)),
+                bottom: 0,
+                child: Image.asset(
+                  "assets/images/flower2.png",
+                  width: actualWidth / 1200 * 307,
+                  fit: BoxFit.fitWidth,
+                )),
+            //두두두두 되어있는 터널 이미지
+            Positioned(
+                top: actualHeight * 0.717,
+                child: Image.asset(
+                  "assets/images/dudu.png",
+                  width: actualWidth / 1200 * 562,
+                  fit: BoxFit.fitWidth,
+                )),
+            //상단 꽃 이미지
+            Positioned(
+                top: 0,
+                child: Image.asset(
+                  "assets/images/flower.png",
+                  width: actualWidth / 1200 * 348,
+                  fit: BoxFit.fitWidth,
+                )),
           ],
         ),
       ),
