@@ -270,8 +270,8 @@ class _UnitExamPageState extends State<UnitExamPage>
                                                  child: Image.asset(
                                                   answerType == AnswerType.correct
                                                       ? 'assets/images/scoring_dingdongdang.png' //맞췄을 때
-                                                      : wrongCount == 2
-                                                          ? 'assets/images/scoring_semo.png' //2번 틀렸을 때
+                                                      : wrongCount >= 2
+                                                          ? 'assets/images/scoring_X.png' //2번 틀렸을 때
                                                           : 'assets/images/scoring_ddaeng.png', //1번 틀렸을 때
                                                   alignment: Alignment.topLeft,
                                                 ),
