@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, avoid_print
+// ignore_for_file: unused_import, avoid_print, prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:io';
 

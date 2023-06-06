@@ -20,7 +20,6 @@ class WrongExamPage extends StatefulWidget {
 class _WrongExamPageState extends State<WrongExamPage> {
   final FirebaseService _firebaseService = FirebaseService();
   final double spaceBetweenNumbers = 48;
-  late List<int> _selectedNumbers;
 
   late Future<List<Problem>> _loadProblemsFuture;
   late List<Problem> _problems;

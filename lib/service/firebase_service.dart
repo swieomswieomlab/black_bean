@@ -47,6 +47,7 @@ class FirebaseService {
     UploadTask uploadTask =
         ref.putData(bytes, SettableMetadata(contentType: 'image/png'));
     TaskSnapshot taskSnapshot =
+        // ignore: body_might_complete_normally_catch_error
         await uploadTask.whenComplete(() {}).catchError((error) {});
     String url = await taskSnapshot.ref.getDownloadURL();
     return url;

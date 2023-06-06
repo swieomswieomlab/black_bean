@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'model/full_exam_arguments.dart';
-import 'pages/home_page.dart';
 import 'firebase_options.dart';
 import 'pages/select_full_exam_page.dart';
 import 'pages/select_unit_exam_page.dart';
