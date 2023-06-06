@@ -100,6 +100,15 @@ TextStyle title3(Color color) {
       color: color);
 }
 
+TextStyle title4(Color color) {
+  return TextStyle(
+      fontSize: 40,
+      fontWeight: FontWeight.w700,
+      fontFamily: "Pretendard",
+      height: 60 / 40,
+      color: color);
+}
+
 TextStyle body1(Color color) {
   return TextStyle(
       fontSize: 20,

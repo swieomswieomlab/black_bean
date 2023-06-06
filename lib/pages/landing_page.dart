@@ -11,7 +11,7 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   double standardWidth = 1194;
-  double standardHeight = 834;
+  double standardHeight = 796;
   
 
   @override
@@ -36,6 +36,9 @@ class _LandingPageState extends State<LandingPage> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // OutlinedButton(onPressed: (){
+                      //   print("width: $screenWidth, height: $screenHeight");
+                      // }, child: Text("width: $actualWidth, height: $actualHeight")),
                       Image.asset(
                         "assets/images/landing_title.png",
                         width: actualWidth /(1280/609),
@@ -50,9 +53,7 @@ class _LandingPageState extends State<LandingPage> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("쉬엄쉬엄 조금씩 공부하다 보면", style: title1(grey09)),
-                      const SizedBox(height: 34),
-                      Text("어느새 검정고시가 쉬워질 거에요", style: title1(grey09)),
+                      Text("쉬엄쉬엄 조금씩 공부하다 보면\n어느새 검정고시가 쉬워질 거에요",textAlign: TextAlign.center, style: title4(grey09)),
                       const SizedBox(height: 122),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -150,13 +151,13 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ]),
             Positioned(
-                right: 0,
-                top: 0,
-                child: Image.asset("assets/images/stairs.png")),
-            Positioned(top: 0, child: Image.asset("assets/images/flower2.png")),
-            Positioned(top: actualHeight * 0.717, child: Image.asset("assets/images/dudu.png")),
+                right: 40,
+                top: 100,
+                child: Image.asset("assets/images/stairs.png", width: actualWidth / 1200*270, fit: BoxFit.fitWidth,),),
+            Positioned(bottom: 0, child: Image.asset("assets/images/flower2.png", width: actualWidth / 1200*307, fit: BoxFit.fitWidth,)),
+            Positioned(top: actualHeight * 0.717, child: Image.asset("assets/images/dudu.png", width: actualWidth / 1200*562, fit: BoxFit.fitWidth,)),
             Positioned(
-                bottom: 0, child: Image.asset("assets/images/flower.png")),
+                top: 0, child: Image.asset("assets/images/flower.png", width: actualWidth / 1200*348, fit: BoxFit.fitWidth,)),
           ],
         ),
       ),
