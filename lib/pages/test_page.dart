@@ -29,12 +29,11 @@ class _TestPageState extends State<TestPage> {
       });
     }).then((value) {
       Future.delayed(Duration(seconds: 2)).then((value) {
-      setState(() {
-        selected = true;
+        setState(() {
+          selected = true;
+        });
       });
     });
-    });
-    
   }
 
   @override
@@ -42,6 +41,12 @@ class _TestPageState extends State<TestPage> {
     return Scaffold(
         body: Stack(
       children: [
+        ElevatedButton(
+            onPressed: () {
+              print(firebaseService.getInstanceFromProblem(
+                  'High', 'Math', '2022-1', 1));
+            },
+            child: Text("PRESS")),
         Positioned(
           bottom: 0,
           left: 0,
