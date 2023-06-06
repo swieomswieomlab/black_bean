@@ -21,8 +21,9 @@ class UnitExamPage extends StatefulWidget {
   State<UnitExamPage> createState() => _UnitExamPageState();
 }
 
-class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMixin {
-  late final AnimationController lottieController;
+class _UnitExamPageState extends State<UnitExamPage>
+    with TickerProviderStateMixin {
+  // late final AnimationController lottieController;
 
   final FirebaseService _firebaseService = FirebaseService();
   //0 for init, 1 for correct, 2 for wrong
@@ -38,19 +39,28 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
   bool isCorrect = false;
   double imageWidth = 480;
   late double screenWidth;
-
+  bool speechBubble = false;
   List<int> corrects = [];
-
   List<String> majorSectionNames = [];
+  int wrongCount = 0;
 
   @override
   void initState() {
     super.initState();
-    
+
     var args = widget.arguments;
     loadProblems(args);
-    lottieController = AnimationController(vsync: this);
-    lottieController.duration = const Duration(milliseconds: 1000);
+    // lottieController = AnimationController(vsync: this);
+    // lottieController.duration = const Duration(milliseconds: 1000);
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        speechBubble = true;
+      });
+    }).then((value) => Future.delayed(const Duration(seconds: 5), () {
+          setState(() {
+            speechBubble = false;
+          });
+        }));
   }
 
   void loadProblems(UnitExamArguments args) async {
@@ -161,31 +171,40 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
               children: [
                 Positioned(
                   bottom: 0,
-                  child: Container(
-                    height: 70,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: answerType == AnswerType.basic
-                          ? Colors.white
-                          : answerType == AnswerType.correct
-                              ? const Color(0xffF3FFF8)
-                              : answerType == AnswerType.checkAnswer
-                                  ? const Color(0xffFDF7E3)
-                                  : const Color(0xffFEF5F5),
-                      border: Border(
-                        top: BorderSide(
+                  child: Column(
+                    children: [
+                      AnimatedOpacity(
+                          opacity: speechBubble ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 500),
+                          child:
+                              Image.asset("assets/images/speech_bubble.png")),
+                      Container(
+                        height: 70,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
                           color: answerType == AnswerType.basic
-                              ? grey04
+                              ? Colors.white
                               : answerType == AnswerType.correct
-                                  ? pointGreen
+                                  ? const Color(0xffF3FFF8)
                                   : answerType == AnswerType.checkAnswer
-                                      ? pointYellow
-                                      : pointRed,
-                          width: 1.0,
+                                      ? const Color(0xffFDF7E3)
+                                      : const Color(0xffFEF5F5),
+                          border: Border(
+                            top: BorderSide(
+                              color: answerType == AnswerType.basic
+                                  ? grey04
+                                  : answerType == AnswerType.correct
+                                      ? pointGreen
+                                      : answerType == AnswerType.checkAnswer
+                                          ? pointYellow
+                                          : pointRed,
+                              width: 1.0,
+                            ),
+                          ),
                         ),
+                        padding: const EdgeInsets.only(bottom: 20, top: 20),
                       ),
-                    ),
-                    padding: const EdgeInsets.only(bottom: 20, top: 20),
+                    ],
                   ),
                 ),
                 Center(
@@ -202,8 +221,7 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
                               children: [
                                 Container(
                                   width: imageWidth,
-                                  padding: const EdgeInsets.only(left: 220),
-
+                                  padding: const EdgeInsets.only(left: 10),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     yearToKorean(_problems[_numberState].year),
@@ -214,21 +232,23 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
                                   width: imageWidth,
                                   height:
                                       MediaQuery.of(context).size.height - 200,
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: Stack(
-                                      children: [
-                                        SizedBox(
+                                  child: Stack(
+                                    children: [
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Container(
+                                          margin: const EdgeInsets.only(top: 10),
                                           width: 480,
                                           child: Image.network(
                                             _problems[_numberState].problem,
-                                            loadingBuilder:
-                                                (context, child, loadingProgress) {
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
                                               if (loadingProgress == null) {
                                                 return child;
                                               }
                                               return Center(
-                                                child: CircularProgressIndicator(
+                                                child:
+                                                    CircularProgressIndicator(
                                                   value: loadingProgress
                                                               .expectedTotalBytes !=
                                                           null
@@ -242,22 +262,29 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
                                             },
                                           ),
                                         ),
-                                        Visibility(
-                                          visible:
-                                              answerType != AnswerType.basic,
-                                          child: SizedBox(
-                                            width: 100,
-                                            child: Lottie.asset(
-                                              answerType == AnswerType.correct
-                                                  ? 'assets/circleLottie.json' //맞췄을 때
-                                                  : 'assets/circleLottie.json', //틀렸을 때
-                                              controller: lottieController,
-                                              repeat: false,
+                                      ),
+                                      Visibility(
+                                              visible:
+                                                  answerType != AnswerType.basic,
+                                              child: SizedBox(
+                                                 child: Image.asset(
+                                                  answerType == AnswerType.correct
+                                                      ? 'assets/images/scoring_dingdongdang.png' //맞췄을 때
+                                                      : wrongCount == 2
+                                                          ? 'assets/images/scoring_semo.png' //2번 틀렸을 때
+                                                          : 'assets/images/scoring_ddaeng.png', //1번 틀렸을 때
+                                                  alignment: Alignment.topLeft,
+                                                ),
+                                                // child: Lottie.asset(
+                                                //   answerType == AnswerType.correct
+                                                //       ? 'assets/circleLottie.json' //맞췄을 때
+                                                //       : 'assets/circleLottie.json', //틀렸을 때
+                                                //   controller: lottieController,
+                                                //   repeat: false,
+                                                // ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    ],
                                   ),
                                 ),
                                 const Spacer(),
@@ -369,7 +396,6 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
           ),
         ),
         onPressed: () {
-
           if (_selectedNumber != -1) {
             // 뭔가 선택했을 때
             setState(() {
@@ -381,16 +407,24 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
                   corrects[_numberState] = 1; // correct
                   answerType = AnswerType.correct;
                   isCorrect = true;
-                   Future.delayed(Duration(milliseconds: 100)).then((value) => lottieController
-                    ..reset()
-                    ..forward()) ;
+                  // Future.delayed(Duration(milliseconds: 100))
+                  //     .then((value) => lottieController
+                  //       ..reset()
+                  //       ..forward());
                 } else {
                   //정답 못 맞춘 경우 wrong
                   corrects[_numberState] = 2; // wrong
                   answerType = AnswerType.wrong;
-                  Future.delayed(Duration(milliseconds: 100)).then((value) => lottieController
-                    ..reset()
-                    ..forward()) ;
+                  wrongCount += 1;
+                  if (wrongCount == 3) {
+                    answerType = AnswerType.checkAnswer;
+                    _selectedNumber = _problems[_numberState].answer;
+                    isCorrect = true;
+                  }
+                  // Future.delayed(Duration(milliseconds: 100))
+                  //     .then((value) => lottieController
+                  //       ..reset()
+                  //       ..forward());
                 }
               } else {
                 //정답 맞춘 후 '다음' 버튼으로 바뀌고 다음 문제로 넘어가는 부분
@@ -398,6 +432,7 @@ class _UnitExamPageState extends State<UnitExamPage> with TickerProviderStateMix
                 isCorrect = false;
                 _numberState += 1;
                 _selectedNumber = -1;
+                wrongCount = 0;
               }
               //if final number, route to grading page
               if (_numberState == finalNumber) {
