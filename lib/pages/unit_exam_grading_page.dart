@@ -46,6 +46,7 @@ class UnitExamGradingPageState extends State<UnitExamGradingPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          //TODO: image here
                           Text(
                             "수고하셨습니다!",
                             style: Headline(mainSkyBlue),
