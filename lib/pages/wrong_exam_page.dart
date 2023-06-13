@@ -67,7 +67,11 @@ class _WrongExamPageState extends State<WrongExamPage> {
               problems[i].mSection,
               problems[i].iSection,
               problems[i].sSection);
-      assert(tmp.length == 2);
+      for (var pro in tmp) {
+        if (pro.year == problems[i].year && pro.number == problems[i].number) {
+          tmp.remove(pro);
+        }
+      }
       internalProblems.add(tmp);
     }
   }
@@ -446,6 +450,18 @@ class _WrongExamPageState extends State<WrongExamPage> {
     await showDialog<void>(
       context: context,
       builder: (BuildContext context) {
+        if (problems.isEmpty) {
+          return AlertDialog(
+            content: Container(child: Text("해당 단원의 문제가 없습니다.")),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("돌아가기"))
+            ],
+          );
+        }
         int numberState = 0;
         int finalNumber = problems.length;
         double spaceBetweenNumbers = 30;
