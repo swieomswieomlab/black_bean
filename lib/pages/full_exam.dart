@@ -1,10 +1,10 @@
-import 'package:black_bean/model/full_grading_arguments.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../model/full_exam_arguments.dart';
-import '../textstyle.dart';
+import '../model/full_grading_arguments.dart';
 import '../model/problem.dart';
+import '../textstyle.dart';
 
 import '../service/firebase_service.dart';
 

@@ -1,8 +1,7 @@
-import 'package:black_bean/components.dart';
-import 'package:black_bean/model/unit_exam_arguments.dart';
-import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
-
+import '../components.dart';
+import '../model/unit_exam_arguments.dart';
+import '../textstyle.dart';
 import '../service/firebase_service.dart';
 
 class SelectUnitExamPage extends StatefulWidget {

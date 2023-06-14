@@ -1,10 +1,9 @@
-import 'package:black_bean/model/full_grading_arguments.dart';
 import 'package:flutter/material.dart';
-import 'package:black_bean/textstyle.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../components.dart';
+import '../model/full_grading_arguments.dart';
 import '../model/problem.dart';
+import '../textstyle.dart';
+import '../components.dart';
 
 class GradingPage extends StatefulWidget {
   final FullGradingArguments _gradingArguments;

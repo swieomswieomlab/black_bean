@@ -1,4 +1,4 @@
-import 'package:black_bean/textstyle.dart';
+import '../textstyle.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
