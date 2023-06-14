@@ -197,34 +197,34 @@ class NameMakePage extends StatelessWidget {
   //   ]
   // ];
 
-  String subject = 'History';
-  List<String> MajorSectionNames = [
-    '전근대 한국사의 이해',
-    '근대 국민 국가 수립 운동',
-    '일제 식민지 지배와 민족 운동의 전개',
-    '대한민국의 발전',
-  ];
-  List<List<String>> InterSectionNames = [
-    ['noInterSection'],
-    ['noInterSection'],
-    ['noInterSection'],
-    ['noInterSection'],
-  ];
-  List<List<List<String>>> SmallSectionsNames = [
-    [
-      ['고대 국가의 지배 체제', '고대 사회의 종교와 사상', '고려의 통치 체제와 국제 질서의 변동', '고려의 사회와 사상', '조선의 정치 운영과 세계관의 변화','양반 신분제 사화의 상품 화폐 경제']
-    ],
-    [
-      ['서구 열강의 접근과 조선의 대응','동아시아의 변화와 근대적 개혁의 추진','근대 국민 국가 수립을 위한 노력','일본의 침략 확대와 국권 수호 운동','개항 이후 경제와 사회·문화적 변화']
-    ],
-    [
-      ['일제의 식민지 지배 정책','3·1 운동과 대한민국 임시 정부','다양한 민족 운동의 전개','사회·문화의 변화와 사회 운동','전시 동원 체제와 민중의 삶','광복을 위한 노력']
-    ],
-    [
-      ['8·15 광복과 통일 정부 수립을 위한 노력','대한민국 정부 수립과 6·25 전쟁','4·19 혁명과 민주화를 위한 노력','6월 민주 항쟁과 민주주의의 발전','경제 성장과 사회·문화의 변화','남북 화해와 동아시와 평화를 위한 노력'
-      ]
-    ],
-  ];
+  // String subject = 'History';
+  // List<String> MajorSectionNames = [
+  //   '전근대 한국사의 이해',
+  //   '근대 국민 국가 수립 운동',
+  //   '일제 식민지 지배와 민족 운동의 전개',
+  //   '대한민국의 발전',
+  // ];
+  // List<List<String>> InterSectionNames = [
+  //   ['noInterSection'],
+  //   ['noInterSection'],
+  //   ['noInterSection'],
+  //   ['noInterSection'],
+  // ];
+  // List<List<List<String>>> SmallSectionsNames = [
+  //   [
+  //     ['고대 국가의 지배 체제', '고대 사회의 종교와 사상', '고려의 통치 체제와 국제 질서의 변동', '고려의 사회와 사상', '조선의 정치 운영과 세계관의 변화','양반 신분제 사화의 상품 화폐 경제']
+  //   ],
+  //   [
+  //     ['서구 열강의 접근과 조선의 대응','동아시아의 변화와 근대적 개혁의 추진','근대 국민 국가 수립을 위한 노력','일본의 침략 확대와 국권 수호 운동','개항 이후 경제와 사회·문화적 변화']
+  //   ],
+  //   [
+  //     ['일제의 식민지 지배 정책','3·1 운동과 대한민국 임시 정부','다양한 민족 운동의 전개','사회·문화의 변화와 사회 운동','전시 동원 체제와 민중의 삶','광복을 위한 노력']
+  //   ],
+  //   [
+  //     ['8·15 광복과 통일 정부 수립을 위한 노력','대한민국 정부 수립과 6·25 전쟁','4·19 혁명과 민주화를 위한 노력','6월 민주 항쟁과 민주주의의 발전','경제 성장과 사회·문화의 변화','남북 화해와 동아시와 평화를 위한 노력'
+  //     ]
+  //   ],
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -232,8 +232,8 @@ class NameMakePage extends StatelessWidget {
       body: Center(
           child: ElevatedButton(
         onPressed: () {
-          upload(degree, subject, MajorSectionNames, InterSectionNames,
-              SmallSectionsNames);
+          // upload(degree, subject, MajorSectionNames, InterSectionNames,
+          //     SmallSectionsNames);
         },
         child: const Text("PRESS"),
       )),
