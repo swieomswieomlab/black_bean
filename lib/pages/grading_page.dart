@@ -75,7 +75,7 @@ class GradingPageState extends State<GradingPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: basicAppbar(),
+        appBar: basicAppbar(context),
         body: Center(
           child: SingleChildScrollView(
             child: SingleChildScrollView(
