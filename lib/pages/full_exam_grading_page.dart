@@ -57,46 +57,48 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
               width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.height,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 1040,
-                    height: 349,
-                    child: Text(
-                      "수고하셨습니다 !",
-                      style: Headline(grey09),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 1040,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    problemBoxes(
-                        " 맞춘 문제", correctNumbers, blue03, Colors.transparent),
-                    problemBoxes(
-                        " 틀린 문제", wrongNumbers, red02, Colors.transparent),
-                    const SizedBox(
-                      width: 50,
+                    Container(
+                      alignment: Alignment.center,
+                      width: 1040,
+                      height: 349,
+                      child: Text(
+                        "수고하셨습니다 !",
+                        style: Headline(grey09),
+                      ),
                     ),
-                    MouseRegion(
-                        onEnter: (event) {
-                          setState(() {
-                            tipBoxBackgroundColor = yellow05;
-                            tipBoxFontColor = blue10;
-                          });
-                        },
-                        onExit: (event) {
-                          setState(() {
-                            tipBoxBackgroundColor = Colors.transparent;
-                            tipBoxFontColor = yellow05;
-                          });
-                        },
-                        child: tipBox(tipBoxBackgroundColor, tipBoxFontColor))
-                  ],
-                ),
-              ),
+                    SizedBox(
+                      width: 1040,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          problemBoxes(" 맞춘 문제", correctNumbers, blue03,
+                              Colors.transparent),
+                          problemBoxes(" 틀린 문제", wrongNumbers, red02,
+                              Colors.transparent),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          MouseRegion(
+                              onEnter: (event) {
+                                setState(() {
+                                  tipBoxBackgroundColor = yellow05;
+                                  tipBoxFontColor = blue10;
+                                });
+                              },
+                              onExit: (event) {
+                                setState(() {
+                                  tipBoxBackgroundColor = Colors.transparent;
+                                  tipBoxFontColor = yellow05;
+                                });
+                              },
+                              child: tipBox(
+                                  tipBoxBackgroundColor, tipBoxFontColor))
+                        ],
+                      ),
+                    ),
+                  ]),
             ),
           ],
         ),

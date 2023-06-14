@@ -80,8 +80,6 @@ flutter:
   # - assets/circle.gif
   # - assets/circle1.gif
   # - assets/LottieLego.json
-  - assets/congraturation.json
-  - assets/congraturation.lottie
     # - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
