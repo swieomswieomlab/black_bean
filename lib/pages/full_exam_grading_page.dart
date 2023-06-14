@@ -22,6 +22,9 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
   late List<Problem> problems;
   late List<int> wrongNumbers;
 
+  Color tipBoxBackgroundColor = Colors.transparent;
+  Color tipBoxFontColor = yellow05;
+
   @override
   void initState() {
     super.initState();
@@ -67,21 +70,32 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
                   ),
                   SizedBox(
                     width: 1040,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        problemBoxes(
-                            " 맞춘 문제", correctNumbers, grey00, maingreyblue),
-                        problemBoxes(" 틀린 문제", wrongNumbers, mainLightBlue,
-                            maingreyblue),
-                        const SizedBox(
-                          width: 50,
-                        ),
-                        tipBox()
-                      ],
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    problemBoxes(
+                        " 맞춘 문제", correctNumbers, blue03, Colors.transparent),
+                    problemBoxes(
+                        " 틀린 문제", wrongNumbers, red02, Colors.transparent),
+                    const SizedBox(
+                      width: 50,
                     ),
-                  ),
-                ],
+                    MouseRegion(
+                        onEnter: (event) {
+                          setState(() {
+                            tipBoxBackgroundColor = yellow05;
+                            tipBoxFontColor = blue10;
+                          });
+                        },
+                        onExit: (event) {
+                          setState(() {
+                            tipBoxBackgroundColor = Colors.transparent;
+                            tipBoxFontColor = yellow05;
+                          });
+                        },
+                        child: tipBox(tipBoxBackgroundColor, tipBoxFontColor))
+                  ],
+                ),
               ),
             ),
           ],
@@ -132,7 +146,7 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
                             tileNumbers[rowIndex * columnCount + columnIndex]
                                 .toString(),
                             textAlign: TextAlign.center,
-                            style: body2(mainBlack),
+                            style: body2(blue10),
                           ),
                         ),
                       ),
@@ -152,62 +166,57 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
     );
   }
 
-  Widget tipBox() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 14, 10, 10),
-      width: 212,
-      height: 254,
-      decoration: BoxDecoration(
-          color: yellow03,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: yellow05)),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(22, 26, 16, 26),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            "TIP",
-            style: body1(yellow05),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Text(
-            "틀린 문제를 다시 풀면\n훨씬 기억에 잘 남아요!",
-            style: body4(mainBlack),
-          ),
-          const SizedBox(
-            height: 60,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const SizedBox(
-                width: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  "틀린 문제 \n다시 풀기 ",
-                  style: body3(yellow05),
+  Widget tipBox(Color backgroundColor, Color fontColor) {
+    Color borderColor = blue10;
+    return GestureDetector(
+      onTap: routeToWrongExamPage,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(10, 14, 10, 10),
+        width: 212,
+        height: 254,
+        decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(2),
+            border: Border.all(color: borderColor)),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(22, 26, 16, 26),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              "TIP",
+              style: body1(fontColor),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Text("틀린 문제를 다시 풀면\n훨씬 기억에 잘 남아요!", style: body4(blue10)),
+            const SizedBox(
+              height: 70,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SizedBox(
+                  width: 60,
                 ),
-              ),
-              ElevatedButton(
-                onPressed: routeToWrongExamPage,
-                style: ElevatedButton.styleFrom(
-                    side: const BorderSide(color: yellow05),
-                    backgroundColor: const Color(0xffE7FFF2),
-                    fixedSize: const Size(52, 52),
-                    shape: const CircleBorder(),
-                    shadowColor: Colors.transparent),
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: pointGreen,
-                  size: 26,
-                ),
-              )
-            ],
-          )
-        ]),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(
+                    "Start",
+                    style: button1(fontColor),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Icon(
+                    Icons.arrow_outward,
+                    size: 32,
+                    color: fontColor,
+                  )
+                ]),
+              ],
+            )
+          ]),
+        ),
       ),
     );
   }

@@ -278,8 +278,12 @@ class FirebaseService {
       problems.add(problem);
     });
     problems.shuffle();
-    assert(problems.length >= 2);
-    return problems.sublist(0, 2);
+    // assert(problems.length >= 2);
+    if (problems.length >= 2) {
+      return problems.sublist(0, 2);
+    } else {
+      return problems;
+    }
   }
 
   //대단원명 불러오기

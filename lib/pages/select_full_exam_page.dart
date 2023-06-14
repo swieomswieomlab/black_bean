@@ -1,7 +1,7 @@
-import 'package:black_bean/components.dart';
-import 'package:black_bean/model/full_exam_arguments.dart';
-import 'package:black_bean/textstyle.dart';
 import 'package:flutter/material.dart';
+import '../components.dart';
+import '../model/full_exam_arguments.dart';
+import '../textstyle.dart';
 
 class SelectFullExamPage extends StatefulWidget {
   const SelectFullExamPage({super.key});

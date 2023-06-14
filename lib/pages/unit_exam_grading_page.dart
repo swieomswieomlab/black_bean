@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:black_bean/textstyle.dart';
+import '../textstyle.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../components.dart';

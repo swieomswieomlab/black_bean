@@ -1,4 +1,4 @@
-import 'package:black_bean/model/problem.dart';
+import 'problem.dart';
 
 class WrongExamArguments {
   final String degree;

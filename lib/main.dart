@@ -1,9 +1,9 @@
-import 'package:black_bean/model/full_grading_arguments.dart';
-import 'package:black_bean/model/unit_exam_arguments.dart';
-import 'package:black_bean/model/wrong_exam_arguments.dart';
-import 'package:black_bean/pages/image_change.dart';
-import 'package:black_bean/pages/landing_page.dart';
-import 'package:black_bean/pages/name_make.dart';
+import 'model/full_grading_arguments.dart';
+import 'model/unit_exam_arguments.dart';
+import 'model/wrong_exam_arguments.dart';
+import 'pages/image_change.dart';
+import 'pages/landing_page.dart';
+import 'pages/name_make.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
