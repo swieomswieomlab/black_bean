@@ -36,38 +36,55 @@ class FullExamGradingPageState extends State<FullExamGradingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: basicAppbar(),
+      backgroundColor: grey00,
+      appBar: basicAppbar(context),
       body: SingleChildScrollView(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          // height: MediaQuery.of(context).size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              //TODO: image here
-              Container(
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+                alignment: Alignment.topCenter,
                 width: 1040,
-                height: 274,
-                color: grey06,
-              ),
-              SizedBox(
-                width: 1040,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    problemBoxes(
-                        " 맞춘 문제", correctNumbers, grey00, maingreyblue),
-                    problemBoxes(
-                        " 틀린 문제", wrongNumbers, mainLightBlue, maingreyblue),
-                    const SizedBox(
-                      width: 50,
+                height: 500,
+                child: Image.asset(
+                  "assets/congraturation.gif",
+                  fit: BoxFit.fitHeight,
+                )),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: 1040,
+                    height: 349,
+                    child: Text(
+                      "수고하셨습니다 !",
+                      style: Headline(grey09),
                     ),
-                    tipBox()
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    width: 1040,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        problemBoxes(
+                            " 맞춘 문제", correctNumbers, grey00, maingreyblue),
+                        problemBoxes(" 틀린 문제", wrongNumbers, mainLightBlue,
+                            maingreyblue),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        tipBox()
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
