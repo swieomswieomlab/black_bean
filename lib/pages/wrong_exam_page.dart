@@ -60,6 +60,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
     List<Problem> problems = args.problems;
 
     for (int i = 0; i < problems.length; i++) {
+      List<Problem> toRemove = [];
       List<Problem> tmp =
           await _firebaseService.loadProblemSmallSectionFromDatabase(
               args.degree,
@@ -69,8 +70,11 @@ class _WrongExamPageState extends State<WrongExamPage> {
               problems[i].sSection);
       for (var pro in tmp) {
         if (pro.year == problems[i].year && pro.number == problems[i].number) {
-          tmp.remove(pro);
+          toRemove.add(pro);
         }
+      }
+      for (var toR in toRemove){
+        tmp.remove(toR);
       }
       internalProblems.add(tmp);
     }
