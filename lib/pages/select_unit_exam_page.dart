@@ -200,10 +200,10 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
               )
                   .then((value) {
                 List<String> tmp = [];
-                int ind = 1;
+                // int ind = 1;
                 for (var element in value) {
                   tmp.add(element.name);
-                  ind += 1;
+                  // ind += 1;
                 }
                 return tmp;
               });

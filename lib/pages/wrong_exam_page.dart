@@ -452,13 +452,13 @@ class _WrongExamPageState extends State<WrongExamPage> {
       builder: (BuildContext context) {
         if (problems.isEmpty) {
           return AlertDialog(
-            content: Container(child: Text("해당 단원의 문제가 없습니다.")),
+            content: const Text("해당 단원의 문제가 없습니다."),
             actions: [
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("돌아가기"))
+                  child: const Text("돌아가기"))
             ],
           );
         }
