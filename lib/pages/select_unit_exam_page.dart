@@ -41,7 +41,8 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: basicAppbar(),
+      backgroundColor: grey00,
+      appBar: basicAppbar(context),
       body: Center(
         child: SingleChildScrollView(
             child: SingleChildScrollView(

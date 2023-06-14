@@ -31,7 +31,8 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: basicAppbar(),
+      appBar: basicAppbar(context),
+      backgroundColor: grey00,
       body: Center(
         child: SingleChildScrollView(
             child: SingleChildScrollView(
