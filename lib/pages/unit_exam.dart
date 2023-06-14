@@ -1,13 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import '../model/unit_exam_arguments.dart';
 import '../textstyle.dart';
 import '../model/full_grading_arguments.dart';
 import '../model/problem.dart';
-
 import '../service/firebase_service.dart';
 
 //문제 정답 여부 나타내는 enum 변수에 사용
@@ -178,6 +176,9 @@ class _UnitExamPageState extends State<UnitExamPage>
                           duration: const Duration(milliseconds: 500),
                           child:
                               Image.asset("assets/images/speech_bubble.png")),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Container(
                         height: 70,
                         width: MediaQuery.of(context).size.width,
@@ -237,7 +238,8 @@ class _UnitExamPageState extends State<UnitExamPage>
                                       SingleChildScrollView(
                                         scrollDirection: Axis.vertical,
                                         child: Container(
-                                          margin: const EdgeInsets.only(top: 10),
+                                          margin:
+                                              const EdgeInsets.only(top: 10),
                                           width: 480,
                                           child: Image.network(
                                             _problems[_numberState].problem,
@@ -264,26 +266,18 @@ class _UnitExamPageState extends State<UnitExamPage>
                                         ),
                                       ),
                                       Visibility(
-                                              visible:
-                                                  answerType != AnswerType.basic,
-                                              child: SizedBox(
-                                                 child: Image.asset(
-                                                  answerType == AnswerType.correct
-                                                      ? 'assets/images/scoring_dingdongdang.png' //맞췄을 때
-                                                      : wrongCount >= 2
-                                                          ? 'assets/images/scoring_X.png' //2번 틀렸을 때
-                                                          : 'assets/images/scoring_ddaeng.png', //1번 틀렸을 때
-                                                  alignment: Alignment.topLeft,
-                                                ),
-                                                // child: Lottie.asset(
-                                                //   answerType == AnswerType.correct
-                                                //       ? 'assets/circleLottie.json' //맞췄을 때
-                                                //       : 'assets/circleLottie.json', //틀렸을 때
-                                                //   controller: lottieController,
-                                                //   repeat: false,
-                                                // ),
-                                              ),
-                                            ),
+                                        visible: answerType != AnswerType.basic,
+                                        child: SizedBox(
+                                          child: Image.asset(
+                                            answerType == AnswerType.correct
+                                                ? 'assets/images/scoring_dingdongdang.png' //맞췄을 때
+                                                : wrongCount >= 2
+                                                    ? 'assets/images/scoring_X.png' //2번 틀렸을 때
+                                                    : 'assets/images/scoring_ddaeng.png', //1번 틀렸을 때
+                                            alignment: Alignment.topLeft,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

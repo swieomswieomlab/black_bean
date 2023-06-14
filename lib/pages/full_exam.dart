@@ -126,6 +126,9 @@ class _FullExamPageState extends State<FullExamPage> {
                             duration: const Duration(milliseconds: 500),
                             child:
                                 Image.asset("assets/images/speech_bubble.png")),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Container(
                           height: 70,
                           width: MediaQuery.of(context).size.width,
