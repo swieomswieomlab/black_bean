@@ -15,7 +15,7 @@ class _SelectFullExamPageState extends State<SelectFullExamPage> {
     "Korean",
     "Math",
     "English",
-    "Society",
+    "Social",
     "Science",
     "History"
   ];
