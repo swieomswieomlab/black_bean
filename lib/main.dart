@@ -1,9 +1,7 @@
 import 'model/full_grading_arguments.dart';
 import 'model/unit_exam_arguments.dart';
 import 'model/wrong_exam_arguments.dart';
-import 'pages/image_change.dart';
 import 'pages/landing_page.dart';
-import 'pages/name_make.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +10,6 @@ import 'model/full_exam_arguments.dart';
 import 'firebase_options.dart';
 import 'pages/select_full_exam_page.dart';
 import 'pages/select_unit_exam_page.dart';
-import 'pages/test_page.dart';
 import 'package:flutter/foundation.dart';
 import 'pages/full_exam.dart';
 import 'pages/full_exam_grading_page.dart';
@@ -53,14 +50,9 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const LandingPage(),
           '/problemMake': (context) => const ProblemMake(),
-          '/testPage': (context) => const TestPage(),
           '/selectFullExamPage': (context) => const SelectFullExamPage(),
           '/selectUnitExamPage': (context) => const SelectUnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
-          '/nameMake': (context) => NameMakePage(),
-
-          // TO DELETE
-          '/imageChange': (context) => const ImageChange(),
         },
         // ignore: body_might_complete_normally_nullable
         onGenerateRoute: ((settings) {
