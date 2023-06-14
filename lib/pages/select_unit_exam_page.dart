@@ -19,7 +19,7 @@ class _SelectUnitExamPageState extends State<SelectUnitExamPage> {
     "Korean",
     "Math",
     "English",
-    "Society",
+    "Social",
     "Science",
     "History"
   ];
