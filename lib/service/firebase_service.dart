@@ -233,6 +233,11 @@ class FirebaseService {
       problems.add(problem);
     });
 
+    problems.shuffle();
+    if (problems.length >= 15){
+      return problems.sublist(0,15);
+    }
+
     return problems;
   }
 
@@ -317,6 +322,14 @@ class FirebaseService {
     });
 
     return majorSectionNames;
+  }
+
+  //TODO : 소단원명 불러오기
+  Future<List<MajorSectionName>> loadSmallSectionNameFromDatabase(
+    String degree,
+    String subject,
+  ) async {
+    return [];
   }
 
   // 년도, 번호로 문제 레퍼런스 들고옴

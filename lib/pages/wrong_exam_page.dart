@@ -35,6 +35,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
   Color submitButtonColor = grey02;
 
   List<String> majorSectionNames = [];
+  List<List<List<String>>> smallSectionNames = [];
 
   Color answerLineColor = grey05;
   Color answerLineBackgroundColor = Colors.white;
@@ -73,7 +74,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
           toRemove.add(pro);
         }
       }
-      for (var toR in toRemove){
+      for (var toR in toRemove) {
         tmp.remove(toR);
       }
       internalProblems.add(tmp);
@@ -526,7 +527,7 @@ class _WrongExamPageState extends State<WrongExamPage> {
                       padding:
                           const EdgeInsets.only(left: 92, right: 80, top: 20),
                       child: Text(
-                        "${problems[numberState].mSection}단원|랄랄루",
+                        "${problems[numberState].mSection}단원| ${majorSectionNames[problems[numberState].mSection - 1]}",
                         style: body3(yellow06),
                       ),
                     ),
