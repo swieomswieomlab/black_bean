@@ -1,3 +1,5 @@
+import 'package:seo/seo.dart';
+
 import '../textstyle.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -34,155 +36,132 @@ class _LandingPageState extends State<LandingPage> {
                     width: actualWidth,
                     height: actualHeight,
                     color: blue10,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            "assets/images/landing_title.png",
-                            width: actualWidth / (1280 / 609),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ]),
+                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Image.asset(
+                        "assets/images/landing_title.png",
+                        width: actualWidth / (1280 / 609),
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ]),
                   ),
                   Container(
                     width: actualWidth,
                     height: actualHeight,
                     color: grey00,
-                    child: Column(
+                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Seo.text(
+                        text: "쉬엄쉬엄 검정고시",
+                        child: Text("쉬엄쉬엄 조금씩 공부하다 보면\n어느새 검정고시가 쉬워질 거에요",
+                            textAlign: TextAlign.center, style: title4(grey09)),
+                      ),
+                      const SizedBox(height: 122),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("쉬엄쉬엄 조금씩 공부하다 보면\n어느새 검정고시가 쉬워질 거에요",
-                              textAlign: TextAlign.center,
-                              style: title4(grey09)),
-                          const SizedBox(height: 122),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          Column(
                             children: [
-                              Column(
-                                children: [
-                                  Text("한 단원씩 골라 풀고 싶다면",
-                                      style: title2(blue08)),
-                                  const SizedBox(height: 20),
-                                  OutlinedButton(
-                                    style: ButtonStyle(
-                                      fixedSize:
-                                          MaterialStateProperty.all<Size>(
-                                              const Size(250, 72)),
-                                      side:
-                                          MaterialStateProperty.all<BorderSide>(
-                                        const BorderSide(
-                                          color: blue10,
-                                          width: 5,
-                                        ),
-                                      ),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                        ),
-                                      ),
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          if (states.contains(
-                                              MaterialState.pressed)) {
-                                            return yellowButton;
-                                          } else if (states.contains(
-                                              MaterialState.hovered)) {
-                                            return blue09;
-                                          }
-                                          return grey00; // Return null for default background color
-                                        },
-                                      ),
+                              Text("한 단원씩 골라 풀고 싶다면", style: title2(blue08)),
+                              const SizedBox(height: 20),
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all<Size>(const Size(250, 72)),
+                                  side: MaterialStateProperty.all<BorderSide>(
+                                    const BorderSide(
+                                      color: blue10,
+                                      width: 5,
                                     ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, '/selectUnitExamPage');
+                                  ),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(40),
+                                    ),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      if (states.contains(MaterialState.pressed)) {
+                                        return yellowButton;
+                                      } else if (states.contains(MaterialState.hovered)) {
+                                        return blue09;
+                                      }
+                                      return grey00; // Return null for default background color
                                     },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text("연습문제", style: title1(grey09)),
-                                          const SizedBox(width: 10),
-                                          const Icon(
-                                            Icons.arrow_outward_outlined,
-                                            color: grey09,
-                                            size: 34,
-                                          ),
-                                        ],
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/selectUnitExamPage');
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("연습문제", style: title1(grey09)),
+                                      const SizedBox(width: 10),
+                                      const Icon(
+                                        Icons.arrow_outward_outlined,
+                                        color: grey09,
+                                        size: 34,
                                       ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(width: 56),
+                          Column(
+                            children: [
+                              Text("실제 시험처럼 풀고 싶다면", style: title2(blue08)),
+                              const SizedBox(height: 20),
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all<Size>(const Size(250, 72)),
+                                  side: MaterialStateProperty.all<BorderSide>(
+                                    const BorderSide(
+                                      color: blue10,
+                                      width: 5,
                                     ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(width: 56),
-                              Column(
-                                children: [
-                                  Text("실제 시험처럼 풀고 싶다면", style: title2(blue08)),
-                                  const SizedBox(height: 20),
-                                  OutlinedButton(
-                                    style: ButtonStyle(
-                                      fixedSize:
-                                          MaterialStateProperty.all<Size>(
-                                              const Size(250, 72)),
-                                      side:
-                                          MaterialStateProperty.all<BorderSide>(
-                                        const BorderSide(
-                                          color: blue10,
-                                          width: 5,
-                                        ),
-                                      ),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                        ),
-                                      ),
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          if (states.contains(
-                                              MaterialState.pressed)) {
-                                            return yellowButton;
-                                          } else if (states.contains(
-                                              MaterialState.hovered)) {
-                                            return blue09;
-                                          }
-                                          return grey00; // Return null for default background color
-                                        },
-                                      ),
+                                  ),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(40),
                                     ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, '/selectFullExamPage');
+                                  ),
+                                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      if (states.contains(MaterialState.pressed)) {
+                                        return yellowButton;
+                                      } else if (states.contains(MaterialState.hovered)) {
+                                        return blue09;
+                                      }
+                                      return grey00; // Return null for default background color
                                     },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text("모의고사", style: title1(grey09)),
-                                          const SizedBox(width: 10),
-                                          const Icon(
-                                            Icons.arrow_outward_outlined,
-                                            color: grey09,
-                                            size: 34,
-                                          ),
-                                        ],
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/selectFullExamPage');
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("모의고사", style: title1(grey09)),
+                                      const SizedBox(width: 10),
+                                      const Icon(
+                                        Icons.arrow_outward_outlined,
+                                        color: grey09,
+                                        size: 34,
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    ],
+                                  ),
+                                ),
                               )
                             ],
                           )
-                        ]),
+                        ],
+                      )
+                    ]),
                   ),
                 ]),
                 //책으로 만든 계단 이미지
@@ -191,9 +170,7 @@ class _LandingPageState extends State<LandingPage> {
                   top: 100,
                   child: Image.asset(
                     "assets/images/stairs.png",
-                    width: actualWidth /
-                        1200 *
-                        270, //디자이너가 준 기준에 맞추기 위한 수치. Figma에서 확인 가능.
+                    width: actualWidth / 1200 * 270, //디자이너가 준 기준에 맞추기 위한 수치. Figma에서 확인 가능.
                     fit: BoxFit.fitWidth,
                   ),
                 ),
