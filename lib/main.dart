@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/nameMake',
+        initialRoute: '/',
         routes: {
           '/': (context) => const LandingPage(),
           '/problemMake': (context) => const ProblemMake(),
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           '/selectFullExamPage': (context) => const SelectFullExamPage(),
           '/selectUnitExamPage': (context) => const SelectUnitExamPage(),
           '/unitExamGradingPage': (context) => const UnitExamGradingPage(),
-          '/nameMake': (context) => NameMakePage(),
+          // '/nameMake': (context) => NameMakePage(),
 
           // TO DELETE
           '/imageChange': (context) => const ImageChange(),
