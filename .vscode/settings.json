@@ -1,4 +1,3 @@
 {
-  "cmake.configureOnOpen": false,
-  "cSpell.words": ["screenutil"]
+    "cmake.configureOnOpen": false
 }
